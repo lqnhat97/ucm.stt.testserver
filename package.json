@@ -4,11 +4,19 @@
   "description": "umc stt test server",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "lowdb": "^1.0.0",
+    "morgan": "^1.9.1",
+    "mssql": "^5.0.3",
+    "mysql": "^2.16.0",
     "npm": "^6.9.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
