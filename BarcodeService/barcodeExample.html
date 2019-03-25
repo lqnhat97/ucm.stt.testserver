@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="JsBarcode.all.min.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Barcode Generator UCMSTT</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="text-align:center">Barcode Generator FIT.STT</h1>
+        <div class="form-group">
+            <label for="barcodeNumber">Nhập mã số bệnh nhân</label>
+            <input type="text" class="form-control" id="barcodeNumber" aria-describedby="barcodeHelp"
+                placeholder="Enter Patient's code">
+            <small id="barcodeHelp" class="form-text text-muted">Nhập số</small>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-primary center-block" type="submit" class="btn btn-primary"
+                onclick="generateBarcode()">Generate</button>
+        </div>
+        <div class="text-center">
+            <svg id="barcode"></svg>
+        </div>
+    </div>
+    <script>
+        function generateBarcode() {
+            var num = $('#barcodeNumber').val();
+            JsBarcode("#barcode", num, {
+                format: "CODE128",
+                displayValue: true
+            });
+        }
+    </script>
+</body>
+
+</html>
