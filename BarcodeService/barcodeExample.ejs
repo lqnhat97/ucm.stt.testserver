@@ -24,27 +24,25 @@
             <svg id="barcode"></svg>
         </div>
     </div>
-    <script>
-            function generateBarcode() {
-                $.ajax({
-                    contentType: 'application/json',
-                    url: '/test',
-                    type: 'GET',
-                    dataType: 'JSON',
-                    timeout: 15000
-                }).done(function (data) {
-                    var dataArray = data[0];
-                    var randomItem = dataArray[Math.floor(Math.random() * dataArray.length)];
-                    JsBarcode("#barcode", randomItem.ID, {
-                        format: "CODE128",
-                        displayValue: true
-                    });
-                }).catch(function(err){
-                    console.log(err);
-                })
-            }
-
-
+    <script type="text/javascript">
+        function generateBarcode() {
+            jQuery.ajax({
+                contentType: 'application/json',
+                url: '/test',
+                type: 'GET',
+                dataType: 'JSON',
+                timeout: 15000
+            }).done(function (data) {
+                var dataArray = data[0];
+                var randomItem = dataArray[Math.floor(Math.random() * dataArray.length)];
+                JsBarcode("#barcode", randomItem.ID, {
+                    format: "CODE128",
+                    displayValue: true
+                });
+            }).catch(function (err) {
+                console.log(err);
+            })
+        }
     </script>
 </body>
 
