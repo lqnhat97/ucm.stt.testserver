@@ -6,7 +6,7 @@ router.get('/:id',(req,res)=>{
     var id = req.params.id;
     console.log(id);
     db.loadPatientById(id).then(rows=>{
-        res.json(rows);
+        res.json(rows.recordsets[0]);
     })
 })
 

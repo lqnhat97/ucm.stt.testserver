@@ -16,12 +16,6 @@
 <body>
     <div class="container">
         <h1 style="text-align:center">Barcode Generator FIT.STT</h1>
-        <div class="form-group">
-            <label for="barcodeNumber">Nhập mã số bệnh nhân</label>
-            <input type="text" class="form-control" id="barcodeNumber" aria-describedby="barcodeHelp"
-                placeholder="Enter Patient's code">
-            <small id="barcodeHelp" class="form-text text-muted">Nhập số</small>
-        </div>
         <div class="text-center">
             <button class="btn btn-primary center-block" type="submit" class="btn btn-primary"
                 onclick="generateBarcode()">Generate</button>
@@ -31,13 +25,26 @@
         </div>
     </div>
     <script>
-        function generateBarcode() {
-            var num = $('#barcodeNumber').val();
-            JsBarcode("#barcode", num, {
-                format: "CODE128",
-                displayValue: true
-            });
-        }
+            function generateBarcode() {
+                $.ajax({
+                    contentType: 'application/json',
+                    url: '/test',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    timeout: 15000
+                }).done(function (data) {
+                    var dataArray = data[0];
+                    var randomItem = dataArray[Math.floor(Math.random() * dataArray.length)];
+                    JsBarcode("#barcode", randomItem.ID, {
+                        format: "CODE128",
+                        displayValue: true
+                    });
+                }).catch(function(err){
+                    console.log(err);
+                })
+            }
+
+
     </script>
 </body>
 

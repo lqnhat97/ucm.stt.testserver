@@ -7,9 +7,15 @@ var cors = require('cors');
 var sampleController = require('./Controller/SampleController');
 //patient
 var patientController = require('./Controller/PatientController');
-
-
 app = express();
+
+//use public folder
+app.use(express.static('BarcodeService'));
+app.set("view engine", "ejs");
+app.set('views','./BarcodeService');
+app.use('/home',(req,res)=>{
+    res.render('./barcodeExample');
+})
 app.use(express.static('Public'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
