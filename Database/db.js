@@ -30,3 +30,24 @@ exports.executeQuery = (sql) => {
         }
     });
 }
+
+exports.executeProcedure = (param, input, procedureName) => {
+    return new Promise((resolve, reject) => {
+        try {
+            var connect = new mssql.ConnectionPool(config);
+            var request = new mssql.Request(connect);
+            connect.connect(err => {
+                if (err) throw err;
+                request.input(param,input).execute(procedureName, (err, rows) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(rows);
+                    }
+                })
+            })  
+        } catch (err) {
+            throw err;
+        }
+    });
+}
