@@ -43,7 +43,7 @@
                 //(async function () {
                     var dataArray = data[0];
                     var randomItem = dataArray[Math.floor(Math.random() * dataArray.length)];
-                    JsBarcode("#barcode", randomItem.ID, {
+                    JsBarcode("#barcode", 'BN21677', {
                         format: "CODE128",
                         displayValue: true
                     });
