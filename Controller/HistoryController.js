@@ -12,7 +12,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
     var id = req.query;
     db.themLichSu(id.idBn,id.idBnSearch).then(rows=>{
-        res.json(rows);
+        res.json(rows.recordset);
     })
 });
 

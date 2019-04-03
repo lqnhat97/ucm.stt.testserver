@@ -15,7 +15,8 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
             for (i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
                 stt = rows.recordsets[0][i].STTPhongKham;
                 maPhong = rows.recordsets[0][i].SoPhong;
-                thoiGianDuKien = rows.recordsets[0][0].Gio
+                timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
+                thoiGianDuKien = (timeTemp.getHours() - 7).toString() + ":" + timeTemp.getMinutes();
                 await db.loadPhongKhamHienTai(rows.recordsets[0][i].IDPhong).then(rows => {
                     //kiem tra co du lieu khong
                     if (Object.keys(rows.recordsets[0]).length > 0) {
@@ -41,7 +42,8 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
             for (i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
                 stt = rows.recordsets[0][i].STTPhongCLS;
                 maPhongCls = rows.recordsets[0][i].SoPhong;
-                thoiGianDuKien = rows.recordsets[0][i].Gio
+                timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
+                thoiGianDuKien = (timeTemp.getHours() - 7).toString() + ":" + timeTemp.getMinutes();
                 tenPhong = rows.recordsets[0][i].TenLoai;
                 await db.loadPhongClsHienTai(rows.recordsets[0][i].IDPhong).then(rows => {
                     //kiem tra co du lieu khong
