@@ -4,8 +4,16 @@ var db = require('../Repos/HistoryRepos');
 
 router.get('/:id', (req, res) => {
     var id = req.params.id;
+    var listId = [];
+    var idHistory;
     db.loadLichSu(id).then(rows => {
-        res.json(rows.recordsets[0]);
+        if (Object.keys(rows.recordset).length > 0) {
+            for (i=0;i<Object.keys(rows.recordset).length;i++){
+                idHistory = rows.recordset[i].IDNguoiDuocTim;
+                listId.push({idHistory});
+            }
+        }
+        res.json(listId);
     })
 });
 
