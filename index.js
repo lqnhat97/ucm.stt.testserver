@@ -7,6 +7,10 @@ var cors = require('cors');
 var sampleController = require('./Controller/SampleController');
 //patient
 var patientController = require('./Controller/PatientController');
+//clinic
+var clinicController = require('./Controller/ClinicController');
+//history
+var historyController = require('./Controller/HistoryController');
 app = express();
 
 //use public folder
@@ -26,6 +30,9 @@ var http = require('http').Server(app);
 //routing
 app.use('/test', sampleController);
 app.use('/patient',patientController);
+app.use('/clinic',clinicController);
+app.use('/history',historyController);
+
 http.listen(port, () => {
     console.log('Connected at port:' + port);
 })
