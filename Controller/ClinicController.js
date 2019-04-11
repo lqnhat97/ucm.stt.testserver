@@ -3,81 +3,79 @@ var router = express.Router();
 var db = require('../Repos/ClinicRepos');
 
 router.get('/thongtinkhambenh/:id', async (req, res) => {
-    var id = req.params.id;
-    var thongTinKhamBenh = [];
-    var lamSang = [];
-    var canLamSang = [];
+    try {
+        var id = req.params.id;
+        var thongTinKhamBenh = [];
+        var lamSang = [];
+        var canLamSang = [];
 
-    await db.laySTTPhongKham(id).then(async rows => {
-        var maPhong, stt, sttHienTai, thoiGianDuKien;
-        //kiem tra co du lieu khong
-        if (Object.keys(rows.recordsets[0]).length > 0) {
-            for (i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
-                stt = rows.recordsets[0][i].STTPhongKham;
-                maPhong = rows.recordsets[0][i].SoPhong;
-                timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
-                thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
-                await db.loadPhongKhamHienTai(rows.recordsets[0][i].IDPhong).then(rows => {
-                    //kiem tra co du lieu khong
-                    if (Object.keys(rows.recordsets[0]).length > 0) {
-                        sttHienTai = rows.recordsets[0][0].STT;
-                    }
-                })
-                lamSang.push({
-                    maPhong,
-                    stt,
-                    sttHienTai,
-                    thoiGianDuKien
-                });
+        await db.layPhongKhamHienTai(id).then(rows => {
+            var maPhong, tenPhong, maPhongCls, stt, sttHienTai, thoiGianDuKien, tinhTrang;
+            if (Object.keys(rows.recordsets).length > 0) {
+                for (i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
+                    maPhong = rows.recordsets[0][i].SoPhong
+                    stt = rows.recordsets[0][i].STTPhongKham;
+                    timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
+                    thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
+                    tinhTrang = rows.recordsets[0][i].TinhTrang;
+                    sttHienTai = rows.recordsets[0][i].SoHienTaiCuaPhong;
+                    lamSang.push({
+                        maPhong,
+                        stt,
+                        sttHienTai,
+                        thoiGianDuKien,
+                        tinhTrang
+                    });
+                }
+                
+                var clsLength = Object.keys(rows.recordsets[1]).length;
+                for (k = 0; k < clsLength; k++) {
+                    maPhongCls = rows.recordsets[1][k].SoPhong;
+                    tenPhong = rows.recordsets[1][k].TenLoai;
+                    stt = rows.recordsets[1][k].STTPhongCLS;
+                    timeTemp = new Date(rows.recordsets[1][k].ThoiGianDuKien);
+                    thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
+                    tinhTrang = rows.recordsets[1][k].TinhTrang;
+                    sttHienTai = rows.recordsets[1][k].SoHienTaiCuaPhong;
+                    canLamSang.push({
+                        maPhongCls,
+                        tenPhong,
+                        stt,
+                        sttHienTai,
+                        thoiGianDuKien,
+                        tinhTrang
+                    });
+                }
             }
+
+        })
+
+        thongTinKhamBenh.push(lamSang);
+        thongTinKhamBenh.push(canLamSang);
+
+        if (thongTinKhamBenh[0] == 'null') {
+            res.json({
+                thongTinKhamBenh: 'null'
+            });
+            res.end(200);
         } else {
-            //thongTinKhamBenh = ['null'];
+            res.json({
+                lamSang: thongTinKhamBenh[0],
+                canLamSang: thongTinKhamBenh[1]
+            });
+            res.end(200);
         }
-    })
 
-    await db.laySTTPhongKhamCls(id).then(async rows => {
-        var maPhongCls, stt, sttHienTai, thoiGianDuKien, tenPhong;
-        //kiem tra co du lieu khong
-        if (Object.keys(rows.recordsets[0]).length > 0) {
-            for (i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
-                stt = rows.recordsets[0][i].STTPhongCLS;
-                maPhongCls = rows.recordsets[0][i].SoPhong;
-                timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
-                thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
-                tenPhong = rows.recordsets[0][i].TenLoai;
-                await db.loadPhongClsHienTai(rows.recordsets[0][i].IDPhong).then(rows => {
-                    //kiem tra co du lieu khong
-                    if (Object.keys(rows.recordsets[0]).length > 0) {
-                        sttHienTai = rows.recordsets[0][0].STT;
-                    }
-                })
-                canLamSang.push({
-                    maPhongCls,
-                    tenPhong,
-                    stt,
-                    sttHienTai,
-                    thoiGianDuKien
-                });
-            }
-        }
-    })
-
-
-    thongTinKhamBenh.push(lamSang);
-    thongTinKhamBenh.push(canLamSang);
-
-    if (thongTinKhamBenh[0] == 'null') {
-        res.json({
-            thongTinKhamBenh: 'null'
-        });
-        res.end(200);
-    } else {
-        res.json({
-            lamSang: thongTinKhamBenh[0],
-            canLamSang: thongTinKhamBenh[1]
-        });
-        res.end(200);
+    } catch (err) {
+        throw err;
     }
+})
+
+router.get('/test/:id', (req, res) => {
+    var id = req.params.id;
+    db.layPhongKhamHienTai(id).then(rows => {
+        res.json(rows);
+    })
 })
 
 module.exports = router;

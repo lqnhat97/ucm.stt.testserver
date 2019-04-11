@@ -15,3 +15,7 @@ exports.laySTTPhongKham = (idBn) =>{
 exports.laySTTPhongKhamCls = (idBn) =>{
     return db.executeProcedure('IDBenhNhan',idBn,'LaySTTPhongCLS');
 }
+
+exports.layPhongKhamHienTai = (idBn) =>{
+    return db.executeProcedure('IDBenhNhan',idBn,'LaySTT');
+}
