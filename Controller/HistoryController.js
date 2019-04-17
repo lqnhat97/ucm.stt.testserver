@@ -28,6 +28,7 @@ router.get('/:id', async (req, res) => {
                 }
             }
             res.json(listId);
+            res.end(200);
         } catch (err) {
             if (err) throw err;
         }
