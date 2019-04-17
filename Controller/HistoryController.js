@@ -12,19 +12,15 @@ router.get('/:id', async (req, res) => {
             if (Object.keys(rows.recordset).length > 0) {
                 for (i = 0; i < Object.keys(rows.recordset).length; i++) {
                     idHistory = rows.recordset[i].IDNguoiDuocTim;
-                    await db_bn.loadPatientById(idHistory).then(rows => {
-                        console.log(rows.recordset)
-                        hoTen = rows.recordset[0].Ho + " " + rows.recordset[0].TenLot + " " + rows.recordset[0].Ten
-                        var tuoiTmp = new Date(rows.recordset[0].NgaySinh);
-                        var now = new Date();
-                        tuoi = now.getFullYear() - tuoiTmp.getFullYear();
-                        listId.push({
-                            idHistory,
-                            hoTen,
-                            tuoi
-                        });
-                        console.log(listId);
-                    })
+                    hoTen = rows.recordset[i].Ho + " " + rows.recordset[i].TenLot + " " + rows.recordset[i].Ten
+                    var tuoiTmp = new Date(rows.recordset[i].NgaySinh);
+                    var now = new Date();
+                    tuoi = now.getFullYear() - tuoiTmp.getFullYear();
+                    listId.push({
+                        idHistory,
+                        hoTen,
+                        tuoi
+                    });
                 }
             }
             res.json(listId);
