@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UMC-S1</title>
+    <link rel="stylesheet" type="text/css" href="UMCC.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <header>
+            <div class="head">
+                <div>
+                    <h1 id="head">UMC</h1>
+                </div>
+                <div class="head" style=" margin:15pt">
+                    <div style="padding-right:5pt"><img src="h2.png" alt="Avartar" height="42pt" width="42pt"></div>
+                    <div>
+                        <h4>Hoàng Công Lương</h4>
+                    </div>
+                    <div class="dropdown" style="margin-top:7pt">
+
+                        <a href="#" class="dropdown-toggle " data-toggle="dropdown"><span class="caret"></span></a>
+
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li class="menu-item"><a href="#">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="row justify-content-space-between" style="background-color:#ece9e9">
+                <div class=" col-sm-3" >
+                        <div class="nav-left">
+                                <div class="ava"><img src="h3.jpg" alt="" class="relative" style="width:100%;height:600px">
+                                </div>
+                                <div class="container-fluid list-option">
+                                        <div class="panel-group">
+                                            <div class="panel panel-default" id="changepanel">
+                                                <div class="panel-body" id="changecolor">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" href="#collapse1">Khám bệnh</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse1" class="panel-collapse collapse">
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item" id="changecolortext"><a href="Screen1.html">Phiếu khám</a></li>
+                                                        <!-- <li class="list-group-item" id="changecolortext"><a href="#">Two</a></li>
+                                                        <li class="list-group-item" id="changecolortext"><a href="#">Three</a></li> -->
+                                                    </ul>
+                                                </div>
+                                            </div>
+                    
+                                            <div class="panel panel-default" id="changepanel">
+                                                
+                                                <div class="panel-body" id="changecolor">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" href="#collapse2">Phòng khám</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse2" class="panel-collapse collapse">
+                                                    <ul class="list-group">
+                                                        <li class="list-group-item" id="changecolortext"><a href="Screen2.html">Danh sách phòng khám</a></li>
+                                                        <li class="list-group-item" id="changecolortext"><a href="Screen3.html">Thống kê</a></li>
+                                                        <!-- <li class="list-group-item" id="changecolortext"><a href="#">Three</a></li>
+                                                        <li class="list-group-item" id="changecolortext"><a href="#">Four</a></li> -->
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                    
+                                        <div class="panel panel-default" id="changepanel">
+                                            <div class="panel-body" id="changecolor">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#collapse3">Phòng cận lâm sàng</a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse3" class="panel-collapse collapse">
+                                                <ul class="list-group">
+                                                    <li class="list-group-item" id="changecolortext"><a href="Screen4.html">Danh sách phòng cận lâm sàng</a></li>
+                                                    <li class="list-group-item" id="changecolortext"><a href="Screen5.html">Thống kê</a></li>
+                                                    <!-- <li class="list-group-item" id="changecolortext"><a href="#">Three</a></li>
+                                                    <li class="list-group-item" id="changecolortext"><a href="#">Four</a></li> -->
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+                        
+                        
+                    </div>
+            <div class="col-md-9 form-group">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-5" id="cliente">
+
+                            <form style=" border-bottom: 2px solid #bbbbbb">
+                                <div class="row" style="padding:10pt">
+                                    <div class="col-md-4"> <label class="control-label" for=""
+                                            style="color:#969696;padding:8pt;margin-left: 3pt">Mã bệnh nhân</label>
+                                    </div>
+                                    <div class="search-box col-md-6" style="height:30pt">
+                                        <input type="text" id="" class="form-control" placeholder="">
+                                        <button class="btn btn-link search-btn"> <i
+                                                class="glyphicon glyphicon-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <form action="" style=" border-bottom: 2px solid #bbbbbb">
+                                <p>Thông tin bệnh nhân</p>
+                                <div class="row form-group">
+                                    <label for="" class="col-sm-3 col-form-label">Họ và tên</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                    <label for="" class="col-sm-2 col-form-label" style="text-align:right">Giới
+                                        tính</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" value="" class="form-control" style="margin-right: 10px;">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="" class="col-sm-3 col-form-label">Ngày sinh</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                    <label for="" class="col-sm-2 col-form-label" style="text-align:right">Tuổi</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="" class="col-sm-3 col-form-label">Quê quán</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                    <label for="" class="col-sm-3 col-form-label"
+                                        style="text-align:right">CMND/CCCD</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="" class="col-sm-3 col-form-label">Địa chỉ</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="" class="col-sm-3 col-form-label">Nghề nghiệp</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                    <label for="" class="col-sm-3 col-form-label" style="text-align:right">Số điện
+                                        thoại</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="" class="col-sm-3 col-form-label">Người thân</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" value="" class="form-control">
+                                    </div>
+                                </div>
+                            </form>
+                            <p style="text-align:center">Các thông tin khác</p>
+                        </div>
+                        <div class="col-sm-6" id="cliente">
+                            <form style=" border-bottom: 2px solid #bbbbbb; padding:10pt">
+                                <p>Phiếu khám và chỉ định</p>
+                            </form>
+                            <div>
+                                <form action="" style="margin-top: 10px">
+                                    <div class="row form-group">
+                                        <label for="" class="col-sm-3 col-form-label">Mã phiếu khám</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" value="" class="form-control">
+                                        </div>
+                                        <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày
+                                            khám</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" value="" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="row form-group">
+                                        <label for="" class="col-sm-3 col-form-label">Triệu chứng</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" value="" class="form-control">
+                                        </div>
+                                    </div>
+                                    <hr color="black" />
+                                    <div class="row">
+                                        <label for="" class="col-sm-5 col-form-label">Chỉ định cận lâm sàng 1</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" value="" class="form-control">
+                                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                                <div class="small">
+                                                    <span>Phí</span>
+                                                    <span>150.000 VNĐ</span>
+                                                </div>
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="" class="col-sm-5 col-form-label">Chỉ định cận lâm sàng 2</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" value="" class="form-control">
+                                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                                <div class="small">
+                                                    <span>Phí</span>
+                                                    <span>150.000 VNĐ</span>
+                                                </div>
+                                            </small>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <label for="" class="col-sm-5 col-form-label">Chỉ định cận lâm sàng 3</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" value="" class="form-control">
+                                            <small id="passwordHelpBlock" class="form-text text-muted">
+                                                <div class="small">
+                                                    <span>Phí</span>
+                                                    <span>150.000 VNĐ</span>
+                                                </div>
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <a id="add" href="">Thêm chỉ định</a>
+                                    <br><br><br><br>
+                                    <hr />
+                                    <div class="small">
+                                        <span>Tổng cộng</span>
+                                        <span>450.000 VNĐ</span>
+                                    </div>
+                                    <hr />
+                                    <div class="row">
+                                        <label for="" class="col-sm-9 col-form-label">Số tài khoản</label>
+                                        <label for="" class="col-sm-3 col-form-label">Tình trạng</label>
+                                    </div>
+                                    <div class="row" style="margin-bottom:10px;">
+                                        <div class="col-sm-9"><input type="text" value="" class="form-control"></div>
+                                        <div class="col-sm-3"><small id="passwordHelpInline" class="text-muted"><span
+                                                    style="color: rgb(9, 173, 214); text-align: right">Số dư
+                                                    đủ</span></small></div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
