@@ -1,12 +1,12 @@
 var mssql = require('mssql');
 
 var config = {
-    user: 'ucm_fit_stt',
-    password: 'Hcmus2019',
-    server: 'stt-testdb.database.windows.net',
-    database: 'STT_TESTDB',
+    user: 'test',
+    password: '123456',
+    server: 'DESKTOP-RF5QQMJ',
+    database: 'TEST',
     options: {
-        encrypt: true
+        trustedConnection: true
     }
 }
 

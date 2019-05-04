@@ -8,12 +8,13 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
         var thongTinKhamBenh = [];
         var lamSang = [];
         var canLamSang = [];
-
         await db.layPhongKhamHienTai(id).then(rows => {
-            var maPhong, tenPhong, maPhongCls, stt, sttHienTai, thoiGianDuKien, tinhTrang;
+        console.log(rows.recordsets);
+            var maPhong, tenPhong, tenChuyenKhoa, maPhongCls, stt, sttHienTai, thoiGianDuKien, tinhTrang;
             if (Object.keys(rows.recordsets).length > 0) {
-                for (i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
-                    maPhong = rows.recordsets[0][i].SoPhong
+                for (let i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
+                    tenChuyenKhoa = rows.recordsets[0][i].TenChuyenKhoa;
+                    maPhong = rows.recordsets[0][i].SoPhong;
                     stt = rows.recordsets[0][i].STTPhongKham;
                     timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
                     thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
@@ -21,6 +22,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                     sttHienTai = rows.recordsets[0][i].SoHienTaiCuaPhong;
                     lamSang.push({
                         maPhong,
+                        tenChuyenKhoa,
                         stt,
                         sttHienTai,
                         thoiGianDuKien,
@@ -29,9 +31,9 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                 }
                 
                 var clsLength = Object.keys(rows.recordsets[1]).length;
-                for (k = 0; k < clsLength; k++) {
+                for (let k = 0; k < clsLength; k++) {
                     maPhongCls = rows.recordsets[1][k].SoPhong;
-                    tenPhong = rows.recordsets[1][k].TenLoai;
+                    tenPhong = rows.recordsets[1][k].TenCanLamSang;
                     stt = rows.recordsets[1][k].STTPhongCLS;
                     timeTemp = new Date(rows.recordsets[1][k].ThoiGianDuKien);
                     thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
