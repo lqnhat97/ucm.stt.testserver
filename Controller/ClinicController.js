@@ -9,7 +9,6 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
         var lamSang = [];
         var canLamSang = [];
         await db.layPhongKhamHienTai(id).then(rows => {
-        console.log(rows.recordsets);
             var maPhong, tenPhong, tenChuyenKhoa, maPhongCls, stt, sttHienTai, thoiGianDuKien, tinhTrang;
             if (Object.keys(rows.recordsets).length > 0) {
                 for (let i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
