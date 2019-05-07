@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>UMC-Phòng khám</title>
+  <link rel="stylesheet" type="text/css" href="UMCC.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div>
+    <header>
+      <div class="head">
+        <div>
+          <h1 id="head">UMC</h1>
+        </div>
+        <div class="head" style=" margin:15pt">
+          <div style="padding-right:5pt"><img src="h2.png" alt="Avartar" height="42pt" width="42pt"></div>
+          <div>
+            <h4>Hoàng Công Lương</h4>
+          </div>
+          <div class="dropdown" style="margin-top:7pt">
+
+            <a href="#" class="dropdown-toggle " data-toggle="dropdown"><span class="caret"></span></a>
+
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li class="menu-item"><a href="#">Đăng xuất</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="row justify-content-space-between" style="  background-color:#ece9e9">
+      <div class=" col-sm-3">
+        <div class="nav-left">
+            <div class="ava"><img src="h3.jpg" alt="" class="relative; background-left">
+            </div>
+            <div class="container-fluid list-option">
+                <div class="panel-group">
+                    <div class="panel panel-default" id="changepanel">
+                        <div class="panel-body" id="changecolor">
+                            <h4 class="panel-title" >
+                                <a href="WTiepNhan.html">Tiếp nhận</a>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="panel panel-default" id="changepanel">
+                        <div class="panel-body" id="changecolor">
+                            <h4 class="panel-title">
+                                <a href="WKhamBenh.html">Khám bệnh</a>
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default" id="changepanel">
+                        <div class="panel-body" id="changecolor-now">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#collapse2">Phòng khám</a>
+                            </h4>
+                        </div>
+                        <div id="collapse2" class="panel-collapse collapse">
+                            <ul class="list-group">
+                                <li class="list-group-item" id="changecolortext"><a id="changepanel" href="WDanhSachPhongKham.html">Danh
+                                        sách phòng khám</a></li>
+                                <li class="list-group-item" id="changecolortext"><a id="changepanel" href="WThongKePhongKham.html">Thống
+                                        kê</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" id="changepanel">
+                    <div class="panel-body" id="changecolor">
+                        <h4 class="panel-title">
+                            <a href="WChiTietPhongCanLamSang.html">Phòng cận lâm sàng</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+        <div class="col-sm-9 ">
+          <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
+            <form style=" border-bottom: 2px solid #bbbbbb">
+              <div class="row" style="padding:5pt">
+                <div class="col-sm-2"> <label class="control-label" for="chuyenkhoa"
+                    style="color:#969696;padding:8pt;margin-left: 3pt">Chuyên khoa</label></div>
+                <div class="search-box col-sm-4" style="height:30pt">
+                  <input type="text" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa">
+                  <button class="btn btn-link search-btn"> <i class="glyphicon glyphicon-search"></i>
+                  </button>
+                </div>
+                <div class="col-sm-2"> <label for="sophong" style="color:#969696;padding:8pt;margin-left: 15pt">Số
+                    phòng</label></div>
+                <div class="search-box col-sm-2" style="height:30pt"> <input type="text" id="sophong"
+                    class="form-control" placeholder="Số phòng">
+                  <button class="btn btn-link search-btn"> <i class="glyphicon glyphicon-search"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+            <form style="padding-bottom:8pt;padding-left:5pt">
+              <div class="row">
+                <div class="col-sm-4">
+                  <h3>Danh sách phòng khám</h3>
+                </div>
+               
+              </div>
+            </form>
+            <div class="row " style="padding-left:5pt;display:flex;justify-content:space-between">
+              <div class="col-sm-5" style="background-color: white;   box-shadow:1px 1px 1px;">
+                <div class="row" style="border-bottom: 2pt solid #bbbbbb">
+                  <h3 style="display:inline-block;margin:10pt; color:rgb(9, 173, 214)">Phòng khám</h4>
+                    <h3 style="display:inline-block; margin:10pt;color:#67cf9c">102</h5>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Bàn</th>
+                      <th>Số hiện tại</th>
+                      <th>Bác sĩ</th>
+                      <th>Bệnh nhân</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="number">1</td>
+                      <td class="number">2000</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">2</td>
+                      <td class="number">2001</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">3</td>
+                      <td class="number">2002</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">4</td>
+                      <td class="number">2003</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">5</td>
+                      <td class="number">2004</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">6</td>
+                      <td class="number">2006</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">7</td>
+                      <td class="number">2007</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="col-sm-5" style="background-color: white;box-shadow:1px 1px 1px; ">
+                <div class="row" style="border-bottom: 2pt solid #bbbbbb">
+                  <h3 style="display:inline-block;margin:10pt; color:rgb(9, 173, 214)">Phòng khám</h4>
+                    <h3 style="display:inline-block; margin:10pt;color:#67cf9c">103</h5>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Bàn</th>
+                      <th>Số hiện tại</th>
+                      <th>Bác sĩ</th>
+                      <th>Bệnh nhân</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="number">1</td>
+                      <td class="number">2000</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">2</td>
+                      <td class="number">2001</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">3</td>
+                      <td class="number">2002</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">4</td>
+                      <td class="number">2003</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">5</td>
+                      <td class="number">2004</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">6</td>
+                      <td class="number">2006</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">7</td>
+                      <td class="number">2007</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row " style="padding-left:5pt;display:flex;justify-content:space-between ; padding-top:10pt">
+              <div class="col-sm-5" style="background-color: white;   box-shadow:1px 1px 1px;">
+                <div class="row" style="border-bottom: 2pt solid #bbbbbb">
+                  <h3 style="display:inline-block;margin:10pt; color:rgb(9, 173, 214)">Phòng khám</h4>
+                    <h3 style="display:inline-block; margin:10pt;color:#67cf9c">104</h5>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Bàn</th>
+                      <th>Số hiện tại</th>
+                      <th>Bác sĩ</th>
+                      <th>Bệnh nhân</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="number">1</td>
+                      <td class="number">2000</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">2</td>
+                      <td class="number">2001</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">3</td>
+                      <td class="number">2002</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">4</td>
+                      <td class="number">2003</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">5</td>
+                      <td class="number">2004</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">6</td>
+                      <td class="number">2006</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">7</td>
+                      <td class="number">2007</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="col-sm-5" style="background-color: white;box-shadow:1px 1px 1px ">
+                <div class="row" style="border-bottom: 2pt solid #bbbbbb">
+                  <h3 style="display:inline-block;margin:10pt; color:rgb(9, 173, 214)">Phòng khám</h4>
+                    <h3 style="display:inline-block; margin:10pt;color:#67cf9c">105</h5>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Bàn</th>
+                      <th>Số hiện tại</th>
+                      <th>Bác sĩ</th>
+                      <th>Bệnh nhân</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="number">1</td>
+                      <td class="number">2000</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">2</td>
+                      <td class="number">2001</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">3</td>
+                      <td class="number">2002</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">4</td>
+                      <td class="number">2003</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">5</td>
+                      <td class="number">2004</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">6</td>
+                      <td class="number">2006</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                    <tr>
+                      <td class="number">7</td>
+                      <td class="number">2007</td>
+                      <td>Hoàng Công Lương</td>
+                      <td>Nguyễn Hoàng Sơn</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+</body>
+
+</html>
