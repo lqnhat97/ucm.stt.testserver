@@ -118,4 +118,4 @@ where tk.ChuyenKhoa=@IDchuyenKhoa
 END;
 GO
 
-EXEC TinhTrangConChoTheoChuyenKhoa "P@"
+EXEC TinhTrangConChoTheoChuyenKhoa "PH"
