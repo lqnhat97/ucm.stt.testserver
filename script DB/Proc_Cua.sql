@@ -68,7 +68,7 @@ begin
 	from (select SHT.IDPhongCanLamSang, max(SHT.Gio) as GioMax 
 			from SoHienThiPhongCanLamSang SHT
 			group by SHT.IDPhongCanLamSang) as SM
-	inner join SoHienThiPhongCanLamSang SH on SH.IDPhongCanLamSang = SM.IDPhongCanLamSang
+	inner join SoHienThiPhongCanLamSang SH on SH.IDPhongCanLamSang = SM.IDPhongCanLamSang and SH.Gio=SM.GioMax
 	inner join PhieuKham PK on PK.IDPhieuKham = SH.IDPhieuKham
 	inner join PhongCanLamSang P on P.ID = SH.IDPhongCanLamSang
 	inner join ThucHienCLS TH on TH.IDPhongCLS = P.ID
@@ -82,6 +82,8 @@ go
 
 exec ChiTietCanLamSangTheoTenDichVu "TZ07"
 drop proc ChiTietCanLamSangTheoTenDichVu
+
+
 
 
 
