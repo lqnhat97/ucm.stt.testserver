@@ -89,14 +89,14 @@ router.get('/dsBacSi/:idCK', (req, res) => {
 //Tạo phiếu khám
 router.post('/taoPhieuKham', (req, res) => {
     db.taoPhieuKham(req.body).then(rows => {
-        res.json(rows);
+        res.status(200).json(rows);
     })
 })
 
 //Kích hoạt Phát sinh STT phòng khám lâm sàng theo bác sĩ
 router.post('/phatSinhStt', (req, res) => {
     db.phatSinhSttPk(req.body).then(row => {
-        res.json(rows);
+        res.status(200).json(rows);
     })
 })
 
