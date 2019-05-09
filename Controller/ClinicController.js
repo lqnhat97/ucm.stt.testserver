@@ -28,7 +28,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tinhTrang
                     });
                 }
-                
+
                 var clsLength = Object.keys(rows.recordsets[1]).length;
                 for (let k = 0; k < clsLength; k++) {
                     maPhongCls = rows.recordsets[1][k].SoPhong;
@@ -72,9 +72,30 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
     }
 })
 
-router.get('/test/:id', (req, res) => {
-    var id = req.params.id;
-    db.layPhongKhamHienTai(id).then(rows => {
+//Lấy danh sách chuyên khoa
+router.get('/dsChuyenKhoa', (req, res) => {
+    db.layDSChuyenKhoa().then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
+
+//Lấy bác sĩ theo chuyên khoa
+router.get('/dsBacSi/:idCK', (req, res) => {
+    db.layDSBacSiTheoChuyenKhoa(req.params.idCK).then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
+
+//Tạo phiếu khám
+router.post('/taoPhieuKham', (req, res) => {
+    db.taoPhieuKham(req.body).then(rows => {
+        res.json(rows);
+    })
+})
+
+//Kích hoạt Phát sinh STT phòng khám lâm sàng theo bác sĩ
+router.post('/phatSinhStt', (req, res) => {
+    db.phatSinhSttPk(req.body).then(row => {
         res.json(rows);
     })
 })

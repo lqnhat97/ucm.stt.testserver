@@ -16,9 +16,9 @@ router.get('/checkBenhNhan/:id', (req, res) => {
     var id = req.params.id;
     db.checkPatientById(id).then(rows => {
         if (rows.rowsAffected[0] != 0)
-            res.status(200).json(rows);
+            res.status(200).json(rows.recordset[0]);
         else
-            res.status(404).json('Không có kết quả tìm kiếm');
+            res.status(404).json({message:'Không có kết quả tìm kiếm'});
     })
 })
 
@@ -26,6 +26,8 @@ router.get('/checkBenhNhan/:id', (req, res) => {
 router.post('/taoThongTin',(req,res)=>{
     db.createNewPatient(req.body).then(rows=>{
         res.status(200).json(rows.recordset[0]).end();
+    }).catch(e=>{
+        console.log(e);
     })
 })
 

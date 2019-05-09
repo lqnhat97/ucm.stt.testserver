@@ -15,7 +15,7 @@
                 <select class="browser-default custom-select-lg form-group" v-model="selectedOption"
                   @change="handleChange">
                   <option selected disabled>Chọn chuyên khoa</option>
-                  `<option v-for="option in data" v-bind:key="option.IDChuyenKhoa">{{option.TenChuyenKhoa}}</option>
+                  <option v-for="option in data" :value="option.IDChuyenKhoa">{{option.TenChuyenKhoa}}</option>
 
                 </select>
               </div>
@@ -40,10 +40,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(row, rindex) in loadedDoctor" v-bind:key="row.data">
-                    <td >{{ rindex }}</td>
-                      <cell v-for="(value, vindex) in row" :value="value" :vindex="vindex" :rindex="rindex"
-                        :key="value"></cell>
+                  <tr v-for="(row, rindex) in loadedDoctor">
+                    <td>{{ rindex +1 }}</td>
+                    <cell v-for="(value, vindex) in row" :value="value" :vindex="vindex" :rindex="rindex" :key="value">
+                    </cell>
+                    <td>{{row.HovaTen}}</td>
+                    <td>
+                      <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="customRadio" name="example1"
+                          value="customEx" @click="checkedDoctor(row)">                    
+                      </div>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -84,24 +91,34 @@
         selectedOption: "",
         data: "",
         loadedDoctor: "",
+        item: ""
       }
     },
     created(e) {
-      axios.get(`http://192.168.1.90:8088/clinic/dsChuyenKhoa`).then(response => {
+      this.selectedOption = ""
+      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
     methods: {
       handleChange(e) {
-        axios.get(`http://192.168.1.90:8088/clinic/dsChuyenKhoa`).then(response => {
-          this.data = response.data;
-          console.log(response.data);
+        axios.get(`http://localhost:8088/clinic/dsBacSi/` + this.selectedOption).then(response => {
+          console.log(this.selectedOption);
+          this.loadedDoctor = response.data;
         })
+      },
+      checkedDoctor(item) {
+        return this.item;
+      },
+      taoPk(){
+        axios.post()
       }
     }
   }
+
 </script>
 
 <style>
   @import '../../UMCC.css';
+
 </style>

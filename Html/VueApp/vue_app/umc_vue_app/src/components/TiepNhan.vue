@@ -131,9 +131,8 @@
     methods: {
       checkCMND(e) {
         e.preventDefault();
-        axios.get(`http://192.168.1.90:8088/patient/checkBenhNhan/` + this.cmnd)
-          .then(response => {
-            console.log(response);
+        axios.get(`http://localhost:8088/patient/checkBenhNhan/` + this.cmnd)
+          .then(response => {            
             let res = response.data;
             this.cmnd = res.CMND_CCCD;
             this.HoVaTen = res.Ho + " " + res.TenLot + " " + res.Ten;
@@ -143,6 +142,8 @@
             this.NgheNghiep = res.NgheNghiep;
             this.DiaChi = res.Diachi;
             this.SoDienThoai = res.SDT
+            this.idBenhNhan = res.ID;
+            console.log(this.idBenhNhan);
           })
           .catch(e => {
             console.log(e);
@@ -164,7 +165,7 @@
           "address": this.DiaChi,
         };
         console.log(posbody);
-        axios.post(`http://192.168.1.90:8088/patient/taoThongTin`, {
+        axios.post(`http://localhost:8088/patient/taoThongTin`, {
             body:  posbody
           }).then(response => {})
           .catch(e => {
