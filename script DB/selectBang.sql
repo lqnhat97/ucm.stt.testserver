@@ -118,4 +118,19 @@ where tk.ChuyenKhoa=@IDchuyenKhoa
 END;
 GO
 
-EXEC TinhTrangConChoTheoChuyenKhoa "PH"
+EXEC TinhTrangConChoTheoChuyenKhoa "P@"
+---------------------------------------
+create proc BacSiTheoChuyenKhoa
+@ChuyenKhoa nvarchar(10)
+as
+begin
+select bs.ID, bs.HovaTen, bs.GioiTinh, bs.NamSinh, bs.QueQuan, bs.ChuyenKhoa,ck.TenChuyenKhoa,lk.IDBan as BanKham,lk.phong as PhongKham ,bs.ThoiGianKhamTB_min
+from BacSi bs
+inner join ChuyenKhoa ck on bs.ChuyenKhoa=ck.IDChuyenKhoa
+inner join LichKhamBacSi lk on lk.IDBacSi=bs.ID
+where bs.ChuyenKhoa=@ChuyenKhoa
+end;
+go
+
+
+exec BacSiTheoChuyenKhoa "PH"
