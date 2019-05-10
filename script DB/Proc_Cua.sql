@@ -57,8 +57,8 @@ where @IDLoaiDichVu = LDV.IDLoaiDichVu
 end;
 go
 
-exec ChiTietCanLamSangTheoLoaiDichVu "MM"
 drop proc ChiTietCanLamSangTheoLoaiDichVu
+exec ChiTietCanLamSangTheoLoaiDichVu "MM"
 
 
 create proc ChiTietCanLamSangTheoTenDichVu @IDDichVu nvarchar(10)
@@ -80,7 +80,7 @@ where @IDDichVu = DV.IDDichVu
 end;
 go
 
-exec ChiTietCanLamSangTheoTenDichVu "TZ07"
+exec ChiTietCanLamSangTheoTenDichVu "TZ02"
 drop proc ChiTietCanLamSangTheoTenDichVu
 
 
