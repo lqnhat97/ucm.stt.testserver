@@ -10,4 +10,8 @@ export default {
 }
 </script>
 
+<style>
+  @import '../UMCC.css';
+</style>
+
 

@@ -16,7 +16,7 @@
           <div class="panel panel-default" id="changepanel">
             <div class="panel-body" id="changecolor">
               <h4 class="panel-title">
-                <a href="WKhamBenh.html">Khám bệnh</a>
+                <router-link  to="/khamBenh">Khám bệnh</router-link>
               </h4>
             </div>
           </div>
@@ -29,10 +29,12 @@
             </div>
             <div id="collapse2" class="panel-collapse collapse">
               <ul class="list-group">
-                <li class="list-group-item" id="changecolortext"><router-link to="/taoPhieuKham"><a id="changepanel" href="WDanhSachPhongKham.html">Danh
-                    sách phòng khám</a></router-link></li>
-                <li class="list-group-item" id="changecolortext"><a id="changepanel" href="WThongKePhongKham.html">Thống
-                    kê</a></li>
+                <li class="list-group-item" id="changecolortext"><a id="changepanel" href="WDanhSachPhongKham.html">Danh
+                    sách phòng khám</a></li>
+                <li class="list-group-item" id="changecolortext"><a id="changepanel" href="WChiTietPhongKham.html">Chi
+                    tiết phòng khám</a></li>
+                <li class="list-group-item" id="changecolortext"><router-link id="changepanel" to="/quanLySoPhongKham">Quản
+                    lý số</router-link></li>
               </ul>
             </div>
           </div>
@@ -56,6 +58,5 @@
   export default {
     name: "Sidebar",
   }
+
 </script>
-
-
