@@ -1,8 +1,8 @@
 <template>
   <div class="TiepNhan">
     <Header />
-    <div class="row" style="background-color:#ece9e9">
-      <Sidebar />
+     <Sidebar />
+     
       <div class="col-sm-9 ">
         <div class="row">
           <div class="col-sm-11" id="cliente">
@@ -100,7 +100,7 @@
         </div>
       </div>
     </div>
-  </div>
+ 
 </template>
 
 <script>

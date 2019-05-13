@@ -16,7 +16,7 @@
           <div class="panel panel-default" id="changepanel">
             <div class="panel-body" id="changecolor">
               <h4 class="panel-title">
-                <router-link  to="/khamBenh">Khám bệnh</router-link>
+                <router-link to="/khamBenh">Khám bệnh</router-link>
               </h4>
             </div>
           </div>
@@ -29,12 +29,18 @@
             </div>
             <div id="collapse2" class="panel-collapse collapse">
               <ul class="list-group">
-                <li class="list-group-item" id="changecolortext"><a id="changepanel" href="WDanhSachPhongKham.html">Danh
-                    sách phòng khám</a></li>
-                <li class="list-group-item" id="changecolortext"><a id="changepanel" href="WChiTietPhongKham.html">Chi
-                    tiết phòng khám</a></li>
-                <li class="list-group-item" id="changecolortext"><router-link id="changepanel" to="/quanLySoPhongKham">Quản
-                    lý số</router-link></li>
+                <li class="list-group-item" id="changecolortext">
+                  <router-link id="changepanel" to="/danhSachPhongKham">Danh
+                    sách phòng khám</router-link>
+                </li>
+                <li class="list-group-item" id="changecolortext">
+                  <router-link id="changepanel" to="/chiTietPhongKham">Chi
+                    tiết phòng khám</router-link>
+                </li>
+                <li class="list-group-item" id="changecolortext">
+                  <router-link id="changepanel" to="/quanLySoPhongKham">Quản
+                    lý số</router-link>
+                </li>
               </ul>
             </div>
           </div>
@@ -43,8 +49,17 @@
         <div class="panel panel-default" id="changepanel">
           <div class="panel-body" id="changecolor">
             <h4 class="panel-title">
-              <a href="WChiTietPhongCanLamSang.html">Phòng cận lâm sàng</a>
+              <a data-toggle="collapse" href="#collapse3">Phòng cận lâm sàng</a>
             </h4>
+
+          </div>
+          <div id="collapse3" class="panel-collapse collapse">
+            <ul class="list-group">
+              <li class="list-group-item" id="changecolortext"><router-link id="changepanel"
+                  to="/chiTietCanLamSang">Chi tiếp phòng cận lâm sàng</router-link></li>
+              <li class="list-group-item" id="changecolortext"><router-link id="changepanel"
+                  to="/quanLySoCanLamSang">Quản lý số</router-link></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -58,5 +73,8 @@
   export default {
     name: "Sidebar",
   }
-
 </script>
+
+<style>
+  @import '../../UMCC.css';
+</style>
