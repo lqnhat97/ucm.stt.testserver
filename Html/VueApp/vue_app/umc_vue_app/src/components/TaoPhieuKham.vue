@@ -41,9 +41,8 @@
                 </thead>
                 <tbody>
                   <tr v-for="(row, rindex) in loadedDoctor">
-                    <td>{{ rindex +1 }}</td>
-                    <cell v-for="(value, vindex) in row" :value="value" :vindex="vindex" :rindex="rindex" :key="value">
-                    </cell>
+                    <td>{{ row.BanKham }}</td>
+                    <td>{{ row.PhongKham }}</td>                    
                     <td>{{row.HovaTen}}</td>
                     <td>
                       <div class="custom-control custom-radio">
@@ -103,16 +102,16 @@
     methods: {
       handleChange(e) {
         axios.get(`http://localhost:8088/clinic/dsBacSi/` + this.selectedOption).then(response => {
-          console.log(this.selectedOption);
           this.loadedDoctor = response.data;
+          console.log(this.loadedDoctor);
         })
       },
       checkedDoctor(item) {
         return this.item;
       },
-      taoPk(){
-        axios.post()
-      }
+      // taoPk(){
+      //   axios.post(`http://localhost:8088/clinic/taoPhieuKham`)
+      // }
     }
   }
 
