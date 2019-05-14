@@ -189,10 +189,9 @@
       Header,
       Sidebar
     },
+    
   }
 
 </script>
 
-<!--<style>
-  @import '../../UMCC.css';
-</style>-->
+

@@ -51,6 +51,5 @@ export default new Router({
       name: 'Quan Ly So Can Lam Sang',
       component: QuanLySoCanLamSang
     }
-    
   ]
 })
