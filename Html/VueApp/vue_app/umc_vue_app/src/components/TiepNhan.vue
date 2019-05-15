@@ -46,11 +46,11 @@
               <div class="row form-group">
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Họ và tên</label>
                 <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" v-model="HoVaTen" v-text="HoVaTen">
+                  <input type="text" value="" class="form-control" :disabled="isFound?true:false" v-model="HoVaTen" v-text="HoVaTen">
                 </div>
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Giới tính</label>
                 <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" style="margin-right: 10px;" v-model="GioiTinh"
+                  <input type="text" value="" class="form-control" :disabled="isFound?true:false" style="margin-right: 10px;" v-model="GioiTinh"
                     v-text="GioiTinh">
                 </div>
               </div>
@@ -58,23 +58,23 @@
               <div class="row form-group">
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Ngày sinh</label>
                 <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" v-model="NgaySinh" v-text="NgaySinh">
+                  <input type="text" value="" class="form-control" :disabled="isFound?true:false" v-model="NgaySinh" v-text="NgaySinh">
                 </div>
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
                 <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" v-model="cmnd" v-text="cmnd">
+                  <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="cmnd" v-text="cmnd">
                 </div>
               </div>
 
               <div class="row form-group">
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Quê quán</label>
                 <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" v-model="QueQuan" v-text="QueQuan">
+                  <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="QueQuan" v-text="QueQuan">
                 </div>
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Số điện
                   thoại</label>
                 <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" v-model="SoDienThoai" v-text="SoDienThoai">
+                  <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="SoDienThoai" v-text="SoDienThoai">
                 </div>
               </div>
 
@@ -82,11 +82,11 @@
               <div class="row form-group">
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Nghề nghiệp</label>
                 <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" v-model="NgheNghiep" v-text="NgheNghiep">
+                  <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="NgheNghiep" v-text="NgheNghiep">
                 </div>
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Địa chỉ</label>
                 <div class="col-sm-4">
-                  <input type="text" value="" placeholder="Số nhà, đường, xã/phường, quận/huyện, tỉnh"
+                  <input type="text" value="" :disabled="isFound?true:false" placeholder="Số nhà, đường, xã/phường, quận/huyện, tỉnh"
                     class="form-control" v-model="DiaChi" v-text="DiaChi">
                 </div>
               </div>
@@ -128,7 +128,8 @@
         SoDienThoai: "",
         message: "",
         handleBtn: "",
-        idBenhNhan:""
+        idBenhNhan:"",
+        isFound:false
       }
     },
     methods: {
@@ -151,8 +152,10 @@
 
               this.idBenhNhan = res.Id;
               this.message = "Có kết qủa tìm kiếm"
+              this.isFound = true;
             } else {
               this.message = res.message;
+              this.isFound = false;
             }
           })
           .catch(e => {

@@ -48,3 +48,14 @@ exports.loadAllCLS = ()=>{
     let sql = `select * from DichVuCanLamSang`;
     return db.executeQuery(sql);
 }
+
+//Check phiếu khám
+exports.checkPk = (data)=>{
+    return db.executeProcedure('IDPhieuKham',data,'CheckPhieuKham');
+}
+
+//Sinh số cls
+exports.sinhSoCLS = (idPk,idCls) =>{
+    console.log(idPk,idCls);
+    return db.executeProcedure2input('IDPhieuKham','IDDichVuCLS',idPk,idCls,'PhatSinhSTTCLS');
+}
