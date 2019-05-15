@@ -12,7 +12,7 @@
                 <div class="col-sm-3"> <label class="control-label" for="chuyenkhoa"
                     style="color:#969696;padding:8pt;margin-left: 3pt; ">Chuyên khoa</label>
                 </div>
-                <select class="browser-default custom-select-lg form-group" v-model="selectedChuyenKhoa"
+                <select class="browser-default custom-select-lg form-group" v-model="selectedOption"
                   @change="handleChange">
                   <option selected disabled>Chọn chuyên khoa</option>
                   <option v-for="option in data" :value="option.IDChuyenKhoa">{{option.TenChuyenKhoa}}</option>
@@ -42,12 +42,12 @@
                 <tbody>
                   <tr v-for="(row, rindex) in loadedDoctor">
                     <td>{{ row.BanKham }}</td>
-                    <td>{{ row.PhongKham }}</td>
+                    <td>{{ row.PhongKham }}</td>                    
                     <td>{{row.HovaTen}}</td>
                     <td>
                       <div class="custom-control custom-radio">
                         <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                          value="customEx" @click="checkedDoctor(row)">
+                          value="customEx" @click="checkedDoctor(row)">                    
                       </div>
                     </td>
                   </tr>
@@ -55,32 +55,15 @@
               </table>
 
             </div>
-            <div style="display: flex;justify-content: center;">
-              <div>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createMedBill"
-                  @click="taoPk">Tạo phiếu khám</button>
-              </div>
-              <!-- Modal -->
-              <div class="modal fade" id="createMedBill" tabindex="-1" role="dialog"
-                aria-labelledby="createMedBillLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h3 class="modal-title" id="createMedBillLabel">Thông báo</h3>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body" v-text="message">
+            <form action="">
 
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    </div>
-                  </div>
+              <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                  <input class="form-group" id="buttom" type="submit" value="Tạo phiếu khám">
                 </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       </div>
@@ -104,22 +87,21 @@
     },
     data() {
       return {
-        message: '',
-        selectedChuyenKhoa: "",
+        selectedOption: "",
         data: "",
         loadedDoctor: "",
-        idBacSi: ""
+        item: ""
       }
     },
     created(e) {
-      this.selectedChuyenKhoa = ""
+      this.selectedOption = ""
       axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
     methods: {
       handleChange(e) {
-        axios.get(`http://localhost:8088/clinic/dsBacSi/` + this.selectedChuyenKhoa).then(response => {
+        axios.get(`http://localhost:8088/clinic/dsBacSi/` + this.selectedOption).then(response => {
           this.loadedDoctor = response.data;
           console.log(this.loadedDoctor);
         })
