@@ -80,12 +80,23 @@
               <div class="row form-group">
                 <label for="" class="col-sm-3 col-form-label">Mã phiếu khám</label>
                 <div class="col-sm-3">
-                  <input type="text" value="" class="form-control">
+                  <input type="text" value="" class="form-control" v-model="MaPhieuKham" v-text="MaPhieuKham"
+                    @change="checkMaPhieuKham">
+                  <small v-if="correct" id="passwordHelpBlock" class="form-text text-muted">
+                    <div class="small">
+                      <span>Có bệnh nhân</span>
+                    </div>
+                  </small>
+                  <small v-if="!correct" id="passwordHelpBlock" class="form-text text-muted">
+                    <div class="small">
+                      <span>Không có phiếu khám này</span>
+                    </div>
+                  </small>
                 </div>
                 <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày
                   khám</label>
                 <div class="col-sm-3">
-                  <input type="text" value="" class="form-control" v-model="date" v-text="date">
+                  <input type="text" value="" class="form-control" disabled v-model="date" v-text="date">
                 </div>
               </div>
 
@@ -97,18 +108,18 @@
               </div>
               <hr color="black" />
 
-              <div id="chiDinhCanLamSang" >
+              <div id="chiDinhCanLamSang">
                 <component v-for="option in soLuongChiDinh" :key="option.stt" :is="dynamicComponent" />
               </div>
               <a id="add" class="col-sm-6" @click="insertNewSubClinical">Thêm chỉ định</a>
               <a id="add" class="col-sm-6" style="text-align:right" @click="removeNewSubClinical">Xóa chỉ định</a>
-            
+
               <br><br><br><br>
               <hr />
               <div class="row">
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4">
-                  <input class="form-group" id="buttom" type="submit" value="Chỉ định">
+                  <input class="form-group" id="buttom" type="submit" value="Chỉ định" @click="chiDinhCanLamSang">
                 </div>
               </div>
               <!-- <div class="small">
@@ -133,7 +144,32 @@
 
       </div>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="findCmndModal" tabindex="-1" role="dialog" aria-labelledby="findCmndModalTitle"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="findCmndModalTitle">Thông báo</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" v-text="message">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
+
+
 </template>
 
 <script>
@@ -159,66 +195,90 @@
         message: "",
         handleBtn: "",
         idBenhNhan: "",
+        MaPhieuKham: "",
+        correct: false,
+        bodyRequestChiDinh: {
+          IDPhieuKham: "",
+          CLS: []
+        },
         soLuongChiDinh: [{
           stt: 1,
-        }]
-        ,
+        }],
+        message: "",
         date: new Date().getDate() + "/" + new Date().getMonth() + "/" + new Date().getFullYear()
       }
     },
-    created(e) {
-      axios.get(`http://192.168.1.26:8088/patient/checkBenhNhanTheoMaBN/` + localStorage.idBenhNhan)
-        .then(response => {
+
+    methods: {
+      insertNewSubClinical(e) {
+        this.soLuongChiDinh.push({
+          stt: this.soLuongChiDinh.length + 1
+        })
+      },
+      removeNewSubClinical(e) {
+        var test = this.soLuongChiDinh.pop()
+        this.bodyRequestChiDinh.CLS.splice(this.soLuongChiDinh.length - 1, 1);
+      },
+      checkMaPhieuKham(e) {
+        axios.get(`http://192.168.1.26:8088/clinic/checkPK/` + this.MaPhieuKham).then(response => {
           let res = response.data;
+
           if (!res.hasOwnProperty("message")) {
+            this.correct = true
             this.cmnd = res.CMND_CCCD;
-            this.HoVaTen = res.HoVaTen;
+            this.HoVaTen = res.Ho + " " + res.TenLot + " " + res.Ten;
             this.NgaySinh = res.NgaySinh.split("T")[0];
             this.GioiTinh = res.GioiTinh;
             this.QueQuan = res.QueQuan;
             this.NgheNghiep = res.NgheNghiep;
-            this.DiaChi = res.DiaChi;
+            this.DiaChi = res.Diachi;
             this.SoDienThoai = res.SDT;
             this.idBenhNhan = res.Id;
           }
-        });
+        }).catch(e => {
+          this.cmnd = "";
+          this.HoVaTen = "";
+          this.NgaySinh = "";
+          this.GioiTinh = "";
+          this.QueQuan = "";
+          this.NgheNghiep = "";
+          this.DiaChi = "";
+          this.SoDienThoai = "";
+          this.idBenhNhan = "";
+          this.correct = false;
+        })
+      },
+      chiDinhCanLamSang(e) {
+        this.bodyRequestChiDinh.IDPhieuKham = this.MaPhieuKham;
+        axios.post(`http://192.168.1.26:8088/clinic/phatSinhCLS`,
+          this.bodyRequestChiDinh
+        ).then(e => {
+          if (e.status === 200) {
+            this.message = "Đã sinh số thành công";
+            $('#findCmndModal').modal('show');
+          }
+        })
+      }
 
     },
-    methods: {
-      insertNewSubClinical(e) {
-       this.soLuongChiDinh.push({
-         stt: this.soLuongChiDinh.length +1
-       }) 
-      },
-      removeNewSubClinical(e){
-        var test = this.soLuongChiDinh.pop()
-        
-      }
-    },
     computed: {
-      dynamicComponent: function (e = this) {
+      dynamicComponent: function (parent = this) {
         return {
           template: ` <div class="row form-group">
                 <label for="" class="col-sm-5 col-form-label" v-text="label"> </label>
                 <div class="col-sm-7">
                   <select style ="width:100%" class="browser-default custom-select-lg form-group" v-model="selectedCanLamSang"
-                 >
+                  @change="selectCLS">
                   <option selected disabled>Chọn chuyên khoa</option>
                   <option v-for="option in data" :value="option.IDDichVu" :key="option.IDDichVu">{{option.TenDichVu}}</option>
                 </select>
-                  <!--<small id="passwordHelpBlock" class="form-text text-muted">
-                                            <div class="small">
-                                                <span>Phí</span>
-                                                <span>150.000 VNĐ</span>
-                                            </div>
-                                        </small> -->
                 </div>
               </div>`,
           data() {
             return {
               selectedCanLamSang: "",
               data: "",
-              stt: e.soLuongChiDinh.length,
+              stt: parent.soLuongChiDinh.length,
               label: "Chỉ định cận lâm sàng "
             }
           },
@@ -228,6 +288,16 @@
               this.data = response.data;
               this.label += this.stt;
             })
+          },
+          methods: {
+            selectCLS() {
+
+              parent.bodyRequestChiDinh.CLS.splice(this.stt - 1, 1, {
+                idCLS: this.selectedCanLamSang
+              });
+
+
+            }
           }
         }
       }
