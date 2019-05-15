@@ -1,7 +1,6 @@
 <template>
   <div class="TiepNhan">
     <Header />
-    <div class="row" style="background-color:#ece9e9">
       <Sidebar />
       <div class="col-sm-9 ">
         <div class="row">
@@ -101,7 +100,7 @@
         </div>
       </div>
     </div>
-  </div>
+ 
 </template>
 
 <script>
@@ -134,7 +133,7 @@
     methods: {
       checkCMND(e) {
         e.preventDefault();
-        axios.get(`http://localhost:8088/patient/checkBenhNhan/` + this.cmnd)
+        axios.get(`http://192.168.1.26:8088/patient/checkBenhNhan/` + this.cmnd)
           .then(response => {
             let res = response.data;
             if (!res.hasOwnProperty("message")) {
@@ -181,7 +180,7 @@
           "phone": this.SoDienThoai,
           "address": this.DiaChi,
         };
-        axios.post(`http://localhost:8088/patient/taoThongTin`, {
+        axios.post(`http://192.168.1.26:8088/patient/taoThongTin`, {
             body: posbody
           }).then(async response => {
             console.log(response);

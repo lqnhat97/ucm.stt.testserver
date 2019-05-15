@@ -113,13 +113,13 @@
     },
     created(e) {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://192.168.1.26:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
     methods: {
       handleChange(e) {
-        axios.get(`http://localhost:8088/clinic/dsBacSi/` + this.selectedChuyenKhoa).then(response => {
+        axios.get(`http://192.168.1.26:8088/clinic/dsBacSi/` + this.selectedChuyenKhoa).then(response => {
           this.loadedDoctor = response.data;
           console.log(this.loadedDoctor);
         })
@@ -128,11 +128,11 @@
         return this.idBacSi;
       },
       taoPk() {
-        axios.post(`http://localhost:8088/clinic/taoPhieuKham`, {
+        axios.post(`http://192.168.1.26:8088/clinic/taoPhieuKham`, {
           idBenhNhan: localStorage.idBenhNhan,
           idChuyenKhoa: this.selectedChuyenKhoa
         }).then(dataResponse => {
-          axios.post(`http://localhost:8088/clinic/phatSinhSttPkTheoChuyenKhoa`, {
+          axios.post(`http://192.168.1.26:8088/clinic/phatSinhSttPkTheoChuyenKhoa`, {
             IDPhieuKham: dataResponse.data.IDPhieuKham,
             idChuyenKhoa: this.selectedChuyenKhoa
           }).then(result => {
