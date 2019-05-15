@@ -134,7 +134,7 @@
     methods: {
       checkCMND(e) {
         e.preventDefault();
-        axios.get(`http://192.168.1.26:8088/patient/checkBenhNhan/` + this.cmnd)
+        axios.get(`http://nhatlq97.sytes.net:8088/patient/checkBenhNhan/` + this.cmnd)
           .then(response => {
             let res = response.data;
             if (!res.hasOwnProperty("message")) {
@@ -147,7 +147,7 @@
               this.DiaChi = res.Diachi;
               this.SoDienThoai = res.SDT;
               localStorage.idBenhNhan = res.ID;
-            console.log(localStorage.idBenhNhan);
+             console.log(localStorage.idBenhNhan);
 
               this.idBenhNhan = res.Id;
               this.message = "Có kết qủa tìm kiếm"
@@ -183,11 +183,11 @@
           "phone": this.SoDienThoai,
           "address": this.DiaChi,
         };
-        axios.post(`http://192.168.1.26:8088/patient/taoThongTin`, {
+        axios.post(`http://nhatlq97.sytes.net:8088/patient/taoThongTin`, {
             body: posbody
           }).then(async response => {
             console.log(response);
-            this.message = "Tạo thông tin thành công";
+            this.message = "Tạo thông tin thành công " +response.data.ID;
             this.handleBtn = "Tạo phiếu khám";
             localStorage.idBenhNhan = response.data.ID;
             console.log(localStorage.idBenhNhan);

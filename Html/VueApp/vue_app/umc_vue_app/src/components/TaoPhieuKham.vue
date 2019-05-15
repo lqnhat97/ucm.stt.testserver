@@ -12,7 +12,7 @@
                 <div class="col-sm-3"> <label class="control-label" for="chuyenkhoa"
                     style="color:#969696;padding:8pt;margin-left: 3pt; ">Chuyên khoa</label>
                 </div>
-                <select class="browser-default custom-select-lg form-group" v-model="selectedOption"
+                <select class="browser-default custom-select-lg form-group" v-model="selectedChuyenKhoa"
                   @change="handleChange">
                   <option selected disabled>Chọn chuyên khoa</option>
                   <option v-for="option in data" :value="option.IDChuyenKhoa">{{option.TenChuyenKhoa}}</option>
@@ -60,7 +60,7 @@
               <div class="row">
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4">
-                  <input class="form-group" id="buttom" type="submit" value="Tạo phiếu khám">
+                  <input class="form-group" @click="taoPk" id="buttom" type="submit" value="Tạo phiếu khám">
                 </div>
               </div>
             </form>
@@ -68,7 +68,30 @@
         </div>
       </div>
     </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="findCmndModal" tabindex="-1" role="dialog" aria-labelledby="findCmndModalTitle"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="findCmndModalTitle">Thông báo</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" v-text="message">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  
 </template>
 
 
@@ -87,21 +110,23 @@
     },
     data() {
       return {
-        selectedOption: "",
+        selectedChuyenKhoa: "",
         data: "",
         loadedDoctor: "",
-        item: ""
+        idBacSi:"",
+        item: "",
+        message:""
       }
     },
     created(e) {
-      this.selectedOption = ""
-      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
+      this.selectedChuyenKhoa = ""
+      axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
     methods: {
       handleChange(e) {
-        axios.get(`http://localhost:8088/clinic/dsBacSi/` + this.selectedOption).then(response => {
+        axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsBacSi/` + this.selectedChuyenKhoa).then(response => {
           this.loadedDoctor = response.data;
           console.log(this.loadedDoctor);
         })
@@ -111,27 +136,31 @@
         console.log(this.idBacSi);
       },
       taoPk() {
-        axios.post(`http://localhost:8088/clinic/taoPhieuKham`, {
+        axios.post(`http://nhatlq97.sytes.net:8088/clinic/taoPhieuKham`, {
           idBenhNhan: localStorage.idBenhNhan,
           idChuyenKhoa: this.selectedChuyenKhoa
         }).then(dataResponse => {
           console.log(dataResponse.data);
           if (this.idBacSi == '') {
-            axios.post(`http://localhost:8088/clinic/phatSinhStt`, {
+            axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhStt`, {
               IDPhieuKham: dataResponse.data.IDPhieuKham,
               IDChuyenKhoa: this.selectedChuyenKhoa
             }).then(result => {
+              this.message = "Tạo phiếu khám thành công " +dataResponse.data.IDPhieuKham;
+               $('#findCmndModal').modal('show');
               console.log(result.data);
             }).catch(err => {
               console.log(err);
             });
           }
           else{
-            axios.post(`http://localhost:8088/clinic/phatSinhSttTheoBS`, {
+            axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhSttTheoBS`, {
               IDPhieuKham: dataResponse.data.IDPhieuKham,
               IDChuyenKhoa: this.selectedChuyenKhoa,
               IDBacSi: this.idBacSi
             }).then(result => {
+              this.message = "Tạo phiếu khám thành công " +dataResponse.data.IDPhieuKham;
+               $('#findCmndModal').modal('show');
               console.log(result.data);
             }).catch(err => {
               console.log(err);
