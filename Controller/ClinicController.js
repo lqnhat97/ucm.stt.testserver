@@ -93,9 +93,19 @@ router.post('/taoPhieuKham', (req, res) => {
     })
 })
 
-//Kích hoạt Phát sinh STT phòng khám lâm sàng theo bác sĩ
+//Kích hoạt Phát sinh STT phòng khám lâm sàng theo chuyên khoa
 router.post('/phatSinhStt', (req, res) => {
-    db.phatSinhSttPk(req.body).then(row => {
+    let data = req.body;
+    db.phatSinhSttPkTheoChuyenKhoa(data).then(rows => {
+        res.status(200).json(rows.recordset[0]);
+    })
+})
+
+//Kích hoạt Phát sinh STT phòng khám lâm sàng theo bác sĩ
+router.post('/phatSinhSttTheoBS', (req, res) => {
+    let data = req.body;
+    console.log(data);
+    db.phatSinhSttPkTheoBS(data).then(rows => {
         res.status(200).json(rows.recordset[0]);
     })
 })
