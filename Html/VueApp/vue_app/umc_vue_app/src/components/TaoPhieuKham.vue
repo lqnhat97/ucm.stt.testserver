@@ -55,15 +55,11 @@
               </table>
 
             </div>
-            <form action="">
-
-              <div class="row">
-                <div class="col-sm-4"></div>
-                <div class="col-sm-4">
+              <div style="text-align:center;display: flex;justify-content: center;">
+                <div>
                   <input class="form-group" @click="taoPk" id="buttom" type="submit" value="Tạo phiếu khám">
                 </div>
               </div>
-            </form>
           </div>
         </div>
       </div>
@@ -135,7 +131,8 @@
         this.idBacSi = row.ID;
         console.log(this.idBacSi);
       },
-      taoPk() {
+      taoPk(e) {
+        e.preventDefault();
         axios.post(`http://nhatlq97.sytes.net:8088/clinic/taoPhieuKham`, {
           idBenhNhan: localStorage.idBenhNhan,
           idChuyenKhoa: this.selectedChuyenKhoa

@@ -30,7 +30,6 @@ exports.layDSBacSiTheoChuyenKhoa = (idCK)=>{
 }
 
 exports.taoPhieuKham = (data) =>{
-    console.log(data);
     return db.executeProcedure2input('IDBenhNhan','IDChuyenKhoa',data.idBenhNhan,data.idChuyenKhoa,'TaoPhieuKham');
 }
 
@@ -40,6 +39,7 @@ exports.phatSinhSttPkTheoBS = (data) =>{
 }
 
 exports.phatSinhSttPkTheoChuyenKhoa = (data) =>{
+    console.log(data);
     return db.executeProcedure2input('IDPhieuKham','IDChuyenKhoa',data.IDPhieuKham,data.IDChuyenKhoa,'PhatSinhSTTPhongKham');
 }
 

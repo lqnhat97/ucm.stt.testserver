@@ -129,10 +129,9 @@ router.get('/checkPK/:idPk', (req,res)=>{
 router.post('/phatSinhCLS',async (req,res)=>{
     let data = req.body;
     let dsCLS = [...data.CLS];
-    await dsCLS.forEach(async (value)=>{
+    await dsCLS.forEach((value)=>{
         console.log(value);
-        await  db.sinhSoCLS(data.IDPhieuKham,value.idCLS).then(rows=>{
-        }).catch(err=>{if (err) throw err})
+        db.sinhSoCLS(data.IDPhieuKham,value.idCLS).catch(err=>{if (err) throw err})
     })
     res.status(200).end();
 })
