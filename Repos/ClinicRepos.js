@@ -42,3 +42,9 @@ exports.phatSinhSttPkTheoBS = (data) =>{
 exports.phatSinhSttPkTheoChuyenKhoa = (data) =>{
     return db.executeProcedure2input('IDPhieuKham','IDChuyenKhoa',data.IDPhieuKham,data.IDChuyenKhoa,'PhatSinhSTTPhongKham');
 }
+
+//Lấy danh sách dịch vụ CLS
+exports.loadAllCLS = ()=>{
+    let sql = `select * from DichVuCanLamSang`;
+    return db.executeQuery(sql);
+}

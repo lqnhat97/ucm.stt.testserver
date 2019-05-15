@@ -124,22 +124,37 @@
           console.log(this.loadedDoctor);
         })
       },
-      checkedDoctor(idBacSi) {
-        return this.idBacSi;
+      checkedDoctor(row) {
+        this.idBacSi = row.ID;
+        console.log(this.idBacSi);
       },
       taoPk() {
         axios.post(`http://localhost:8088/clinic/taoPhieuKham`, {
           idBenhNhan: localStorage.idBenhNhan,
           idChuyenKhoa: this.selectedChuyenKhoa
         }).then(dataResponse => {
-          axios.post(`http://localhost:8088/clinic/phatSinhSttPkTheoChuyenKhoa`, {
-            IDPhieuKham: dataResponse.data.IDPhieuKham,
-            idChuyenKhoa: this.selectedChuyenKhoa
-          }).then(result => {
-            console.log(result.data);
-          }).catch(err => {
-            console.log(err);
-          });
+          console.log(dataResponse.data);
+          if (this.idBacSi == '') {
+            axios.post(`http://localhost:8088/clinic/phatSinhStt`, {
+              IDPhieuKham: dataResponse.data.IDPhieuKham,
+              IDChuyenKhoa: this.selectedChuyenKhoa
+            }).then(result => {
+              console.log(result.data);
+            }).catch(err => {
+              console.log(err);
+            });
+          }
+          else{
+            axios.post(`http://localhost:8088/clinic/phatSinhSttTheoBS`, {
+              IDPhieuKham: dataResponse.data.IDPhieuKham,
+              IDChuyenKhoa: this.selectedChuyenKhoa,
+              IDBacSi: this.idBacSi
+            }).then(result => {
+              console.log(result.data);
+            }).catch(err => {
+              console.log(err);
+            });
+          }
         }).catch(err => {
           console.log(err);
         })

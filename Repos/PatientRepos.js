@@ -4,8 +4,14 @@ exports.loadPatientById = (idBn) => {
     return db.executeProcedure('maBn', idBn, 'LayThongTinBenhNhan');
 }
 
+//Check theo CMND
 exports.checkPatientById = (id) => {
     return db.executeProcedure('CMND_CCCD', id, 'CheckBenhNhan');
+}
+
+//Check theo mã BN
+exports.checkPatientByPatientId = (id) => {
+    return db.executeProcedure('ID', id, 'HienThiThongTinBN');
 }
 
 exports.createNewPatient = (input) => {
