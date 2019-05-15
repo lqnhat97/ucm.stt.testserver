@@ -129,7 +129,7 @@
       },
       taoPk() {
         axios.post(`http://localhost:8088/clinic/taoPhieuKham`, {
-          idBenhNhan: this.idBenhNhan,
+          idBenhNhan: localStorage.idBenhNhan,
           idChuyenKhoa: this.selectedChuyenKhoa
         }).then(dataResponse => {
           axios.post(`http://localhost:8088/clinic/phatSinhSttPkTheoChuyenKhoa`, {

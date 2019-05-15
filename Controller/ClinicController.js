@@ -97,7 +97,9 @@ router.post('/taoPhieuKham', (req, res) => {
 router.post('/phatSinhStt', (req, res) => {
     let data = req.body;
     db.phatSinhSttPkTheoChuyenKhoa(data).then(rows => {
-        res.status(200).json(rows.recordset[0]);
+        res.status(200).json(rows);
+    }).catch(err=>{
+        if (err) throw err;
     })
 })
 
@@ -107,7 +109,7 @@ router.post('/phatSinhSttTheoBS', (req, res) => {
     console.log(data);
     db.phatSinhSttPkTheoBS(data).then(rows => {
         res.status(200).json(rows.recordset[0]);
-    })
+    }).catch(err=>console.log(err))
 })
 
 module.exports = router;

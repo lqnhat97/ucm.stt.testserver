@@ -40,7 +40,5 @@ exports.phatSinhSttPkTheoBS = (data) =>{
 }
 
 exports.phatSinhSttPkTheoChuyenKhoa = (data) =>{
-    console.log(data);
-
     return db.executeProcedure2input('IDPhieuKham','IDChuyenKhoa',data.IDPhieuKham,data.IDChuyenKhoa,'PhatSinhSTTPhongKham');
 }
