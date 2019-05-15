@@ -128,6 +128,7 @@
         SoDienThoai: "",
         message: "",
         handleBtn: "",
+        idBenhNhan:""
       }
     },
     methods: {
@@ -144,10 +145,12 @@
               this.QueQuan = res.QueQuan;
               this.NgheNghiep = res.NgheNghiep;
               this.DiaChi = res.Diachi;
-              this.SoDienThoai = res.SDT
-              this.idBenhNhan = res.ID;
+              this.SoDienThoai = res.SDT;
+              localStorage.idBenhNhan = res.ID;
+            console.log(localStorage.idBenhNhan);
+
+              this.idBenhNhan = res.Id;
               this.message = "Có kết qủa tìm kiếm"
-              console.log(this.idBenhNhan);
             } else {
               this.message = res.message;
             }
@@ -184,8 +187,9 @@
             console.log(response);
             this.message = "Tạo thông tin thành công";
             this.handleBtn = "Tạo phiếu khám";
-            this.idBenhNhan = response.data.ID;
-            console.log(this.idBenhNhan);
+            localStorage.idBenhNhan = response.data.ID;
+            console.log(localStorage.idBenhNhan);
+            this.idBenhNhan = response.data.ID
             $('#findCmndModal').modal('show');
           })
           .catch(e => {

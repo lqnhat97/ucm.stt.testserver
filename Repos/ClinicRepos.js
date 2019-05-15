@@ -34,7 +34,11 @@ exports.taoPhieuKham = (data) =>{
     return db.executeProcedure2input('IDBenhNhan','IDChuyenKhoa',data.idBenhNhan,data.idChuyenKhoa,'TaoPhieuKham');
 }
 
-exports.phatSinhSttPk = (data) =>{
+exports.phatSinhSttPkTheoBS = (data) =>{
     let sql =`exec PhatSinhSTTPhongKham_BacSi '${data.IDPhieuKham}','${data.IDChuyenKhoa}','${data.IDBacSi}'`
     return db.executeQuery(sql);
+}
+
+exports.phatSinhSttPkTheoChuyenKhoa = (data) =>{
+    return db.executeProcedure2input('IDPhieuKham','IDChuyenKhoa',data.IDPhieuKham,data.IDChuyenKhoa,'PhatSinhSTTPhongKham');
 }
