@@ -22,6 +22,17 @@ router.get('/checkBenhNhan/:id', (req, res) => {
     })
 })
 
+//Kiem tra thong tin benh nhan theo mã Bệnh Nhân
+router.get('/checkBenhNhanTheoMaBN/:id', (req, res) => {
+    var id = req.params.id;
+    db.checkPatientByPatientId(id).then(rows => {
+        if (rows.rowsAffected[0] != 0)
+            res.status(200).json(rows.recordset[0]);
+        else
+            res.status(200).json({message:'Không có kết quả tìm kiếm'});
+    })
+})
+
 //Tạo thông tin bệnh nhân
 router.post('/taoThongTin',(req,res)=>{
     db.createNewPatient(req.body).then(rows=>{

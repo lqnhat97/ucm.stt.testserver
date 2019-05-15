@@ -106,10 +106,15 @@ router.post('/phatSinhStt', (req, res) => {
 //Kích hoạt Phát sinh STT phòng khám lâm sàng theo bác sĩ
 router.post('/phatSinhSttTheoBS', (req, res) => {
     let data = req.body;
-    console.log(data);
     db.phatSinhSttPkTheoBS(data).then(rows => {
         res.status(200).json(rows.recordset[0]);
     }).catch(err=>console.log(err))
 })
 
+//Load danh sách cận lâm sàng
+router.get('/loadCLS', (req,res)=>{
+    db.loadAllCLS().then(rows =>{
+        res.status(200).json(rows.recordset);
+    })
+})
 module.exports = router;
