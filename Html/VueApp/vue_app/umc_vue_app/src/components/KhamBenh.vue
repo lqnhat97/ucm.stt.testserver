@@ -100,7 +100,8 @@
               <div id="chiDinhCanLamSang" >
                 <component v-for="option in soLuongChiDinh" :key="option.stt" :is="dynamicComponent" />
               </div>
-              <a id="add" class="col-sm3" @click="addNewSubClinical">Thêm chỉ định</a>
+              <a id="add" class="col-sm-6" @click="insertNewSubClinical">Thêm chỉ định</a>
+              <a id="add" class="col-sm-6" style="text-align:right" @click="removeNewSubClinical">Xóa chỉ định</a>
             
               <br><br><br><br>
               <hr />
@@ -184,10 +185,14 @@
 
     },
     methods: {
-      addNewSubClinical(e) {
+      insertNewSubClinical(e) {
        this.soLuongChiDinh.push({
          stt: this.soLuongChiDinh.length +1
        }) 
+      },
+      removeNewSubClinical(e){
+        var test = this.soLuongChiDinh.pop()
+        
       }
     },
     computed: {
