@@ -117,4 +117,24 @@ router.get('/loadCLS', (req,res)=>{
         res.status(200).json(rows.recordset);
     })
 })
+
+//Check phiếu khám
+router.get('/checkPK/:idPk', (req,res)=>{
+    db.checkPk(req.params.idPk).then(rows =>{
+        res.status(200).json(rows.recordset[0]);
+    })
+})
+
+//Kích hoạt phát sinh STT CLS
+router.post('/phatSinhCLS',async (req,res)=>{
+    let data = req.body;
+    let dsCLS = [...data.CLS];
+    await dsCLS.forEach(async (value)=>{
+        console.log(value);
+        await  db.sinhSoCLS(data.IDPhieuKham,value.idCLS).then(rows=>{
+        }).catch(err=>{if (err) throw err})
+    })
+    res.status(200).end();
+})
+
 module.exports = router;
