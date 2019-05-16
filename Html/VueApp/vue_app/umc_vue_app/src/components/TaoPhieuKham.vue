@@ -15,7 +15,7 @@
                 <select class="browser-default custom-select-lg form-group" v-model="selectedChuyenKhoa"
                   @change="handleChange">
                   <option selected disabled>Chọn chuyên khoa</option>
-                  <option v-for="option in data" :value="option.IDChuyenKhoa">{{option.TenChuyenKhoa}}</option>
+                  <option v-for="option in data" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">{{option.TenChuyenKhoa}}</option>
 
                 </select>
               </div>
@@ -40,7 +40,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(row, rindex) in loadedDoctor">
+                  <tr v-for="(row, rindex) in loadedDoctor" :key="rindex">
                     <td>{{ row.BanKham }}</td>
                     <td>{{ row.PhongKham }}</td>                    
                     <td>{{row.HovaTen}}</td>
@@ -116,13 +116,13 @@
     },
     created(e) {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://192.168.43.50:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
     methods: {
       handleChange(e) {
-        axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsBacSi/` + this.selectedChuyenKhoa).then(response => {
+        axios.get(`http://192.168.43.50:8088/clinic/dsBacSi/` + this.selectedChuyenKhoa).then(response => {
           this.loadedDoctor = response.data;
           console.log(this.loadedDoctor);
         })
@@ -133,13 +133,13 @@
       },
       taoPk(e) {
         e.preventDefault();
-        axios.post(`http://nhatlq97.sytes.net:8088/clinic/taoPhieuKham`, {
+        axios.post(`http://192.168.43.50:8088/clinic/taoPhieuKham`, {
           idBenhNhan: localStorage.idBenhNhan,
           idChuyenKhoa: this.selectedChuyenKhoa
         }).then(dataResponse => {
           console.log(dataResponse.data);
           if (this.idBacSi == '') {
-            axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhStt`, {
+            axios.post(`http://192.168.43.50:8088/clinic/phatSinhStt`, {
               IDPhieuKham: dataResponse.data.IDPhieuKham,
               IDChuyenKhoa: this.selectedChuyenKhoa
             }).then(result => {
@@ -151,7 +151,7 @@
             });
           }
           else{
-            axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhSttTheoBS`, {
+            axios.post(`http://192.168.43.50:8088/clinic/phatSinhSttTheoBS`, {
               IDPhieuKham: dataResponse.data.IDPhieuKham,
               IDChuyenKhoa: this.selectedChuyenKhoa,
               IDBacSi: this.idBacSi

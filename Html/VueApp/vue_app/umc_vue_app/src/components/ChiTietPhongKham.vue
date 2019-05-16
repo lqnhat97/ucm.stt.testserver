@@ -2,25 +2,29 @@
   <div class="ChiTietPhongKham">
     <Header />
     <Sidebar />
-    
+
     <div class="col-sm-9 ">
       <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
         <form style=" border-bottom: 2px solid #bbbbbb">
           <div class="row" style="padding:5pt">
             <div class="col-sm-2"> <label class="control-label" for="chuyenkhoa"
                 style="color:#969696;padding:8pt;margin-left: 3pt">Chuyên khoa</label></div>
-            <div class="search-box col-sm-4" style="height:30pt">
-              <input type="text" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa">
-              <button class="btn btn-link search-btn"> <i class="glyphicon glyphicon-search"></i>
-              </button>
-            </div>
+            <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
+              v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
+              <option :selected="true" disabled>Chọn chuyên khoa</option>
+              <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
+                {{option.TenChuyenKhoa}}</option>
+            </select>
             <div class="col-sm-2"> <label for="sophong" style="color:#969696;padding:8pt;margin-left: 15pt">Số
                 phòng</label></div>
-            <div class="search-box col-sm-2" style="height:30pt"> <input type="text" id="sophong" class="form-control"
-                placeholder="Số phòng">
-              <button class="btn btn-link search-btn"> <i class="glyphicon glyphicon-search"></i>
-              </button>
-            </div>
+    
+              <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
+                v-model="selectedPhongKham" @change="handleChangeSoPhong">
+                <option :selected="true" disabled>Chọn số phòng</option>
+                <option v-for="option in soPhong" :value="option.SoBan" :key="option.SoBan">
+                  {{option.SoBan}}</option>
+              </select>
+            
           </div>
         </form>
         <form style="padding-bottom:8pt;padding-left:5pt">
@@ -289,5 +293,23 @@
       Header,
       Sidebar
     },
+    data(){
+      return{
+        chuyenKhoa: "",
+        selectedChuyenKhoa: "",
+        selectedPhongKham: "",
+        soPhong: "",
+      }
+    },
+    methods:{
+      handleChangeChuyenKhoa(){},
+      handleChangeSoPhong(){}
+    },
+    created() {
+      this.selectedChuyenKhoa = ""
+      axios.get(`http://192.168.43.50:8088/clinic/dsChuyenKhoa`).then(response => {
+        this.chuyenKhoa = response.data;
+      })
+    }
   }
 </script>
