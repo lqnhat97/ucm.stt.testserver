@@ -59,3 +59,8 @@ exports.sinhSoCLS = (idPk,idCls) =>{
     console.log(idPk,idCls);
     return db.executeProcedure2input('IDPhieuKham','IDDichVuCLS',idPk,idCls,'PhatSinhSTTCLS');
 }
+
+//Tìm & xuất danh sách phòng khám, bàn khám, STT hiện tại, bác sĩ, bệnh nhân  theo chuyên khoa
+exports.tinhTrangHienTaiTheoChuyenKhoa=(idChuyenKhoa)=>{
+    return db.executeProcedure('IDChuyenKhoa',idChuyenKhoa,"TinhTrangHienTaiTheoChuyenKhoa");
+}

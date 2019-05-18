@@ -136,4 +136,28 @@ router.post('/phatSinhCLS',async (req,res)=>{
     res.status(200).end();
 })
 
+//Tìm & xuất danh sách phòng khám, bàn khám, STT hiện tại, bác sĩ, bệnh nhân  theo chuyên khoa
+router.get('/tinhTrangTheoChuyenKhoa/:idChuyenKhoa',(req,res)=>{
+    let data = req.params.idChuyenKhoa;
+    db.tinhTrangHienTaiTheoChuyenKhoa(data).then(async rows=>{
+        dataRes= rows.recordset;
+        let ketQua =[]
+        let arrSoPhong = dataRes.map((data)=>{
+            return data.PhongKham;
+        });
+        let rightArraySoPhong = arrSoPhong.filter((v,i)=>arrSoPhong.indexOf(v)===i);
+        rightArraySoPhong.forEach(soPhong=>{
+            let data = dataRes.filter((dataInside)=>{
+                return dataInside.PhongKham === soPhong;
+            });
+            ketQua.push({
+                phongKham:soPhong,
+                thongTin:data
+            })
+        });
+        
+        res.status(200).json(ketQua);
+    })
+})
+
 module.exports = router;
