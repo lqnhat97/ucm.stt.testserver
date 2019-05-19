@@ -144,7 +144,7 @@
     methods: {
       checkCMND(e) {
         e.preventDefault();
-        axios.get(`http://192.168.43.50:8088/patient/checkBenhNhan/` + this.cmnd)
+        axios.get(`http://localhost:8088/patient/checkBenhNhan/` + this.cmnd)
           .then(response => {
             let res = response.data;
             if (!res.hasOwnProperty("message")) {
@@ -193,7 +193,7 @@
           "phone": this.SoDienThoai,
           "address": this.DiaChi,
         };
-        axios.post(`http://192.168.43.50:8088/patient/taoThongTin`, {
+        axios.post(`http://localhost:8088/patient/taoThongTin`, {
             body: posbody
           }).then(async response => {
             console.log(response);

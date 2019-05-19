@@ -15,7 +15,8 @@
                 <select class="browser-default custom-select-lg form-group" v-model="selectedChuyenKhoa"
                   @change="handleChange">
                   <option selected disabled>Chọn chuyên khoa</option>
-                  <option v-for="option in data" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">{{option.TenChuyenKhoa}}</option>
+                  <option v-for="option in data" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
+                    {{option.TenChuyenKhoa}}</option>
 
                 </select>
               </div>
@@ -25,46 +26,69 @@
             <form style="padding-bottom:8pt;padding-left:5pt">
               <div class="row">
                 <div class="col-sm-5">
-                  <h3>Danh sách bác sĩ</h3>
+                  <h3>Danh sách Chuyên khoa</h3>
                 </div>
               </div>
+              <button type="button" class="btn btn-info" v-on:click="addChuyenKhoa"> Thêm </button>
             </form>
             <div class="row " style="padding-left:5pt;display:flex;justify-content:space-between">
-              <table class="table">
+              <table class="table" id="chuyenKhoaTbody">
                 <thead>
                   <tr>
-                    <th>Bàn</th>
-                    <th>Phòng</th>
-                    <th>Bác sĩ</th>
-                    <th>Chọn bác sĩ</th>
+                    <th>Chuyên Khoa</th>
+                    <th>Danh sách bác sĩ</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(row, rindex) in loadedDoctor" :key="rindex">
-                    <td>{{ row.BanKham }}</td>
-                    <td>{{ row.PhongKham }}</td>                    
-                    <td>{{row.HovaTen}}</td>
+                  <tr v-for="(optionChuyenKhoa,index) in soLuongChuyenKhoa" :key="index">
+                    <td >
+                      <select class="browser-default custom-select-lg form-group"  v-model="optionChuyenKhoa.selected" @change="handleChange('optionChuyenKhoa.selected')">
+                        <option selected disabled>Chọn chuyên khoa</option>
+                        <option v-for="option in data" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
+                          {{option.TenChuyenKhoa}}</option>
+
+                      </select>
+                    </td>
                     <td>
-                      <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                          value="customEx" @click="checkedDoctor(row)">                    
-                      </div>
+                      <table class="table" id="demo" style="width: 100%">
+                        <thead>
+                          <tr>
+                            <th>Bàn</th>
+                            <th>Phòng</th>
+                            <th>Bác sĩ</th>
+                            <th>Chọn bác sĩ</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="(row, rindex) in optionChuyenKhoa.loadedDoctor" :key="rindex">
+                            <td>{{ row.BanKham }}</td>
+                            <td>{{ row.PhongKham }}</td>
+                            <td>{{row.HovaTen}}</td>
+                            <td>
+                              <div class="custom-control custom-radio">
+                                <input type="radio" class="custom-control-input" id="customRadio" name="example1"
+                                  value="customEx" @click="checkedDoctor(row)">
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </td>
                   </tr>
                 </tbody>
               </table>
 
             </div>
-              <div style="text-align:center;display: flex;justify-content: center;">
-                <div>
-                  <input class="form-group" @click="taoPk" id="buttom" type="submit" value="Tạo phiếu khám">
-                </div>
+            <div style="text-align:center;display: flex;justify-content: center;">
+              <div>
+                <input class="form-group" @click="taoPk" id="buttom" type="submit" value="Tạo phiếu khám">
               </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    
+
     <!-- Modal -->
     <div class="modal fade" id="findCmndModal" tabindex="-1" role="dialog" aria-labelledby="findCmndModalTitle"
       aria-hidden="true">
@@ -87,7 +111,7 @@
     </div>
   </div>
 
-  
+
 </template>
 
 
@@ -109,22 +133,39 @@
         selectedChuyenKhoa: "",
         data: "",
         loadedDoctor: "",
-        idBacSi:"",
+        idBacSi: "",
         item: "",
-        message:""
+        message: "",
+        soLuongChuyenKhoa: [{
+          stt: 0,
+          selected: "",
+          loadedDoctor: ""
+        }],
       }
     },
     created(e) {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://192.168.43.50:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
     methods: {
+      addChuyenKhoa(e) {
+        this.soLuongChuyenKhoa.push({
+          stt: this.soLuongChuyenKhoa.length,
+          selected: "",
+          loadedDoctor:""
+        })
+        console.log(this.soLuongChuyenKhoa)
+      },
       handleChange(e) {
-        axios.get(`http://192.168.43.50:8088/clinic/dsBacSi/` + this.selectedChuyenKhoa).then(response => {
-          this.loadedDoctor = response.data;
-          console.log(this.loadedDoctor);
+        axios.get(`http://localhost:8088/clinic/dsBacSi/` + e).then(response => {
+          this.soLuongChuyenKhoa.forEach(element => {
+            if(element.selected === e){
+              element.loadedDoctor = response.data;
+            }
+          });
+          console.log(this.soLuongChuyenKhoa);
         })
       },
       checkedDoctor(row) {
@@ -133,31 +174,30 @@
       },
       taoPk(e) {
         e.preventDefault();
-        axios.post(`http://192.168.43.50:8088/clinic/taoPhieuKham`, {
+        axios.post(`http://localhost:8088/clinic/taoPhieuKham`, {
           idBenhNhan: localStorage.idBenhNhan,
           idChuyenKhoa: this.selectedChuyenKhoa
         }).then(dataResponse => {
           console.log(dataResponse.data);
           if (this.idBacSi == '') {
-            axios.post(`http://192.168.43.50:8088/clinic/phatSinhStt`, {
+            axios.post(`http://localhost:8088/clinic/phatSinhStt`, {
               IDPhieuKham: dataResponse.data.IDPhieuKham,
               IDChuyenKhoa: this.selectedChuyenKhoa
             }).then(result => {
-              this.message = "Tạo phiếu khám thành công " +dataResponse.data.IDPhieuKham;
-               $('#findCmndModal').modal('show');
+              this.message = "Tạo phiếu khám thành công " + dataResponse.data.IDPhieuKham;
+              $('#findCmndModal').modal('show');
               console.log(result.data);
             }).catch(err => {
               console.log(err);
             });
-          }
-          else{
-            axios.post(`http://192.168.43.50:8088/clinic/phatSinhSttTheoBS`, {
+          } else {
+            axios.post(`http://localhost:8088/clinic/phatSinhSttTheoBS`, {
               IDPhieuKham: dataResponse.data.IDPhieuKham,
               IDChuyenKhoa: this.selectedChuyenKhoa,
               IDBacSi: this.idBacSi
             }).then(result => {
-              this.message = "Tạo phiếu khám thành công " +dataResponse.data.IDPhieuKham;
-               $('#findCmndModal').modal('show');
+              this.message = "Tạo phiếu khám thành công " + dataResponse.data.IDPhieuKham;
+              $('#findCmndModal').modal('show');
               console.log(result.data);
             }).catch(err => {
               console.log(err);
@@ -169,10 +209,8 @@
       }
     }
   }
-
 </script>
 
 <style>
   @import '../../UMCC.css';
-
 </style>

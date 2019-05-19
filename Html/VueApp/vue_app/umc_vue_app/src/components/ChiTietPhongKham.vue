@@ -24,7 +24,6 @@
                 <option v-for="option in soPhong" :value="option.SoBan" :key="option.SoBan">
                   {{option.SoBan}}</option>
               </select>
-            
           </div>
         </form>
         <form style="padding-bottom:8pt;padding-left:5pt">
@@ -33,7 +32,7 @@
           </div>
         </form>
 
-        <div class="row " style="padding-left:5pt;display:flex;justify-content:space-between">
+        <div class="row " style="flex-wrap: wrap;padding-left:5pt;display:flex;justify-content:space-evenly">
           <div class="col-sm-5" style="background-color: white;   box-shadow:1px 1px 1px;">
             <div class="row" style="border-bottom: 2pt solid #bbbbbb">
               <h3 style="display:inline-block;margin:10pt; color:rgb(9, 173, 214)">Phòng khám</h3>
@@ -302,12 +301,28 @@
       }
     },
     methods:{
-      handleChangeChuyenKhoa(){},
-      handleChangeSoPhong(){}
+      handleChangeChuyenKhoa(e){
+         axios.get(`http://localhost:8088/clinic/tinhTrangConChoTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
+          response => {
+            console.log(response.data);
+            this.soPhong = response.data;
+            this.soLuongPhong  = response.data  ;
+           
+          })
+      },
+      handleChangeSoPhong(){
+        this.soPhong = this.soLuongPhong.filter(value=>{
+            return value.phongKham === this.selectedPhongKham
+          })
+          if(this.selectedPhongKham === "tatCa"){
+             this.soPhong = this.soLuongPhong;
+          }
+          
+      }
     },
     created() {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://192.168.43.50:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
         this.chuyenKhoa = response.data;
       })
     }

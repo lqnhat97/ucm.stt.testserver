@@ -143,12 +143,36 @@ router.get('/tinhTrangTheoChuyenKhoa/:idChuyenKhoa',(req,res)=>{
         dataRes= rows.recordset;
         let ketQua =[]
         let arrSoPhong = dataRes.map((data)=>{
-            return data.PhongKham;
+            return data.Phong;
         });
         let rightArraySoPhong = arrSoPhong.filter((v,i)=>arrSoPhong.indexOf(v)===i);
         rightArraySoPhong.forEach(soPhong=>{
             let data = dataRes.filter((dataInside)=>{
-                return dataInside.PhongKham === soPhong;
+                return dataInside.Phong === soPhong;
+            });
+            ketQua.push({
+                phongKham:soPhong,
+                thongTin:data
+            })
+        });
+        
+        res.status(200).json(ketQua);
+    })
+})
+
+//Tìm và suất danh sách phòng khám chi tiết gồm có số còn chờ, tốc độ nhảy số, phòng khám
+router.get('/tinhTrangConChoTheoChuyenKhoa/:idChuyenKhoa',(req,res)=>{
+    let data = req.params.idChuyenKhoa;
+    db.tinhTrangConChoTheoChuyenKhoa(data).then(async rows=>{
+        dataRes= rows.recordset;
+        let ketQua =[]
+        let arrSoPhong = dataRes.map((data)=>{
+            return data.Phong;
+        });
+        let rightArraySoPhong = arrSoPhong.filter((v,i)=>arrSoPhong.indexOf(v)===i);
+        rightArraySoPhong.forEach(soPhong=>{
+            let data = dataRes.filter((dataInside)=>{
+                return dataInside.Phong === soPhong;
             });
             ketQua.push({
                 phongKham:soPhong,

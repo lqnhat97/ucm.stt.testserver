@@ -64,3 +64,8 @@ exports.sinhSoCLS = (idPk,idCls) =>{
 exports.tinhTrangHienTaiTheoChuyenKhoa=(idChuyenKhoa)=>{
     return db.executeProcedure('IDChuyenKhoa',idChuyenKhoa,"TinhTrangHienTaiTheoChuyenKhoa");
 }
+
+//Tìm và suất danh sách phòng khám chi tiết gồm có số còn chờ, tốc độ nhảy số, phòng khám
+exports.tinhTrangConChoTheoChuyenKhoa=(idChuyenKhoa)=>{
+    return db.executeProcedure('IDChuyenKhoa',idChuyenKhoa,"TinhTrangConChoTheoChuyenKhoa");
+}

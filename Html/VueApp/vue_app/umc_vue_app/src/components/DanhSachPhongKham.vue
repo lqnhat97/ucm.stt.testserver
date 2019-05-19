@@ -23,7 +23,8 @@
             <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
               v-model="selectedPhongKham" @change="handleChangeSoPhong">
               <option :selected="true" disabled>Chọn số phòng</option>
-              <option v-for="option in soLuongPhong" :value="option.phongKham" :key="option.phongKham">
+              <option selected value ="tatCa">Tất cả</option>
+              <option v-for="option in soLuongPhong" :value="option.phongKham" :key="option.Phong">
                 {{option.phongKham}}</option>
             </select>
           </div>
@@ -33,10 +34,9 @@
             <div class="col-sm-4">
               <h3>Danh sách phòng khám</h3>
             </div>
-
           </div>
         </form>
-        <div class="row" id="chiDinhCanLamSang"  style=" flex-wrap: wrap;padding-left:5pt;display:flex;justify-content:space-between ; padding-top:10pt">
+        <div class="row" id="chiDinhCanLamSang"  style=" flex-wrap: wrap;display:flex;justify-content:space-evenly; ">
           <component v-for="option in soPhong" :key="option.phongKham" :is="dynamicComponent" :option= "option"/>
         </div>
       </div>
@@ -66,13 +66,13 @@
     },
     created() {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://192.168.1.29:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
         this.chuyenKhoa = response.data;
       })
     },
     methods: {
       handleChangeChuyenKhoa(e) {
-        axios.get(`http://192.168.1.29:8088/clinic/tinhTrangTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
+        axios.get(`http://localhost:8088/clinic/tinhTrangTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
           response => {
             this.soPhong = response.data;
             this.soLuongPhong  = response.data  ;
@@ -80,17 +80,19 @@
           })
       },
       handleChangeSoPhong(e) {
-       
           this.soPhong = this.soLuongPhong.filter(value=>{
             return value.phongKham === this.selectedPhongKham
           })
+          if(this.selectedPhongKham === "tatCa"){
+             this.soPhong = this.soLuongPhong;
+          }
           
       }
     },
     computed: {
       dynamicComponent: function (parent = this) {
         return {
-          template: ` <div class="col-sm-5" style="background-color: white;   box-shadow:1px 1px 1px;">
+          template: ` <div class="col-sm-5" style="background-color: white; box-shadow:1px 1px 1px; margin: 10px;">
             <div class="row" style="border-bottom: 2pt solid #bbbbbb">
               <h3 style="display:inline-block;margin:10pt; color:rgb(9, 173, 214)" v-text="phongKham"></h3>
               <h3 style="display:inline-block; margin:10pt;color:#67cf9c" v-text="soPhong"></h3>
@@ -130,7 +132,6 @@
           created(){
             this.soLuongBan=this.option.thongTin;
             this.soPhong += this.option.phongKham;
-           
           }
         }
       }
