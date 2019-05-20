@@ -69,3 +69,8 @@ exports.tinhTrangHienTaiTheoChuyenKhoa=(idChuyenKhoa)=>{
 exports.tinhTrangConChoTheoChuyenKhoa=(idChuyenKhoa)=>{
     return db.executeProcedure('IDChuyenKhoa',idChuyenKhoa,"TinhTrangConChoTheoChuyenKhoa");
 }
+
+//Qua số lâm sàng
+exports.soKeTiepLS = (data)=>{
+    return db.executeProcedure2input('IDBanKham', 'IDPhong',data.idBanKham,data.idPhong,'BamSoHienThiPhongKham');
+}

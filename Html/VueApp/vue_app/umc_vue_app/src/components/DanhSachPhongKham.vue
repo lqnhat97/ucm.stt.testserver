@@ -109,7 +109,7 @@
               <tbody>
                 <tr v-for="option in soLuongBan" :value="option.SoBan" :key="option.SoBan">
                   <td class="number">{{option.SoBan}}</td>
-                  <td class="number">{{option.STTHienTai}}</td>
+                  <td class="number">{{option.SoHienTai}}</td>
                   <td>{{option.BacSi}}</td>
                   <td>{{option.BenhNhan}}</td >
                 </tr>

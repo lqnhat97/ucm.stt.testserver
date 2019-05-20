@@ -182,10 +182,10 @@ references  DichVuCanLamSang(IDDichVu)
 ------------------------TRUNCATE BẢNG
 update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
 update ThongKePhongCLS set SoLuongDoi=0 where SoLuongDoi>0;
-truncate table SoHienThiPhongCLS;
+truncate table SoHienThiPhongCanLamSang;
 truncate table SoHienThiPhongKham;
 truncate table SoThuTuPhongKham;
-truncate table SoThuTuPhongCanLamSang;
+truncate table SoThuTuPhongCLS;
 
 /*-----------------------CLEAR STT PHONG KHAM  ( DỮ LIỆU CỦA RỚT)
 update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
