@@ -8,13 +8,14 @@ router.get('/:id', async (req, res) => {
     var listId = [];
     var idHistory, hoTen, tuoi;
     await db.loadLichSu(id).then(async rows => {
+        console.log(rows.recordset);
         try {
             if (Object.keys(rows.recordset).length > 0) {
                 for (i = 0; i < Object.keys(rows.recordset).length; i++) {
                     idHistory = rows.recordset[i].IDNguoiDuocTim;
                     hoTen = rows.recordset[i].Ho + " " + rows.recordset[i].TenLot + " " + rows.recordset[i].Ten
-                    var tuoiTmp = new Date(rows.recordset[i].NgaySinh);
-                    var now = new Date();
+                    let tuoiTmp = new Date(rows.recordset[i].NgaySinh);
+                    let now = new Date();
                     tuoi = now.getFullYear() - tuoiTmp.getFullYear();
                     listId.push({
                         idHistory,
@@ -34,7 +35,8 @@ router.get('/:id', async (req, res) => {
 router.post('/', (req, res) => {
     var id = req.query;
     db.themLichSu(id.idBn, id.idBnSearch).then(rows => {
-        res.json(rows.recordset);
+        console.log(rows);
+        res.json(rows);
     })
 });
 

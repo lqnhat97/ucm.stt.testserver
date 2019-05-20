@@ -30,7 +30,6 @@ exports.layDSBacSiTheoChuyenKhoa = (idCK)=>{
 }
 
 exports.taoPhieuKham = (data) =>{
-    console.log(data);
     return db.executeProcedure2input('IDBenhNhan','IDChuyenKhoa',data.idBenhNhan,data.idChuyenKhoa,'TaoPhieuKham');
 }
 
@@ -40,6 +39,7 @@ exports.phatSinhSttPkTheoBS = (data) =>{
 }
 
 exports.phatSinhSttPkTheoChuyenKhoa = (data) =>{
+    console.log(data);
     return db.executeProcedure2input('IDPhieuKham','IDChuyenKhoa',data.IDPhieuKham,data.IDChuyenKhoa,'PhatSinhSTTPhongKham');
 }
 
@@ -58,4 +58,14 @@ exports.checkPk = (data)=>{
 exports.sinhSoCLS = (idPk,idCls) =>{
     console.log(idPk,idCls);
     return db.executeProcedure2input('IDPhieuKham','IDDichVuCLS',idPk,idCls,'PhatSinhSTTCLS');
+}
+
+//Tìm & xuất danh sách phòng khám, bàn khám, STT hiện tại, bác sĩ, bệnh nhân  theo chuyên khoa
+exports.tinhTrangHienTaiTheoChuyenKhoa=(idChuyenKhoa)=>{
+    return db.executeProcedure('IDChuyenKhoa',idChuyenKhoa,"TinhTrangHienTaiTheoChuyenKhoa");
+}
+
+//Tìm và suất danh sách phòng khám chi tiết gồm có số còn chờ, tốc độ nhảy số, phòng khám
+exports.tinhTrangConChoTheoChuyenKhoa=(idChuyenKhoa)=>{
+    return db.executeProcedure('IDChuyenKhoa',idChuyenKhoa,"TinhTrangConChoTheoChuyenKhoa");
 }

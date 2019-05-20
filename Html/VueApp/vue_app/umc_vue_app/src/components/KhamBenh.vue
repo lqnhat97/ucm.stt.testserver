@@ -220,7 +220,7 @@
         this.bodyRequestChiDinh.CLS.splice(this.soLuongChiDinh.length - 1, 1);
       },
       checkMaPhieuKham(e) {
-        axios.get(`http://192.168.1.26:8088/clinic/checkPK/` + this.MaPhieuKham).then(response => {
+        axios.get(`http://localhost:8088/clinic/checkPK/` + this.MaPhieuKham).then(response => {
           let res = response.data;
 
           if (!res.hasOwnProperty("message")) {
@@ -250,7 +250,7 @@
       },
       chiDinhCanLamSang(e) {
         this.bodyRequestChiDinh.IDPhieuKham = this.MaPhieuKham;
-        axios.post(`http://192.168.1.26:8088/clinic/phatSinhCLS`,
+        axios.post(`http://localhost:8088/clinic/phatSinhCLS`,
           this.bodyRequestChiDinh
         ).then(e => {
           if (e.status === 200) {
@@ -284,19 +284,16 @@
           },
           created() {
             this.selectedChuyenKhoa = ""
-            axios.get(`http://192.168.1.26:8088/clinic/loadCLS`).then(response => {
+            axios.get(`http://localhost:8088/clinic/loadCLS`).then(response => {
               this.data = response.data;
               this.label += this.stt;
             })
           },
           methods: {
             selectCLS() {
-
               parent.bodyRequestChiDinh.CLS.splice(this.stt - 1, 1, {
                 idCLS: this.selectedCanLamSang
               });
-
-
             }
           }
         }

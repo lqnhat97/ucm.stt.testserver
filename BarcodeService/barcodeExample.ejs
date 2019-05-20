@@ -17,41 +17,25 @@
     <div class="container">
         <h1 style="text-align:center">Barcode Generator FIT.STT</h1>
         <div class="text-center">
-            <button class="btn btn-primary center-block" type="submit" class="btn btn-primary"
-                onclick="generateBarcode()">Generate</button>
         </div>
         <div class="text-center">
             <svg id="barcode"></svg>
         </div>
         <div id="stt">
-            <label for="soHienTai">Số hiện tại của phòng khám</label>
-            <input id="soHienTai" type="text" readonly>
-            <button class="btn btn-sucess">Số kế tiếp</button>
+            <label for="ipBarcode">Nhập mã bệnh nhân</label>
+            <input id="ipBarcode" type="text">
+            <button class="btn btn-primary center-block" type="submit" class="btn btn-primary"
+                onclick="generateBarcode()">Generate</button>
         </div>
     </div>
     <script type="text/javascript">
-        $('#stt').hide();
-
         function generateBarcode() {
-            jQuery.ajax({
-                contentType: 'application/json',
-                url: '/test',
-                type: 'GET',
-                dataType: 'JSON',
-                timeout: 15000
-            }).done(function (data) {
-                //(async function () {
-                    var dataArray = data[0];
-                    var randomItem = dataArray[Math.floor(Math.random() * dataArray.length)];
-                    JsBarcode("#barcode", 'BN21683', {
-                        format: "CODE128",
-                        displayValue: true
-                    });
-                    $('#stt').show();
-                //})
-            }).catch(function (err) {
-                console.log(err);
-            })
+            var input = $('#ipBarcode').val();
+
+            JsBarcode("#barcode", input, {
+                format: "CODE128",
+                displayValue: true
+            });
         }
     </script>
 </body>
