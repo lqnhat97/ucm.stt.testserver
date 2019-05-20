@@ -12,7 +12,7 @@
                 <div class="col-sm-3"> <label class="control-label" for="chuyenkhoa"
                     style="color:#969696;padding:8pt;margin-left: 3pt; ">Chuyên khoa</label>
                 </div>
-                <select class="browser-default custom-select-lg form-group" v-model="selectedOption"
+                <select class="browser-default custom-select-lg form-group" v-model="selectedChuyenKhoa "
                   @change="handleChange">
                   <option selected disabled>Chọn chuyên khoa</option>
                   <option v-for="option in data" :value="option.IDChuyenKhoa">{{option.TenChuyenKhoa}}</option>
@@ -60,7 +60,7 @@
               <div class="row">
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4">
-                  <input class="form-group" id="buttom" type="submit" value="Tạo phiếu khám">
+                  <input @click="taoPk" class="form-group" id="buttom" type="submit" value="Tạo phiếu khám">
                 </div>
               </div>
             </form>
@@ -87,21 +87,22 @@
     },
     data() {
       return {
-        selectedOption: "",
+        selectedChuyenKhoa: "",
         data: "",
         loadedDoctor: "",
-        item: ""
+        item: "",
+        idBacSi: ""
       }
     },
     created(e) {
-      this.selectedOption = ""
-      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
+      this.selectedChuyenKhoa = ""
+      axios.get(`http://192.168.1.26:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
     methods: {
       handleChange(e) {
-        axios.get(`http://localhost:8088/clinic/dsBacSi/` + this.selectedOption).then(response => {
+        axios.get(`http://192.168.1.26:8088/clinic/dsBacSi/` + this.selectedChuyenKhoa).then(response => {
           this.loadedDoctor = response.data;
           console.log(this.loadedDoctor);
         })
@@ -111,13 +112,13 @@
         console.log(this.idBacSi);
       },
       taoPk() {
-        axios.post(`http://localhost:8088/clinic/taoPhieuKham`, {
+        axios.post(`http://192.168.1.26:8088/clinic/taoPhieuKham`, {
           idBenhNhan: localStorage.idBenhNhan,
           idChuyenKhoa: this.selectedChuyenKhoa
         }).then(dataResponse => {
           console.log(dataResponse.data);
           if (this.idBacSi == '') {
-            axios.post(`http://localhost:8088/clinic/phatSinhStt`, {
+            axios.post(`http://192.168.1.26:8088/clinic/phatSinhStt`, {
               IDPhieuKham: dataResponse.data.IDPhieuKham,
               IDChuyenKhoa: this.selectedChuyenKhoa
             }).then(result => {
@@ -127,7 +128,7 @@
             });
           }
           else{
-            axios.post(`http://localhost:8088/clinic/phatSinhSttTheoBS`, {
+            axios.post(`http://192.168.1.26:8088/clinic/phatSinhSttTheoBS`, {
               IDPhieuKham: dataResponse.data.IDPhieuKham,
               IDChuyenKhoa: this.selectedChuyenKhoa,
               IDBacSi: this.idBacSi
