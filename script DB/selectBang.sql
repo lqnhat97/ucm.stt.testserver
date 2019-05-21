@@ -71,6 +71,32 @@ CREATE PROC [dbo].[TinhTrangHienTaiTheoChuyenKhoa]
 @IDchuyenKhoa nvarchar(10)
 AS
 BEGIN
+<<<<<<< HEAD
+declare @temp nvarchar(10)
+set @temp=(select count(sht.PhongKham) from SoHienThiPhongKham sht inner join PhongKhamChuyenKhoa pkck on pkck.ID= sht.PhongKham
+where pkck.ChuyenKhoa=@IDchuyenKhoa)
+if(@temp >0)
+begin
+declare @temp2 nvarchar(10)
+	select  B.PhongKham, bk.SoBan, B.BanKham,  A.stt AS STTHienTai, B.GioMax, bs.ID as IDBacSi, bs.HoVaTen as BacSi,BN.ID as IDBenhNhan, (BN.Ho + ' ' +BN.TenLot + ' ' + BN.Ten) AS BenhNhan
+	from ( select sht.PhongKham, sht.BanKham, max(sht.Gio) as GioMax
+			from SoHienThiPhongKham sht
+			group by sht.PhongKham, sht.BanKham ) as B
+	inner join SoHienThiPhongKham as A on A.BanKham=B.BanKham and A.PhongKham=b.PhongKham and A.Gio=B.GioMax
+	inner join PhieuKham pk on pk.IDPhieuKham= A.IDPhieuKham
+	inner join BenhNhan BN on IDBenhNhan=BN.ID
+	inner join BanKham bk on bk.IDBan=B.BanKham and bk.Phong=B.PhongKham
+	inner join LichKhamBacSi lk on lk.IDBan=B.BanKham and lk.Phong=B.PhongKham
+	inner join BacSi bs on bs.ID=lk.IDBacSi
+	inner join PhongKhamChuyenKhoa pkck on pkck.ID= bk.Phong
+	where pkck.ChuyenKhoa=@IDchuyenKhoa
+end;
+else if(@temp =0)
+begin
+select    distinct pkck.ChuyenKhoa,lk.Phong ,bk.SoBan,  bs.HoVaTen as BacSi, 0 as SoHienTai, N'Không có bệnh nhân' AS BenhNhan
+from LichKhamBacSi lk 
+inner join BanKham bk on bk.IDBan=lk.IDBan and lk.Phong=bk.Phong
+=======
 declare @temp int,@temp2 int
 set @temp=(select distinct count(*) from SoHienThiPhongKham sht inner join PhongKhamChuyenKhoa pkck on pkck.ID= sht.PhongKham
 			where pkck.ChuyenKhoa=@IDchuyenKhoa);
@@ -116,6 +142,7 @@ inner join PhieuKham pk on pk.IDPhieuKham= A.IDPhieuKham
 inner join BenhNhan BN on IDBenhNhan=BN.ID
 inner join BanKham bk on bk.IDBan=B.BanKham and bk.Phong=B.PhongKham
 inner join LichKhamBacSi lk on lk.IDBan=B.BanKham and lk.Phong=B.PhongKham
+>>>>>>> bbe58b5f007df6c9b1fef9e66083ee35e65df5ca
 inner join BacSi bs on bs.ID=lk.IDBacSi
 inner join PhongKhamChuyenKhoa pkck on pkck.ID= bk.Phong
 where pkck.ChuyenKhoa=@IDchuyenKhoa;
@@ -151,6 +178,9 @@ end
 end
 GO
 
+
+exec TinhTrangHienTaiTheoChuyenKhoa 'P@'
+exec BamSoHienThiPhongKham '1','117'
 /****** Object:  StoredProcedure [dbo].[TinhTrangHienTaiTheoPhongKhamThuocChuyenKhoa]    Script Date: 5/16/2019 1:09:10 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -162,8 +192,8 @@ CREATE PROC [dbo].[TinhTrangHienTaiTheoPhongKhamThuocChuyenKhoa]
 AS
 BEGIN
 declare @temp nvarchar(10)
-set @temp=(select distinct sht.PhongKham from SoHienThiPhongKham sht where sht.PhongKham=@IDPhong);
-if(@temp is not NULL)
+set @temp=(select count(sht.PhongKham) from SoHienThiPhongKham sht where sht.PhongKham=@IDPhong );
+if(@temp > 0)
 begin
 select  pkck.ChuyenKhoa, B.PhongKham, bk.SoBan, B.BanKham,  A.stt AS STTHienTai, B.GioMax, bs.ID as IDBacSi, bs.HoVaTen as BacSi,BN.ID as IDBenhNhan, (BN.Ho + ' ' +BN.TenLot + ' ' + BN.Ten) AS BenhNhan
 
@@ -179,11 +209,11 @@ inner join BacSi bs on bs.ID=lk.IDBacSi
 inner join PhongKhamChuyenKhoa pkck on pkck.ID= bk.Phong
 where pkck.ID=@IDPhong and pkck.ChuyenKhoa=@IDChuyenKhoa
 end;
-else if(@temp is  NULL)
+else if(@temp = 0)
 begin
-select    pkck.ChuyenKhoa,bk.SoBan,lk.Phong, bs.HoVaTen as BacSi, 0 as SoHienTai, N'Không có bệnh nhân' AS BenhNhan
+select distinct  pkck.ChuyenKhoa, bk.SoBan,lk.Phong, bs.ID, bs.HoVaTen as BacSi, 0 as SoHienTai, N'Không có bệnh nhân' AS BenhNhan
 from LichKhamBacSi lk 
-inner join BanKham bk on bk.IDBan=lk.IDBan
+inner join BanKham bk on bk.IDBan=lk.IDBan and lk.Phong=bk.Phong
 inner join BacSi bs on bs.ID=lk.IDBacSi
 inner join PhongKhamChuyenKhoa pkck on pkck.ID= bk.Phong
 where pkck.ID=@IDPhong and pkck.ChuyenKhoa=@IDChuyenKhoa;
@@ -191,6 +221,7 @@ end;
 END;
 GO
 
+exec TinhTrangHienTaiTheoPhongKhamThuocChuyenKhoa '141', 'PI'
 
 
 ----------------------------------------------
@@ -223,3 +254,100 @@ go
 
 
 exec BacSiTheoChuyenKhoa "PH"
+--------------------------------
+create proc ChiTietCanLamSangTheoChuyenKhoa @IDChuyenKhoa nvarchar(10)
+as
+begin
+declare @temp nvarchar(10)
+set @temp=(select distinct sht.CanLamSang from SoHienThiPhongCanLamSang sht inner join PhongCanLamSang pcls on pcls.ID= sht.IDPhongCanLamSang
+inner join DichVuCanLamSang dvcls ON dvcls.IDDichVu=sht.CanLamSang
+inner join LoaiDichVu ldv ON ldv.IDLoaiDichVu= dvcls.LoaiDichVu
+where ldv.ChuyenKhoa=@IDchuyenKhoa)
+if(@temp is not null)
+begin
+	select P.SoPhong as Phong,SH.STT as SoHienTai, (BN.Ho + ' ' + BN.TenLot + ' ' + BN.Ten) as BenhNhan, TK.SoLuongDoi as SoConCho, DV.ThoiGianNhaySoTB as TocDoNhaySo, SM.GioMax as ThoiGianKhamSoCuoi
+	from (select SHT.IDPhongCanLamSang, max(SHT.Gio) as GioMax 
+			from SoHienThiPhongCanLamSang SHT
+			group by SHT.IDPhongCanLamSang) as SM
+	inner join SoHienThiPhongCanLamSang SH on SH.IDPhongCanLamSang = SM.IDPhongCanLamSang
+	inner join PhieuKham PK on PK.IDPhieuKham = SH.IDPhieuKham
+	inner join PhongCanLamSang P on P.ID = SH.IDPhongCanLamSang
+	inner join ThucHienCLS TH on TH.IDPhongCLS = P.ID
+	inner join DichVuCanLamSang DV on DV.IDDichVu = TH.DichVuCLSThucHien
+	inner join LoaiDichVu LDV on LDV.IDLoaiDichVu = DV.LoaiDichVu
+	inner join ThongKePhongCLS TK on TK.IDPhongCLS = SH.IDPhongCanLamSang
+	inner join BenhNhan BN on BN.ID = PK.IDBenhNhan
+where @IDChuyenKhoa = LDV.ChuyenKhoa
+end;
+else if(@temp is  NULL)
+begin
+select P.SoPhong as Phong,0 as SoHienTai, N'Không có bệnh nhân' AS BenhNhan, 0 as SoConCho, DV.ThoiGianNhaySoTB as TocDoNhaySo, 0 as ThoiGianKhamSoCuoi
+	from SoHienThiPhongCanLamSang SH 
+	inner join PhongCanLamSang P on P.ID = SH.IDPhongCanLamSang
+	inner join DichVuCanLamSang DV on DV.IDDichVu = SH.CanLamSang
+	inner join LoaiDichVu LDV on LDV.IDLoaiDichVu = DV.LoaiDichVu
+	where @IDChuyenKhoa = LDV.ChuyenKhoa
+
+end;
+end;
+go
+
+exec ChiTietCanLamSangTheoChuyenKhoa "DL"
+
+
+----------------tim kiem benh nhan theo IDBenhNhan
+CREATE PROC TimBenhNhanTheoID
+@IDBenhNhan nvarchar(10)
+AS
+BEGIN
+SELECT * FROM BenhNhan BN
+WHERE BN.ID = upper(@IDBenhNhan)
+END;
+GO
+
+exec TimBenhNhanTheoID 'BN21676'
+---------------tim kiem benh nhan theo ho, ten và gioi tinh
+CREATE PROC TimBenhNhanTheoHoTenGioiTinh
+@HoVaTen nvarchar(50),
+@GioiTinh nvarchar(3),
+@NgaySinh date
+AS
+BEGIN
+SELECT  *
+FROM(
+SELECT *, (BN.Ho + ' ' + BN.TenLot + ' ' + BN.Ten) as HoTen FROM BenhNhan BN) A
+WHERE 
+ LTRiM(RTRIM(UPPER(A.HoTen))) =LTRiM(RTRIM(UPPER(@HoVaTen))) and A.GioiTinh=@GioiTinh and A.NgaySinh=@NgaySinh
+END;
+GO
+
+
+
+EXEC TimBenhNhanTheoHoTenGioiTinh N'Lê Quang Nhật', N'Nam', '1997-5-25'
+
+-----------------tìm kiếm bệnh nhân theo ho ten, dia chi
+CREATE PROC TimBenhNhanTheoHoTenDiaChi
+@HoVaTen nvarchar(50),
+@DiaChi nvarchar(50)
+AS
+BEGIN
+SELECT  *
+FROM(
+SELECT *, (BN.Ho + ' ' + BN.TenLot + ' ' + BN.Ten) as HoTen FROM BenhNhan BN) A
+WHERE 
+ LTRiM(RTRIM(UPPER(A.HoTen))) =LTRiM(RTRIM(UPPER(@HoVaTen))) and upper(A.Diachi)=upper(@DiaChi)
+END;
+GO
+
+exec TimBenhNhanTheoHoTenDiaChi N'Lê Quang Nhật', 'tp hcm'
+-----------------tìm kiếm bệnh nhân theo sdt 953621258
+CREATE PROC TimBenhNhanTheoSDT
+@SDT nvarchar(15)
+AS
+BEGIN
+SELECT * FROM BenhNhan BN
+WHERE BN.SDT = upper(@SDT)
+END;
+GO
+
+exec TimBenhNhanTheoSDT '953621258'
