@@ -1,7 +1,7 @@
 <template>
   <div class="TiepNhan">
     <Header />
-    <Sidebar />
+    <Sidebar :currentTab="1"/>
     <div class="col-sm-9 ">
       <div class="row">
         <div class="col-sm-11" id="cliente">

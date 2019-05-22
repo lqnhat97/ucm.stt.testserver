@@ -2,7 +2,7 @@
   <div class="TaoPhieuKham">
     <Header />
     <div class="row" style="background-color:#ece9e9">
-      <Sidebar />
+      <Sidebar :currentTab="1"/>
       <div class="col-sm-9 ">
         <div class="row">
           <div class="col-sm-11" id="cliente">
