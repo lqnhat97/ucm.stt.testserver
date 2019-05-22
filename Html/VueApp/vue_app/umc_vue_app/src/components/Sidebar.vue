@@ -39,10 +39,10 @@
                   <router-link @click.prevent="setActive('PhongKham')" id="changepanel" to="/chiTietPhongKham">Chi
                     tiết phòng khám</router-link>
                 </li>
-                <li class="list-group-item" id="changecolortext">
+                <!-- <li class="list-group-item" id="changecolortext">
                   <router-link @click.prevent="setActive('PhongKham')" id="changepanel" to="/quanLySoPhongKham">Quản
                     lý số</router-link>
-                </li>
+                </li> -->
               </ul>
             </div>
           </div>

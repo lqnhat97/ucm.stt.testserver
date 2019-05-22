@@ -2,6 +2,7 @@
   <div class="DanhSachPhongKham">
     <Header />
     <Sidebar />
+  <modal />
     <div class="col-sm-9 ">
 
       <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
@@ -13,7 +14,7 @@
             <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
               v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
               <option :selected="true" disabled>Chọn chuyên khoa</option>
-              <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa" >
+              <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
                 {{option.TenChuyenKhoa}}</option>
 
             </select>
@@ -23,7 +24,7 @@
             <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
               v-model="selectedPhongKham" @change="handleChangeSoPhong">
               <option :selected="true" disabled>Chọn số phòng</option>
-              <option selected value ="tatCa">Tất cả</option>
+              <option selected value="tatCa">Tất cả</option>
               <option v-for="option in soLuongPhong" :value="option.phongKham" :key="option.Phong">
                 {{option.phongKham}}</option>
             </select>
@@ -36,8 +37,8 @@
             </div>
           </div>
         </form>
-        <div class="row" id="chiDinhCanLamSang"  style=" flex-wrap: wrap;display:flex;justify-content:space-evenly; ">
-          <component v-for="option in soPhong" :key="option.phongKham" :is="dynamicComponent" :option= "option"/>
+        <div class="row" id="chiDinhCanLamSang" style=" flex-wrap: wrap;display:flex;justify-content:space-evenly; ">
+          <component v-for="option in soPhong" :key="option.phongKham" :is="dynamicComponent" :option="option" />
         </div>
       </div>
     </div>
@@ -48,11 +49,13 @@
   import axios from 'axios'
   import Header from './Header.vue'
   import Sidebar from './Sidebar.vue'
+  import modal from './modal.vue'
   export default {
     name: 'DanhSachPhongKham',
     components: {
       Header,
-      Sidebar
+      Sidebar,
+      modal
     },
     data() {
       return {
@@ -60,14 +63,15 @@
         selectedChuyenKhoa: "",
         selectedPhongKham: "",
         soPhong: "",
-        soLuongPhong:"",
-        phongKham:[],
+        soLuongPhong: "",
+        phongKham: [],
       }
     },
     created() {
       this.selectedChuyenKhoa = ""
       axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
         this.chuyenKhoa = response.data;
+        $('#findCmndModal').modal('show');
       })
     },
     methods: {
@@ -75,18 +79,16 @@
         axios.get(`http://localhost:8088/clinic/tinhTrangTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
           response => {
             this.soPhong = response.data;
-            this.soLuongPhong  = response.data  ;
-           
+            this.soLuongPhong = response.data;
           })
       },
       handleChangeSoPhong(e) {
-          this.soPhong = this.soLuongPhong.filter(value=>{
-            return value.phongKham === this.selectedPhongKham
-          })
-          if(this.selectedPhongKham === "tatCa"){
-             this.soPhong = this.soLuongPhong;
-          }
-          
+        this.soPhong = this.soLuongPhong.filter(value => {
+          return value.phongKham === this.selectedPhongKham
+        })
+        if (this.selectedPhongKham === "tatCa") {
+          this.soPhong = this.soLuongPhong;
+        }
       }
     },
     computed: {
@@ -104,37 +106,50 @@
                   <th>Số hiện tại</th>
                   <th>Bác sĩ</th>
                   <th>Bệnh nhân</th>
+                  <th>Tăng số</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="option in soLuongBan" :value="option.SoBan" :key="option.SoBan">
+                <tr v-for="(option,index) in soLuongBan" :value="option.SoBan" :key="index">
                   <td class="number">{{option.SoBan}}</td>
                   <td class="number">{{option.SoHienTai}}</td>
                   <td>{{option.BacSi}}</td>
-                  <td>{{option.BenhNhan}}</td >
+                  <td>{{option.BenhNhan}}</td>
+                  <td><button class="btn-primary" @click="nextNumber(option)">+</button></td>
                 </tr>
               </tbody>
             </table>
           </div>`,
-          props:{
-            option:{
-              type:Object,
-              default:{},
+          props: {
+            option: {
+              type: Object,
+              default: {},
             }
           },
           data() {
             return {
               phongKham: "Phòng khám ",
-              soPhong:"",
-              soLuongBan:"",
+              soPhong: "",
+              soLuongBan: "",
             }
           },
-          created(){
-            this.soLuongBan=this.option.thongTin;
+          created() {
+            this.soLuongBan = this.option.thongTin;
             this.soPhong += this.option.phongKham;
+          },
+          methods: {
+            nextNumber(data) {
+              axios.post(`http://localhost:8088/clinic/soKeTiepLamSang`,{
+                idBanKham:data.SoBan,
+                idPhong:data.PhongKham
+              }).then(response =>{
+                if(response.status == 200);
+              })
+            }
           }
         }
       }
     }
   }
+
 </script>
