@@ -28,6 +28,16 @@ alter table ChuyenKhoa drop constraint FK_CK_KhuVuc;
 alter table LichKhamBacSi drop constraint FK_LK_Ban;
 alter table LichKhamBacSi drop constraint FK_LK_Ca;
 alter table LichKhamBacSi drop constraint FK_LK_BacSi;
+
+------------------------TRUNCATE BẢNG
+update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
+update ThongKePhongCLS set SoLuongDoi=0 where SoLuongDoi>0;
+truncate table SoHienThiPhongCanLamSang;
+truncate table SoHienThiPhongKham;
+truncate table SoThuTuPhongKham;
+truncate table SoThuTuPhongCLS;
+truncate table PhieuKham;
+
 ------------------ ADD CONSTRAINT
 alter table ThongKePhongCLS
 add constraint FK_TK_CKham
@@ -179,13 +189,7 @@ add constraint FK_THCLS_DV
 foreign key (DichVuCLSThucHien)
 references  DichVuCanLamSang(IDDichVu)
 
-------------------------TRUNCATE BẢNG
-update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
-update ThongKePhongCLS set SoLuongDoi=0 where SoLuongDoi>0;
-truncate table SoHienThiPhongCanLamSang;
-truncate table SoHienThiPhongKham;
-truncate table SoThuTuPhongKham;
-truncate table SoThuTuPhongCLS;
+
 
 /*-----------------------CLEAR STT PHONG KHAM  ( DỮ LIỆU CỦA RỚT)
 update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
