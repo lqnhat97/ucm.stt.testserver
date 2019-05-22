@@ -168,15 +168,16 @@ function handlingDsPhong(data) {
     let ketQua = [];
     let dataRes = separateData(data);
     let arrSoPhong = dataRes.map((data) => {
-        return data.PhongKham;
+        return data.SoPhong;
     });
-    console.log(arrSoPhong);
     
     let rightArraySoPhong = arrSoPhong.filter((v, i) => arrSoPhong.indexOf(v) === i);
     rightArraySoPhong.forEach((soPhong, index) => {
         let data = dataRes.filter((dataInside) => {
-            return dataInside.PhongKham === soPhong;
+            return dataInside.SoPhong === soPhong;
         });
+    console.log(data);
+
         ketQua.push({
             phongKham:soPhong,
             thongTin:data
@@ -190,7 +191,7 @@ router.get('/tinhTrangConChoTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
     let data = req.params.idChuyenKhoa;
     db.tinhTrangConChoTheoChuyenKhoa(data).then(async rows => {
         let resData = handlingDsPhong(rows.recordsets);
-        res.status(200).json(resData);
+        res.status(200).json(resData).end();
     })
 })
 
@@ -198,7 +199,7 @@ router.get('/tinhTrangConChoTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
 router.post('/soKeTiepLamSang',(req,res)=>{
     let data = req.body;
     db.soKeTiepLS(data).then((rows)=>{
-        res.status(200).end();
+        res.status(200).json(rows.recordset[0]).end();
     })
 })
 

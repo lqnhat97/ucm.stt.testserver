@@ -1,8 +1,7 @@
 <template>
   <div class="DanhSachPhongKham">
     <Header />
-    <Sidebar />
-  <modal />
+    <Sidebar :currentTab="3"/>
     <div class="col-sm-9 ">
 
       <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
@@ -38,7 +37,7 @@
           </div>
         </form>
         <div class="row" id="chiDinhCanLamSang" style=" flex-wrap: wrap;display:flex;justify-content:space-evenly; ">
-          <component v-for="option in soPhong" :key="option.phongKham" :is="dynamicComponent" :option="option" />
+          <component v-for="phong in soPhong" :key="phong.phongKham" :is="dynamicComponent" :option="phong" />
         </div>
       </div>
     </div>
@@ -55,7 +54,6 @@
     components: {
       Header,
       Sidebar,
-      modal
     },
     data() {
       return {
@@ -71,7 +69,6 @@
       this.selectedChuyenKhoa = ""
       axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
         this.chuyenKhoa = response.data;
-        $('#findCmndModal').modal('show');
       })
     },
     methods: {
@@ -99,6 +96,8 @@
               <h3 style="display:inline-block;margin:10pt; color:rgb(9, 173, 214)" v-text="phongKham"></h3>
               <h3 style="display:inline-block; margin:10pt;color:#67cf9c" v-text="soPhong"></h3>
             </div>
+            <modal :message="this.message" />
+
             <table class="table">
               <thead>
                 <tr>
@@ -126,24 +125,34 @@
               default: {},
             }
           },
+          components: {
+            modal
+          },
           data() {
             return {
-              phongKham: "Phòng khám ",
+              phongKham: "Phòng khám: ",
               soPhong: "",
               soLuongBan: "",
+              message: ""
             }
           },
           created() {
+            console.log(this.option);
             this.soLuongBan = this.option.thongTin;
             this.soPhong += this.option.phongKham;
           },
           methods: {
             nextNumber(data) {
-              axios.post(`http://localhost:8088/clinic/soKeTiepLamSang`,{
-                idBanKham:data.SoBan,
-                idPhong:data.PhongKham
-              }).then(response =>{
-                if(response.status == 200);
+              axios.post(`http://localhost:8088/clinic/soKeTiepLamSang`, {
+                idBanKham: data.IDBan,
+                idPhong: data.IDPhongKham
+              }).then(response => {
+                console.log(response)
+                if (response.status == 200) {
+                  this.message = 'Đã qua số cho bàn <strong><span style="color: #41B883;">' + response.data.BanKham + '</span></strong>  phòng <strong><span style="color: #41B883;">' + response.data.PhongKham + '</span></strong>' ;
+                  $('#findCmndModal').modal('show');
+
+                };
               })
             }
           }
