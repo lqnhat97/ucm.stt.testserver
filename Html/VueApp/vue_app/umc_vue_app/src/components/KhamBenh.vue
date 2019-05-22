@@ -1,7 +1,7 @@
 <template>
   <div class="KhamBenh">
     <Header />
-    <Sidebar />
+    <Sidebar :currentTab="2"/>
     <div class="col-md-9 form-group">
       <div class="row">
         <div class="col-sm-5" id="cliente">

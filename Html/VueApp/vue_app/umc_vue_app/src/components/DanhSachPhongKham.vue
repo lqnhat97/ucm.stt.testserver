@@ -1,7 +1,7 @@
 <template>
   <div class="DanhSachPhongKham">
     <Header />
-    <Sidebar />
+    <Sidebar :currentTab="3"/>
   <modal />
     <div class="col-sm-9 ">
 

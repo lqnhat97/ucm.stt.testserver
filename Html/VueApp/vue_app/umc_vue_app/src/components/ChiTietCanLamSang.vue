@@ -1,7 +1,7 @@
 <template>
   <div class="ChiTietCanLamSang">
       <Header/>
-      <Sidebar/>
+      <Sidebar :currentTab="4"/>
     <div class="col-sm-9 ">
       <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
         <form style=" border-bottom: 2px solid #bbbbbb">
