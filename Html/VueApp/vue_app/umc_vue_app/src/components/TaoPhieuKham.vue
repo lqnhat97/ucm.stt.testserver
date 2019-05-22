@@ -6,7 +6,7 @@
       <div class="col-sm-9 ">
         <div class="row">
           <div class="col-sm-11" id="cliente">
-            <form style=" border-bottom: 2px solid #bbbbbb">
+            <!--<form style=" border-bottom: 2px solid #bbbbbb">
 
               <div class="row" style="padding:5pt">
                 <div class="col-sm-3"> <label class="control-label" for="chuyenkhoa"
@@ -22,7 +22,7 @@
               </div>
 
 
-            </form>
+            </form>-->
             <form style="padding-bottom:8pt;padding-left:5pt">
               <div class="row">
                 <div class="col-sm-5">
@@ -36,17 +36,27 @@
                 <thead>
                   <tr>
                     <th>Chuyên Khoa</th>
+                    <th>Ca</th>
                     <th>Danh sách bác sĩ</th>
+
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="(optionChuyenKhoa,index) in soLuongChuyenKhoa" :key="index">
-                    <td >
-                      <select class="browser-default custom-select-lg form-group"  v-model="optionChuyenKhoa.selected" @change="handleChange('optionChuyenKhoa.selected')">
+                    <td>
+                      <select class="browser-default custom-select-lg form-group" v-model="optionChuyenKhoa.selected"
+                        @change="handleChange(optionChuyenKhoa.selected)">
                         <option selected disabled>Chọn chuyên khoa</option>
                         <option v-for="option in data" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
                           {{option.TenChuyenKhoa}}</option>
 
+                      </select>
+                    </td>
+                    <td>
+                      <select class="browser-default custom-select-lg form-group" v-model="optionChuyenKhoa.caKham"
+                        @change="handleChangeCaKham(index)">
+                        <option value="1">Ca 1</option>
+                        <option value="2"> Ca 2 </option>
                       </select>
                     </td>
                     <td>
@@ -57,17 +67,18 @@
                             <th>Phòng</th>
                             <th>Bác sĩ</th>
                             <th>Chọn bác sĩ</th>
+
                           </tr>
                         </thead>
                         <tbody>
                           <tr v-for="(row, rindex) in optionChuyenKhoa.loadedDoctor" :key="rindex">
-                            <td>{{ row.BanKham }}</td>
-                            <td>{{ row.PhongKham }}</td>
+                            <td>{{ row.SoBan }}</td>
+                            <td>{{ row.SoPhong }}</td>
                             <td>{{row.HovaTen}}</td>
                             <td>
                               <div class="custom-control custom-radio">
-                                <input type="radio" class="custom-control-input" id="customRadio" name="example1"
-                                  value="customEx" @click="checkedDoctor(row)">
+                                <input type="radio" class="custom-control-input" :name=" index"
+                                  @click="checkedDoctor(row,index)">
                               </div>
                             </td>
                           </tr>
@@ -89,7 +100,7 @@
       </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal 
     <div class="modal fade" id="findCmndModal" tabindex="-1" role="dialog" aria-labelledby="findCmndModalTitle"
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -108,10 +119,9 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
+    <Modal :message="this.message"/>
   </div>
-
-
 </template>
 
 
@@ -120,91 +130,112 @@
   import axios from 'axios'
   import Header from './Header.vue'
   import Sidebar from './Sidebar.vue'
-  import cell from './cell';
+  import cell from './cell.vue';
+  import Modal from './modal.vue'
+  import {
+    setTimeout
+  } from 'timers';
   export default {
     name: "TaoPhieuKham",
     components: {
       Header,
       Sidebar,
-      cell
+      cell,
+      Modal
     },
     data() {
       return {
         selectedChuyenKhoa: "",
         data: "",
-        loadedDoctor: "",
-        idBacSi: "",
         item: "",
         message: "",
         soLuongChuyenKhoa: [{
           stt: 0,
           selected: "",
-          loadedDoctor: ""
+          loadedDoctor: "",
+          fetchedDoctor: "",
+          idBacSi: "",
+          caKham: ""
         }],
       }
     },
     created(e) {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://192.168.1.110:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
     methods: {
+      handleChangeCaKham(index) {
+        this.soLuongChuyenKhoa[index].loadedDoctor = this.soLuongChuyenKhoa[index].fetchedDoctor.filter(value => {
+          return value.CaKham == this.soLuongChuyenKhoa[index].caKham
+        })
+      },
       addChuyenKhoa(e) {
         this.soLuongChuyenKhoa.push({
           stt: this.soLuongChuyenKhoa.length,
           selected: "",
-          loadedDoctor:""
+          loadedDoctor: "",
+          idBacSi: "",
+          caKham: ""
         })
         console.log(this.soLuongChuyenKhoa)
       },
       handleChange(e) {
-        axios.get(`http://localhost:8088/clinic/dsBacSi/` + e).then(response => {
+        axios.get(`http://192.168.1.110:8088/clinic/dsBacSi/` + e).then(response => {
+
           this.soLuongChuyenKhoa.forEach(element => {
-            if(element.selected === e){
+            if (element.selected === e) {
               element.loadedDoctor = response.data;
+              element.fetchedDoctor = response.data;
             }
           });
-          console.log(this.soLuongChuyenKhoa);
+
         })
       },
-      checkedDoctor(row) {
-        this.idBacSi = row.ID;
-        console.log(this.idBacSi);
+      checkedDoctor(row, index) {
+        this.soLuongChuyenKhoa[index].idBacSi = row.ID;
       },
       taoPk(e) {
         e.preventDefault();
-        axios.post(`http://localhost:8088/clinic/taoPhieuKham`, {
-          idBenhNhan: localStorage.idBenhNhan,
-          idChuyenKhoa: this.selectedChuyenKhoa
-        }).then(dataResponse => {
-          console.log(dataResponse.data);
-          if (this.idBacSi == '') {
-            axios.post(`http://192.168.1.26:8088/clinic/phatSinhStt`, {
-              IDPhieuKham: dataResponse.data.IDPhieuKham,
-              IDChuyenKhoa: this.selectedChuyenKhoa
-            }).then(result => {
-              this.message = "Tạo phiếu khám thành công " + dataResponse.data.IDPhieuKham;
-              $('#findCmndModal').modal('show');
-              console.log(result.data);
+        this.message = "";
+        this.soLuongChuyenKhoa.forEach(element => {
+          setTimeout(() => {
+            axios.post(`http://192.168.1.110:8088/clinic/taoPhieuKham`, {
+              idBenhNhan: localStorage.idBenhNhan,
+              idChuyenKhoa: element.selected
+            }).then(dataResponse => {
+              console.log(dataResponse.data);
+              if (element.idBacSi == '') {
+                axios.post(`http://192.168.1.110:8088/clinic/phatSinhStt`, {
+                  IDPhieuKham: dataResponse.data.IDPhieuKham,
+                  IDChuyenKhoa: element.selected
+                }).then(result => {
+                  this.message += "Tạo phiếu khám thành công <strong>" + dataResponse.data.IDPhieuKham +
+                  "</strong><br/>";
+                  $('#findCmndModal').modal('show');
+                  console.log(result.data);
+                }).catch(err => {
+                  console.log(err);
+                });
+              } else {
+                axios.post(`http://192.168.1.110:8088/clinic/phatSinhSttTheoBS`, {
+                  IDPhieuKham: dataResponse.data.IDPhieuKham,
+                  IDChuyenKhoa: element.selected,
+                  IDBacSi: element.idBacSi
+                }).then(result => {
+                  this.message += "Tạo phiếu khám thành công <strong>" + dataResponse.data.IDPhieuKham +
+                  "</strong> <br/>";
+                  $('#findCmndModal').modal('show');
+                  console.log(result.data);
+                }).catch(err => {
+                  console.log(err);
+                });
+              }
             }).catch(err => {
               console.log(err);
             });
-          } else {
-            axios.post(`http://localhost:8088/clinic/phatSinhSttTheoBS`, {
-              IDPhieuKham: dataResponse.data.IDPhieuKham,
-              IDChuyenKhoa: this.selectedChuyenKhoa,
-              IDBacSi: this.idBacSi
-            }).then(result => {
-              this.message = "Tạo phiếu khám thành công " + dataResponse.data.IDPhieuKham;
-              $('#findCmndModal').modal('show');
-              console.log(result.data);
-            }).catch(err => {
-              console.log(err);
-            });
-          }
-        }).catch(err => {
-          console.log(err);
+          }, 500)
         })
       }
     }

@@ -19,7 +19,7 @@
             </div>
           </form>
 
-          <!-- Modal -->
+          <!-- Modal 
           <div class="modal fade" id="findCmndModal" tabindex="-1" role="dialog" aria-labelledby="findCmndModalTitle"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -38,8 +38,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
 
+          <Modal :message="this.message"/>
           <form action="">
             <p>Thông tin bệnh nhân</p>
             <div class="row form-group">
@@ -50,8 +51,11 @@
               </div>
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">Giới tính</label>
               <div class="col-sm-4">
-                <input type="text" value="" class="form-control" :disabled="isFound?true:false"
-                  style="margin-right: 10px;" v-model="GioiTinh" v-text="GioiTinh">
+                <select type="text"  class="form-control" :disabled="isFound?true:false"
+                  style="margin-right: 10px;" v-model="GioiTinh" >
+                  <option>Nam</option>
+                  <option>Nữ</option>
+                </select>
               </div>
             </div>
 
@@ -117,11 +121,13 @@
   import axios from 'axios'
   import Header from './Header.vue'
   import Sidebar from './Sidebar.vue'
+  import Modal from './modal.vue'
   export default {
     name: 'TiepNhan',
     components: {
       Header,
-      Sidebar
+      Sidebar,
+      Modal
     },
     data() {
       return {
@@ -144,7 +150,7 @@
     methods: {
       checkCMND(e) {
         e.preventDefault();
-        axios.get(`http://localhost:8088/patient/checkBenhNhan/` + this.cmnd)
+        axios.get(`http://192.168.1.110:8088/patient/checkBenhNhan/` + this.cmnd)
           .then(response => {
             let res = response.data;
             if (!res.hasOwnProperty("message")) {
@@ -193,7 +199,7 @@
           "phone": this.SoDienThoai,
           "address": this.DiaChi,
         };
-        axios.post(`http://localhost:8088/patient/taoThongTin`, {
+        axios.post(`http://192.168.1.110:8088/patient/taoThongTin`, {
             body: posbody
           }).then(async response => {
             console.log(response);

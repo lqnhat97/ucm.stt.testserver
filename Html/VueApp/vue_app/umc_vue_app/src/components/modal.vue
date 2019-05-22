@@ -10,7 +10,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body" v-text="message">
+        <div class="modal-body" v-html="message">
 
         </div>
         <div class="modal-footer">
