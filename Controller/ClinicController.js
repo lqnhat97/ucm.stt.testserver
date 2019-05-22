@@ -87,17 +87,20 @@ router.get('/dsBacSi/:idCK', (req, res) => {
 })
 
 //Tạo phiếu khám
-router.post('/taoPhieuKham', (req, res) => {
-    db.taoPhieuKham(req.body).then(rows => {
-        res.status(200).json(rows.recordset[0]);
-    })
+router.post('/taoPhieuKham', (req, res) => { 
+        console.log(req.body);
+        db.taoPhieuKham(req.body).then(rows => {
+            console.log(rows.recordset);
+            res.status(200).json(rows.recordset[0]);
+        })
+    
 })
 
 //Kích hoạt Phát sinh STT phòng khám lâm sàng theo chuyên khoa
 router.post('/phatSinhStt', (req, res) => {
     let data = req.body;
     db.phatSinhSttPkTheoChuyenKhoa(data).then(rows => {
-        res.status(200).json(rows);
+        res.status(200).json(rows.recordset);
     }).catch(err => {
         if (err) throw err;
     })
@@ -107,7 +110,7 @@ router.post('/phatSinhStt', (req, res) => {
 router.post('/phatSinhSttTheoBS', (req, res) => {
     let data = req.body;
     db.phatSinhSttPkTheoBS(data).then(rows => {
-        res.status(200).json(rows.recordset[0]);
+        res.status(200).json(rows.recordset);
     }).catch(err => console.log(err))
 })
 

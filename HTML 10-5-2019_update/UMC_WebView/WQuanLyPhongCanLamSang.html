@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UMC-Quản Lý Phòng Cận Lâm Sàng</title>
+    <link rel="stylesheet" type="text/css" href="UMCC.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <header>
+            <div class="head">
+                <div>
+                    <h1 id="head">UMC</h1>
+                </div>
+                <div class="head" style=" margin:15pt">
+                    <div style="padding-right:5pt"><img src="h2.png" alt="Avartar" height="42pt" width="42pt"></div>
+                    <div>
+                        <h4>Hoàng Công Lương</h4>
+                    </div>
+                    <div class="dropdown" style="margin-top:7pt">
+
+                        <a href="#" class="dropdown-toggle " data-toggle="dropdown"><span class="caret"></span></a>
+
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li class="menu-item"><a href="#">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="row justify-content-space-between" style="  background-color:#ece9e9">
+            <div class=" col-sm-3">
+                <div class="nav-left">
+                    <div class="ava"><img src="h3.jpg" alt="" class="relative; background-left">
+                    </div>
+                    <div class="container-fluid list-option">
+                        <div class="panel-group">
+                            <div class="panel panel-default" id="changepanel">
+                                <div class="panel-body" id="changecolor">
+                                    <h4 class="panel-title">
+                                        <a href="WTiepNhan.html">Tiếp nhận</a>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default" id="changepanel">
+                                <div class="panel-body" id="changecolor">
+                                    <h4 class="panel-title">
+                                        <a href="WKhamBenh.html">Khám bệnh</a>
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default" id="changepanel">
+                                <div class="panel-body" id="changecolor">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" href="#collapse2">Phòng khám</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse2" class="panel-collapse collapse">
+                                    <ul class="list-group">
+                                        <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                                href="WDanhSachPhongKham.html">Danh
+                                                sách phòng khám</a></li>
+                                        <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                                href="WChiTietPhongKham.html">Chi tiết phòng khám</a></li>
+                                        <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                                href="WQuanLySoPhongKham.html">Quản lý số</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="changepanel">
+                            <div class="panel-body" id="changecolor-now">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse3">Phòng cận lâm sàng</a>
+                                </h4>
+                            </div>
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <ul class="list-group">
+                                    <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                            href="WQuanLyPhongCanLamSang.html">Quản lý phòng cận lâm sàng</a></li>
+                                    <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                            href="WChiTietPhongCanLamSang.html">Chi tiết phòng cận lâm sàng</a></li>
+                                    <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                            href="WQuanLySoPhongCanLamSang.html">Quản lý số</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-sm-9 ">
+                <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
+                    <form style=" border-bottom: 2px solid #bbbbbb">
+                        <div class="row">
+                            <div class="col-sm-6 form-group" style="display:flex; align-items:center">
+                                <div class="col-sm-4"> <label class="control-label" for="chuyenkhoa"
+                                        id="search-name">Chuyên khoa</label></div>
+                                <div class="search-box col-sm-8" style="height:30pt">
+                                    <input type="text" id="chuyenkhoa" class="form-control" placeholder="Nội soi">
+                                    <button class="btn btn-link search-btn"> <i class="glyphicon glyphicon-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+                    <form style="padding-bottom:8pt;padding-left:5pt">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <h3>Quản lý dịch vụ cận lâm sàng</h3>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row" style="padding-left:5pt;display:flex;justify-content:space-between">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Phòng</th>
+                                    <th>Ca</th>
+                                    <th>Thời gian khám</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="number" rowspan="12">22-05-2019</td>
+                                    <td class="number" rowspan="12">401</td>
+                                    <td class="text" >Ca 1</td>
+                                    <td class="number" >7h30-10h30</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 2</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 3</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 4
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2><input type="button" class="ThemCLS" value="Thêm CLS">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text">Ca 2</td>
+                                    <td class="number">13h30-16h30</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 2</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 3</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 4
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2><input type="button" class="ThemCLS" value="Thêm CLS">
+                                    </td>
+                                </tr>
+
+
+
+                                <tr>
+                                        <td class="number" rowspan="12">22-05-2019</td>
+                                        <td class="number" rowspan="12">401</td>
+                                        <td class="text">Ca 1</td>
+                                        <td class="number">7h30-10h30</td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 3</td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 4
+    
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2><input type="button" class="ThemCLS" value="Thêm CLS">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text">Ca 2</td>
+                                        <td class="number">13h30-16h30</td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 3</td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 4
+    
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td ALIGN=CENTER COLSPAN=2><input type="button" class="ThemCLS" value="Thêm CLS">
+                                        </td>
+                                    </tr>
+    
+    
+    
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <form action="">
+                        <div class="row" style="display:flex ; justify-content: space-around">
+
+                            <div class="col-sm-4">
+                                <input class="form-group" id="buttom" type="submit" value="Quy định">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>
