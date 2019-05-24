@@ -70,7 +70,7 @@
                                 </div>
                                 <div id="collapse2" class="panel-collapse collapse">
                                     <ul class="list-group">
-                                            <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                        <li class="list-group-item" id="changecolortext"><a id="changepanel"
                                                 href="WQuanLyBacSi.html">Phân công lịch khám</a></li>
                                         <li class="list-group-item" id="changecolortext"><a id="changepanel"
                                                 href="WDanhSachPhongKham.html">Danh
@@ -142,10 +142,16 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="number" rowspan="12">22-05-2019</td>
+                                    <td class="number" rowspan="12"><input type="text" name="txtNgay" value="22-05-2019"
+                                            placeholder="22-05-2019"></td>
                                     <td class="number" rowspan="12">401</td>
-                                    <td class="text" >Ca 1</td>
-                                    <td class="number" >7h30-10h30</td>
+                                    <td class="text"  ><select  onchange="disabled1(this)">
+                                            <option value="Ca1" selected>Ca 1</option>
+                                            <option value="Ca2">Ca 2</option>
+                                            <option value="Null">NULL</option>
+                                        </select></td>
+                                    <td class="number"><input type="time"  > - <input type="time" >
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
@@ -166,8 +172,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text">Ca 2</td>
-                                    <td class="number">13h30-16h30</td>
+                                        <td class="text"  ><select >
+                                                <option  value="Ca1" selected>Ca 1</option>
+                                                <option  value="Ca2">Ca 2</option>
+                                                <option  value="Null">NULL</option>
+                                            </select></td>
+                                        <td class="number"><input type="time" > - <input type="time" >
+                                        </td>
                                 </tr>
                                 <tr>
                                     <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
@@ -191,54 +202,65 @@
 
 
                                 <tr>
-                                        <td class="number" rowspan="12">22-05-2019</td>
-                                        <td class="number" rowspan="12">401</td>
-                                        <td class="text">Ca 1</td>
-                                        <td class="number">7h30-10h30</td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 2</td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 3</td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 4
-    
+                                    <td class="number" rowspan="12"><input type="text" name="txtNgay" value="22-05-2019"
+                                            placeholder="22-05-2019"></td>
+                                    <td class="number" rowspan="12">401</td>
+                                    <td class="text"  ><select>
+                                            <option id="Cad2" value="Ca1" selected>Ca 1</option>
+                                            <option id="Cad2" value="Ca2">Ca 2</option>
+                                            <option id="Cad2" value="Null">NULL</option>
+                                        </select></td>
+                                    <td class="number" ><input type="time" > - <input type="time" >
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 2</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 3</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 4
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2><input type="button" class="ThemCLS" value="Thêm CLS">
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <td class="text"  ><select >
+                                                <option  value="Ca1" selected>Ca 1</option>
+                                                <option value="Ca2">Ca 2</option>
+                                                <option  value="Null">NULL</option>
+                                            </select></td>
+                                        <td class="number" ><input type="time" > - <input type="time" >
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2><input type="button" class="ThemCLS" value="Thêm CLS">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text">Ca 2</td>
-                                        <td class="number">13h30-16h30</td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 2</td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 3</td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2>Làm cls 4
-    
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td ALIGN=CENTER COLSPAN=2><input type="button" class="ThemCLS" value="Thêm CLS">
-                                        </td>
-                                    </tr>
-    
-    
-    
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 1</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 2</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 3</td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2>Làm cls 4
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td ALIGN=CENTER COLSPAN=2><input type="button" class="ThemCLS" value="Thêm CLS">
+                                    </td>
+                                </tr>
+
+
+
                             </tbody>
                         </table>
 
@@ -252,12 +274,14 @@
                         </div>
                     </form>
                 </div>
-
-
+                        
             </div>
         </div>
     </div>
+
+
+            
+    
+        
 </body>
-
-
 </html>
