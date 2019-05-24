@@ -351,3 +351,73 @@ END;
 GO
 
 exec TimBenhNhanTheoSDT '953621258'
+---------------------------------------24/05/2019
+------------------Danh sach chuyen khoa cua can lam sang 24/05/2019
+create proc DanhSachChuyenKhoaCLS
+as
+begin
+select p.TrucThuoc as ChuyenKhoaCLS, ck.TenChuyenKhoa
+from PhongCanLamSang p
+inner join ChuyenKhoa ck on ck.IDChuyenKhoa=p.TrucThuoc
+end;
+go
+exec DanhSachChuyenKhoaCLS
+-------------------Hien thi phong can lam sang theo chuyen khoa 24/05/2019
+
+create proc DanhSachPhongCanLamSangTheoChuyenKhoa @IDChuyenKhoa nvarchar(10)
+as
+begin
+	select P.SoPhong , P.ID as IDPhong
+	from PhongCanLamSang P
+where @IDChuyenKhoa =P.TrucThuoc
+end;
+go
+
+exec DanhSachPhongCanLamSangTheoChuyenKhoa 'DH'
+-------------Danh sach dich vu can lam sang theo chuyen khoa 24/05/2019
+create proc DanhSachDichVuCanLamSangTheoChuyenKhoa @IDChuyenKhoa nvarchar(10)
+as
+begin
+	select dv.IDDichVu, dv.TenDichVu
+	from  DichVuCanLamSang dv
+	inner join LoaiDichVu ldv on ldv.IDLoaiDichVu=dv.LoaiDichVu	
+where @IDChuyenKhoa =ldv.ChuyenKhoa
+end;
+go
+exec DanhSachDichVuCanLamSangTheoChuyenKhoa 'DH'
+--------------------Danh sach chuyen khoa cua lam sang 24/05/2019
+create proc DanhSachChuyenKhoaLamSang
+as
+begin
+select p.ChuyenKhoa, ck.TenChuyenKhoa
+from PhongKhamChuyenKhoa p
+inner join ChuyenKhoa ck on ck.IDChuyenKhoa=p.ChuyenKhoa
+end;
+go
+
+exec DanhSachChuyenKhoaLamSang
+--------------------Hien thi danh sách phòng khám theo chuyen khoa 24/05/2019
+create proc DanhSachPhongKhamBanKhamTheoChuyenKhoa @IDChuyenKhoa nvarchar(10)
+as
+begin
+select p.ID as IDPhong,bk.IDBan, bk.SoBan,p.ChuyenKhoa as IDChuyenKhoa, ck.TenChuyenKhoa
+from PhongKhamChuyenKhoa p
+inner join ChuyenKhoa ck on ck.IDChuyenKhoa=p.ChuyenKhoa
+inner join BanKham bk on bk.Phong=p.ID
+where @IDChuyenKhoa = p.ChuyenKhoa
+end;
+go
+
+exec DanhSachPhongKhamBanKhamTheoChuyenKhoa 'PH'
+-----
+create proc DanhSachBacSiThuocChuyenKhoa @IDChuyenKhoa nvarchar(10)
+as
+begin
+select distinct bs.ID as IDBacSi, bs.HovaTen
+from BacSi bs
+inner join PhongKhamChuyenKhoa p on p.ChuyenKhoa=bs.ChuyenKhoa
+where @IDChuyenKhoa = p.ChuyenKhoa
+end;
+go
+
+exec DanhSachBacSiThuocChuyenKhoa 'PH'

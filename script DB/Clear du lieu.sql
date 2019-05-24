@@ -37,6 +37,7 @@ truncate table SoHienThiPhongKham;
 truncate table SoThuTuPhongKham;
 truncate table SoThuTuPhongCLS;
 truncate table PhieuKham;
+truncate table BenhNhanXetNghiem;
 
 ------------------ ADD CONSTRAINT
 alter table ThongKePhongCLS
