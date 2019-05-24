@@ -67,13 +67,13 @@
     },
     created() {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://192.168.1.11:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsChuyenKhoa`).then(response => {
         this.chuyenKhoa = response.data;
       })
     },
     methods: {
       handleChangeChuyenKhoa() {
-        axios.get(`http://192.168.1.11:8088/clinic/tinhTrangTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
+        axios.get(`http://nhatlq97.sytes.net:8088/clinic/tinhTrangTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
           response => {
             this.soPhong = response.data;
             this.soLuongPhong = response.data;
@@ -147,7 +147,7 @@
           },
           methods: {
             nextNumber(data) {
-              axios.post(`http://192.168.1.11:8088/clinic/soKeTiepLamSang`, {
+              axios.post(`http://nhatlq97.sytes.net:8088/clinic/soKeTiepLamSang`, {
                 idBanKham: data.IDBan,
                 idPhong: data.IDPhongKham
               }).then(response => {

@@ -108,7 +108,8 @@
               <hr color="black" />
 
               <div id="chiDinhCanLamSang">
-                <component v-for="(option,index) in soLuongChiDinh" :key="option.stt" :is="dynamicComponent" :index="index"/>
+                <component v-for="(option,index) in soLuongChiDinh" :key="option.stt" :is="dynamicComponent"
+                  :index="index" />
               </div>
               <a id="add" class="col-sm-6" @click="insertNewSubClinical">Thêm chỉ định</a>
 
@@ -216,7 +217,7 @@
       },
 
       checkMaPhieuKham(e) {
-        axios.get(`http://192.168.1.11:8088/clinic/checkPK/` + this.MaPhieuKham).then(response => {
+        axios.get(`http://nhatlq97.sytes.net:8088/clinic/checkPK/` + this.MaPhieuKham).then(response => {
           let res = response.data;
 
           if (!res.hasOwnProperty("message")) {
@@ -246,7 +247,7 @@
       },
       chiDinhCanLamSang(e) {
         this.bodyRequestChiDinh.IDPhieuKham = this.MaPhieuKham;
-        axios.post(`http://192.168.1.11:8088/clinic/phatSinhCLS`,
+        axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhCLS`,
           this.bodyRequestChiDinh
         ).then(e => {
           if (e.status === 200) {
@@ -266,41 +267,68 @@
                   <select style ="width:100%" class="browser-default custom-select-lg form-group" v-model="selectedCanLamSang"
                   @change="selectCLS">
                   <option selected disabled>Chọn chuyên khoa</option>
-                  <option v-for="option in data" :value="option.IDDichVu" :key="option.IDDichVu">{{option.TenDichVu}}</option>
+                  <option v-for="option in data" :value="option.LoaiDichVu" :key="option.LoaiDichVu">{{option.TenLoaiDichVu}}</option>
+                </select>
+
+                <select style ="width:100%" class="browser-default custom-select-lg form-group" v-model="selectedDichVu"
+                  @change="selectDichVu">
+                  <option selected disabled>Chọn chuyên khoa</option>
+                  <option v-for="option in dichVu" :value="option.IDDichVu" :key="option.IDDichVu">{{option.TenDichVu}}</option>
                 </select>
                 </div>
+                
+
+                <!--<table class="table">
+                  <thead>
+                    <td>Tên dịch vụ</td>
+                    <td>Chọn</td>
+                  </thead>
+                </table>-->
                 <a id="add" class="col-sm-6" style="text-align:right" @click="removeNewSubClinical">Xóa chỉ định</a>
               </div>`,
           data() {
             return {
               selectedCanLamSang: "",
+              selectedDichVu: "",
+              dichVu: "",
               data: "",
-              stt: this.index+1,
+              stt: this.index + 1,
               label: "Chỉ định cận lâm sàng "
             }
           },
-          props:{
-            index:{
-              type:Number,
+          props: {
+            index: {
+              type: Number,
               default: 0
             }
           },
           created() {
             this.selectedChuyenKhoa = ""
-            axios.get(`http://192.168.1.11:8088/clinic/loadCLS`).then(response => {
+            axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsCls`).then(response => {
               this.data = response.data;
               //this.label += this.stt;
             })
           },
           methods: {
+            selectDichVu() {
+
+            },
             selectCLS() {
               parent.bodyRequestChiDinh.CLS.splice(this.stt - 1, 1, {
-                idCLS: this.selectedCanLamSang
+                idCLS: this.selectDichVu
               });
+
+              axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsClsTheoDv/` + this.selectedCanLamSang).then(
+                response => {
+                  if (response != null) {
+                    this.dichVu = response.data;
+                  }
+                }
+              )
             },
             removeNewSubClinical() {
-              parent.soLuongChiDinh.splice(this.index,1);
-              parent.bodyRequestChiDinh.CLS.splice(this.index , 1);
+              parent.soLuongChiDinh.splice(this.index, 1);
+              parent.bodyRequestChiDinh.CLS.splice(this.index, 1);
             },
           }
         }
