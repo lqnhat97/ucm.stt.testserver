@@ -47,12 +47,27 @@ exports.phatSinhSttPkTheoBS = (data) => {
 
 exports.phatSinhSttPkTheoChuyenKhoa = (data) => {
     console.log(data);
-    let d = new Date();
-    let n = d.getHours();
-    if (n <= 11) {
-        return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa1');
-    } else
-        return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa2');
+    switch (data.CaKham) {
+        case '1':
+            console.log('th1');
+            return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa1');
+            break;
+        case '2':
+            console.log('th2');
+
+            return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa2');
+            break;
+        default:
+            console.log('th3');
+
+            let d = new Date();
+            let n = d.getHours();
+            if (n <= 11) {
+                return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa1');
+            } else
+                return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa2');
+            break;
+    }
 }
 
 //Lấy danh sách dịch vụ CLS
