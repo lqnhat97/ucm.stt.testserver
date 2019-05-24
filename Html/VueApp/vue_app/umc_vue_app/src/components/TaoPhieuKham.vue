@@ -53,10 +53,10 @@
                       </select>
                     </td>
                     <td>
-                      <select class="browser-default custom-select-lg form-group" v-model="optionChuyenKhoa.caKham"
+                      <select class="browser-default custom-select-lg form-group"  v-model="optionChuyenKhoa.caKham"
                         @change="handleChangeCaKham(index)">
-                        <option value="1">Ca 1</option>
-                        <option value="2"> Ca 2 </option>
+                        <option value="1" :disabled="new Date().getHours()>12?true:false">Ca 1</option>
+                        <option value="2" > Ca 2 </option>
                       </select>
                     </td>
                     <td>
@@ -158,13 +158,14 @@
           loadedDoctor: "",
           fetchedDoctor: "",
           idBacSi: "",
-          caKham: ""
+          caKham: new Date().getHours()>12?"2":"1"
         }],
       }
     },
     created(e) {
+      
       this.selectedChuyenKhoa = ""
-      axios.get(`http://192.168.1.11:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
@@ -175,7 +176,7 @@
         })
       },
       removeChuyenKhoa(e){
-        this.soLuongChuyenKhoa.splice(e,1);       
+        this.soLuongChuyenKhoa.splice(e,1);
       },
       addChuyenKhoa(e) {
         this.soLuongChuyenKhoa.push({
@@ -185,15 +186,16 @@
           idBacSi: "",
           caKham: ""
         })
-        console.log(this.soLuongChuyenKhoa)
+        
       },
       handleChange(e) {
-        axios.get(`http://192.168.1.11:8088/clinic/dsBacSi/` + e).then(response => {
-
+        axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsBacSi/` + e).then(response => {
           this.soLuongChuyenKhoa.forEach(element => {
             if (element.selected === e) {
               element.loadedDoctor = response.data;
               element.fetchedDoctor = response.data;
+              element.loadedDoctor = element.fetchedDoctor.filter(value => {
+          return value.CaKham == element.caKham});
             }
           });
 
@@ -207,13 +209,13 @@
         this.message = "";
         this.soLuongChuyenKhoa.forEach(element => {
           setTimeout(() => {
-            axios.post(`http://192.168.1.11:8088/clinic/taoPhieuKham`, {
+            axios.post(`http://nhatlq97.sytes.net:8088/clinic/taoPhieuKham`, {
               idBenhNhan: localStorage.idBenhNhan,
               idChuyenKhoa: element.selected
             }).then(dataResponse => {
               console.log(dataResponse.data);
               if (element.idBacSi == '') {
-                axios.post(`http://192.168.1.11:8088/clinic/phatSinhStt`, {
+                axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhStt`, {
                   IDPhieuKham: dataResponse.data.IDPhieuKham,
                   IDChuyenKhoa: element.selected,
                   CaKham: element.caKham
@@ -226,7 +228,7 @@
                   console.log(err);
                 });
               } else {
-                axios.post(`http://192.168.1.11:8088/clinic/phatSinhSttTheoBS`, {
+                axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhSttTheoBS`, {
                   IDPhieuKham: dataResponse.data.IDPhieuKham,
                   IDChuyenKhoa: element.selected,
                   IDBacSi: element.idBacSi,
