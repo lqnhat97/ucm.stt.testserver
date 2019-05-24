@@ -2,7 +2,7 @@
   <div class="TaoPhieuKham">
     <Header />
     <div class="row" style="background-color:#ece9e9">
-      <Sidebar :currentTab="1"/>
+      <Sidebar :currentTab="1" />
       <div class="col-sm-9 ">
         <div class="row">
           <div class="col-sm-11" id="cliente">
@@ -29,7 +29,7 @@
                   <h3>Danh sách Chuyên khoa</h3>
                 </div>
               </div>
-              <button type="button" class="btn btn-info" v-on:click="addChuyenKhoa"> Thêm </button>
+
             </form>
             <div class="row " style="padding-left:5pt;display:flex;justify-content:space-between">
               <table class="table" id="chuyenKhoaTbody">
@@ -85,11 +85,14 @@
                         </tbody>
                       </table>
                     </td>
+                    <button type="button" class="btn btn-danger" v-on:click="removeChuyenKhoa(index)"> Xóa </button>
                   </tr>
                 </tbody>
               </table>
-
+              
             </div>
+            <button type="button" class="btn btn-info" v-on:click="addChuyenKhoa"> Thêm </button>
+            
             <div style="text-align:center;display: flex;justify-content: center;">
               <div>
                 <input class="form-group" @click="taoPk" id="buttom" type="submit" value="Tạo phiếu khám">
@@ -120,7 +123,7 @@
         </div>
       </div>
     </div>-->
-    <Modal :message="this.message"/>
+    <Modal :message="this.message" />
   </div>
 </template>
 
@@ -161,7 +164,7 @@
     },
     created(e) {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://192.168.1.110:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://192.168.1.11:8088/clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
@@ -170,6 +173,9 @@
         this.soLuongChuyenKhoa[index].loadedDoctor = this.soLuongChuyenKhoa[index].fetchedDoctor.filter(value => {
           return value.CaKham == this.soLuongChuyenKhoa[index].caKham
         })
+      },
+      removeChuyenKhoa(e){
+        this.soLuongChuyenKhoa.splice(e,1);       
       },
       addChuyenKhoa(e) {
         this.soLuongChuyenKhoa.push({
@@ -182,7 +188,7 @@
         console.log(this.soLuongChuyenKhoa)
       },
       handleChange(e) {
-        axios.get(`http://192.168.1.110:8088/clinic/dsBacSi/` + e).then(response => {
+        axios.get(`http://192.168.1.11:8088/clinic/dsBacSi/` + e).then(response => {
 
           this.soLuongChuyenKhoa.forEach(element => {
             if (element.selected === e) {
@@ -201,31 +207,33 @@
         this.message = "";
         this.soLuongChuyenKhoa.forEach(element => {
           setTimeout(() => {
-            axios.post(`http://192.168.1.110:8088/clinic/taoPhieuKham`, {
+            axios.post(`http://192.168.1.11:8088/clinic/taoPhieuKham`, {
               idBenhNhan: localStorage.idBenhNhan,
               idChuyenKhoa: element.selected
             }).then(dataResponse => {
               console.log(dataResponse.data);
               if (element.idBacSi == '') {
-                axios.post(`http://192.168.1.110:8088/clinic/phatSinhStt`, {
+                axios.post(`http://192.168.1.11:8088/clinic/phatSinhStt`, {
                   IDPhieuKham: dataResponse.data.IDPhieuKham,
-                  IDChuyenKhoa: element.selected
+                  IDChuyenKhoa: element.selected,
+                  CaKham: element.caKham
                 }).then(result => {
                   this.message += "Tạo phiếu khám thành công <strong>" + dataResponse.data.IDPhieuKham +
-                  "</strong><br/>";
+                    "</strong><br/>";
                   $('#findCmndModal').modal('show');
                   console.log(result.data);
                 }).catch(err => {
                   console.log(err);
                 });
               } else {
-                axios.post(`http://192.168.1.110:8088/clinic/phatSinhSttTheoBS`, {
+                axios.post(`http://192.168.1.11:8088/clinic/phatSinhSttTheoBS`, {
                   IDPhieuKham: dataResponse.data.IDPhieuKham,
                   IDChuyenKhoa: element.selected,
-                  IDBacSi: element.idBacSi
+                  IDBacSi: element.idBacSi,
+                  CaKham: element.caKham
                 }).then(result => {
                   this.message += "Tạo phiếu khám thành công <strong>" + dataResponse.data.IDPhieuKham +
-                  "</strong> <br/>";
+                    "</strong> <br/>";
                   $('#findCmndModal').modal('show');
                   console.log(result.data);
                 }).catch(err => {

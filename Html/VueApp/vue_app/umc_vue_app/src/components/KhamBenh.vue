@@ -1,7 +1,7 @@
 <template>
   <div class="KhamBenh">
     <Header />
-    <Sidebar :currentTab="2"/>
+    <Sidebar :currentTab="2" />
     <div class="col-md-9 form-group">
       <div class="row">
         <div class="col-sm-5" id="cliente">
@@ -69,7 +69,6 @@
 
 
           </form>
-          <p style="text-align:center">Các thông tin khác</p>
         </div>
         <div class="col-sm-6" id="cliente">
           <form style=" border-bottom: 2px solid #bbbbbb; padding:10pt">
@@ -109,10 +108,10 @@
               <hr color="black" />
 
               <div id="chiDinhCanLamSang">
-                <component v-for="option in soLuongChiDinh" :key="option.stt" :is="dynamicComponent" />
+                <component v-for="(option,index) in soLuongChiDinh" :key="option.stt" :is="dynamicComponent" :index="index"/>
               </div>
               <a id="add" class="col-sm-6" @click="insertNewSubClinical">Thêm chỉ định</a>
-              <a id="add" class="col-sm-6" style="text-align:right" @click="removeNewSubClinical">Xóa chỉ định</a>
+
 
               <br><br><br><br>
               <hr />
@@ -205,7 +204,7 @@
           stt: 1,
         }],
         message: "",
-        date: new Date().getDate() + "/" + new Date().getMonth() + "/" + new Date().getFullYear()
+        date: new Date().getDate() + "/" + String(new Date().getMonth() + 1) + "/" + new Date().getFullYear()
       }
     },
 
@@ -215,12 +214,9 @@
           stt: this.soLuongChiDinh.length + 1
         })
       },
-      removeNewSubClinical(e) {
-        var test = this.soLuongChiDinh.pop()
-        this.bodyRequestChiDinh.CLS.splice(this.soLuongChiDinh.length - 1, 1);
-      },
+
       checkMaPhieuKham(e) {
-        axios.get(`http://localhost:8088/clinic/checkPK/` + this.MaPhieuKham).then(response => {
+        axios.get(`http://192.168.1.11:8088/clinic/checkPK/` + this.MaPhieuKham).then(response => {
           let res = response.data;
 
           if (!res.hasOwnProperty("message")) {
@@ -250,7 +246,7 @@
       },
       chiDinhCanLamSang(e) {
         this.bodyRequestChiDinh.IDPhieuKham = this.MaPhieuKham;
-        axios.post(`http://localhost:8088/clinic/phatSinhCLS`,
+        axios.post(`http://192.168.1.11:8088/clinic/phatSinhCLS`,
           this.bodyRequestChiDinh
         ).then(e => {
           if (e.status === 200) {
@@ -273,20 +269,27 @@
                   <option v-for="option in data" :value="option.IDDichVu" :key="option.IDDichVu">{{option.TenDichVu}}</option>
                 </select>
                 </div>
+                <a id="add" class="col-sm-6" style="text-align:right" @click="removeNewSubClinical">Xóa chỉ định</a>
               </div>`,
           data() {
             return {
               selectedCanLamSang: "",
               data: "",
-              stt: parent.soLuongChiDinh.length,
+              stt: this.index+1,
               label: "Chỉ định cận lâm sàng "
+            }
+          },
+          props:{
+            index:{
+              type:Number,
+              default: 0
             }
           },
           created() {
             this.selectedChuyenKhoa = ""
-            axios.get(`http://localhost:8088/clinic/loadCLS`).then(response => {
+            axios.get(`http://192.168.1.11:8088/clinic/loadCLS`).then(response => {
               this.data = response.data;
-              this.label += this.stt;
+              //this.label += this.stt;
             })
           },
           methods: {
@@ -294,11 +297,14 @@
               parent.bodyRequestChiDinh.CLS.splice(this.stt - 1, 1, {
                 idCLS: this.selectedCanLamSang
               });
-            }
+            },
+            removeNewSubClinical() {
+              parent.soLuongChiDinh.splice(this.index,1);
+              parent.bodyRequestChiDinh.CLS.splice(this.index , 1);
+            },
           }
         }
       }
     },
   }
-
 </script>

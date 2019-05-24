@@ -302,7 +302,7 @@
     },
     methods:{
       handleChangeChuyenKhoa(e){
-         axios.get(`http://localhost:8088/clinic/tinhTrangConChoTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
+         axios.get(`http://192.168.1.11:8088/clinic/tinhTrangConChoTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
           response => {
             console.log(response.data);
             this.soPhong = response.data;
@@ -322,7 +322,7 @@
     },
     created() {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://192.168.1.11:8088/clinic/dsChuyenKhoa`).then(response => {
         this.chuyenKhoa = response.data;
       })
     }

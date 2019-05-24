@@ -37,7 +37,7 @@
           </div>
         </form>
         <div class="row" id="chiDinhCanLamSang" style=" flex-wrap: wrap;display:flex;justify-content:space-evenly; ">
-          <component v-for="phong in soPhong" :key="phong.phongKham" :is="dynamicComponent" :option="phong" />
+          <component v-for="(phong,index) in soPhong" :key="phong.phongKham" :is="dynamicComponent" :option="phong" :index="index" />
         </div>
       </div>
     </div>
@@ -67,13 +67,13 @@
     },
     created() {
       this.selectedChuyenKhoa = ""
-      axios.get(`http://localhost:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(`http://192.168.1.11:8088/clinic/dsChuyenKhoa`).then(response => {
         this.chuyenKhoa = response.data;
       })
     },
     methods: {
-      handleChangeChuyenKhoa(e) {
-        axios.get(`http://localhost:8088/clinic/tinhTrangTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
+      handleChangeChuyenKhoa() {
+        axios.get(`http://192.168.1.11:8088/clinic/tinhTrangTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
           response => {
             this.soPhong = response.data;
             this.soLuongPhong = response.data;
@@ -123,6 +123,10 @@
             option: {
               type: Object,
               default: {},
+            },
+            index:{
+              type: Number,
+              default:0
             }
           },
           components: {
@@ -137,21 +141,22 @@
             }
           },
           created() {
-            console.log(this.option);
+       
             this.soLuongBan = this.option.thongTin;
             this.soPhong += this.option.phongKham;
           },
           methods: {
             nextNumber(data) {
-              axios.post(`http://localhost:8088/clinic/soKeTiepLamSang`, {
+              axios.post(`http://192.168.1.11:8088/clinic/soKeTiepLamSang`, {
                 idBanKham: data.IDBan,
                 idPhong: data.IDPhongKham
               }).then(response => {
-                console.log(response)
                 if (response.status == 200) {
                   this.message = 'Đã qua số cho bàn <strong><span style="color: #41B883;">' + response.data.BanKham + '</span></strong>  phòng <strong><span style="color: #41B883;">' + response.data.PhongKham + '</span></strong>' ;
                   $('#findCmndModal').modal('show');
-
+                  parent.handleChangeChuyenKhoa();
+                  this.soLuongBan=parent.soPhong[this.index].thongTin;
+                  
                 };
               })
             }
