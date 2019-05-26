@@ -217,7 +217,7 @@
       },
 
       checkMaPhieuKham(e) {
-        axios.get(`http://nhatlq97.sytes.net:8088/clinic/checkPK/` + this.MaPhieuKham).then(response => {
+        axios.get(process.env.SERVER_URI+`clinic/checkPK/` + this.MaPhieuKham).then(response => {
           let res = response.data;
 
           if (!res.hasOwnProperty("message")) {
@@ -247,7 +247,7 @@
       },
       chiDinhCanLamSang(e) {
         this.bodyRequestChiDinh.IDPhieuKham = this.MaPhieuKham;
-        axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhCLS`,
+        axios.post(process.env.SERVER_URI+`clinic/phatSinhCLS`,
           this.bodyRequestChiDinh
         ).then(e => {
           if (e.status === 200) {
@@ -304,7 +304,7 @@
           },
           created() {
             this.selectedChuyenKhoa = ""
-            axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsCls`).then(response => {
+            axios.get(process.env.SERVER_URI+`clinic/dsCls`).then(response => {
               this.data = response.data;
               //this.label += this.stt;
             })
@@ -318,7 +318,7 @@
                 idCLS: this.selectDichVu
               });
 
-              axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsClsTheoDv/` + this.selectedCanLamSang).then(
+              axios.get(process.env.SERVER_URI+`clinic/dsClsTheoDv/` + this.selectedCanLamSang).then(
                 response => {
                   if (response != null) {
                     this.dichVu = response.data;

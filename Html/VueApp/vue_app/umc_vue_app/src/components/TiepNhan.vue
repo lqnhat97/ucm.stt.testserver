@@ -150,7 +150,7 @@
     methods: {
       checkCMND(e) {
         e.preventDefault();
-        axios.get(`http://nhatlq97.sytes.net:8088/patient/checkBenhNhan/` + this.cmnd)
+        axios.get(process.env.SERVER_URI + `patient/checkBenhNhan/` + this.cmnd)
           .then(response => {
             let res = response.data;
             if (!res.hasOwnProperty("message")) {
@@ -199,7 +199,7 @@
           "phone": this.SoDienThoai,
           "address": this.DiaChi,
         };
-        axios.post(`http://nhatlq97.sytes.net:8088/patient/taoThongTin`, {
+        axios.post(process.env.SERVER_URI + `patient/taoThongTin`, {
             body: posbody
           }).then(async response => {
             console.log(response);

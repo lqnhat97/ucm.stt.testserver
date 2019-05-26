@@ -163,9 +163,8 @@
       }
     },
     created(e) {
-      
       this.selectedChuyenKhoa = ""
-      axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsChuyenKhoa`).then(response => {
+      axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoa`).then(response => {
         this.data = response.data;
       })
     },
@@ -184,12 +183,12 @@
           selected: "",
           loadedDoctor: "",
           idBacSi: "",
-          caKham: ""
+          caKham: new Date().getHours()>12?"2":"1"
         })
         
       },
       handleChange(e) {
-        axios.get(`http://nhatlq97.sytes.net:8088/clinic/dsBacSi/` + e).then(response => {
+        axios.get(process.env.SERVER_URI + `clinic/dsBacSi/` + e).then(response => {
           this.soLuongChuyenKhoa.forEach(element => {
             if (element.selected === e) {
               element.loadedDoctor = response.data;
@@ -209,13 +208,13 @@
         this.message = "";
         this.soLuongChuyenKhoa.forEach(element => {
           setTimeout(() => {
-            axios.post(`http://nhatlq97.sytes.net:8088/clinic/taoPhieuKham`, {
+            axios.post(process.env.SERVER_URI + `clinic/taoPhieuKham`, {
               idBenhNhan: localStorage.idBenhNhan,
               idChuyenKhoa: element.selected
             }).then(dataResponse => {
               console.log(dataResponse.data);
               if (element.idBacSi == '') {
-                axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhStt`, {
+                axios.post(process.env.SERVER_URI + `clinic/phatSinhStt`, {
                   IDPhieuKham: dataResponse.data.IDPhieuKham,
                   IDChuyenKhoa: element.selected,
                   CaKham: element.caKham
@@ -228,7 +227,7 @@
                   console.log(err);
                 });
               } else {
-                axios.post(`http://nhatlq97.sytes.net:8088/clinic/phatSinhSttTheoBS`, {
+                axios.post(process.env.SERVER_URI + `clinic/phatSinhSttTheoBS`, {
                   IDPhieuKham: dataResponse.data.IDPhieuKham,
                   IDChuyenKhoa: element.selected,
                   IDBacSi: element.idBacSi,
