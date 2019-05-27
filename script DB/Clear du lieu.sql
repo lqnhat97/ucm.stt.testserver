@@ -5,7 +5,6 @@ alter table ThongKePhongCLS drop constraint FK_TK_PCLS;
 alter table SoThuTuPhongCLS drop constraint FK_STTCLS_DV;
 alter table ThucHienCLS drop constraint FK_THCLS_PCLS;
 alter table ThucHienCLS drop constraint FK_THCLS_DV;
-alter table PhongCanLamSang drop constraint FK_PCLS_KV;
 alter table SoThuTuPhongKham drop constraint FK_STT_BanKham;
 alter table SoThuTuPhongCLS drop constraint FK_STTCLS_CKham;
 alter table SoThuTuPhongKham drop constraint FK_STTPK_CKham;
@@ -75,10 +74,7 @@ add constraint FK_STTCLS_DV
 foreign key(CanLamSang)
 references DichVuCanLamSang(IDDichVu)
 
-alter table PhongCanLamSang
-add constraint FK_PCLS_KV
-foreign key (KhuVuc)
-references KhuVuc(IDKhuVuc)
+
 
 /*alter table PhongCanLamSang
 add constraint FK_PCLS_PCK
@@ -154,6 +150,7 @@ alter table SoHienThiPhongCanLamSang
 add constraint FK_HienThi_STTPhongCanLamSang
 foreign key(IDPhieuKham,STT,CanLamSang)
 references SoThuTuPhongCLS(IDPhieuKham,STT,CanLamSang)
+
 alter table LichSuTraCuu
 add constraint FK_LichSu_NgTim
 foreign key (IDNguoiTim)
