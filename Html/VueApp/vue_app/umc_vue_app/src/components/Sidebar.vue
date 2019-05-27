@@ -7,35 +7,36 @@
       <div class="container-fluid list-option">
         <div class="panel-group">
           <div class="panel panel-default" id="changepanel">
-            <div class="panel-body" :id="this.currentTab == 1? this.changecolor_now:this.changecolor"
-              >
+            <div class="panel-body" :id="this.currentTab == 1? this.changecolor_now:this.changecolor">
               <h4 class=" panel-title">
-                <router-link  to="/">Tiếp nhận</router-link>
+                <router-link to="/">Tiếp nhận</router-link>
               </h4>
             </div>
           </div>
           <div class="panel panel-default" id="changepanel">
-            <div class="panel-body" :id="this.currentTab == 2? this.changecolor_now:this.changecolor"
-              >
+            <div class="panel-body" :id="this.currentTab == 2? this.changecolor_now:this.changecolor">
               <h4 class="panel-title">
-                <router-link  to="/khamBenh">Khám bệnh</router-link>
+                <router-link to="/khamBenh">Khám bệnh</router-link>
               </h4>
             </div>
           </div>
 
           <div class="panel panel-default" id="changepanel">
-            <div class="panel-body"  :id="this.currentTab == 3? this.changecolor_now:this.changecolor">
+            <div class="panel-body" :id="this.currentTab == 3? this.changecolor_now:this.changecolor">
               <h4 class="panel-title"> <a data-toggle="collapse" href="#collapse2">Phòng khám</a>
               </h4>
             </div>
             <div id="collapse2" class="panel-collapse collapse">
               <ul class="list-group">
                 <li class="list-group-item" id="changecolortext">
-                  <router-link  id="changepanel" to="/danhSachPhongKham">Danh
+                  <router-link id="changepanel" to="/quanLyBacSi">Phân công lịch khám</router-link>
+                </li>
+                <li class="list-group-item" id="changecolortext">
+                  <router-link id="changepanel" to="/danhSachPhongKham">Danh
                     sách phòng khám</router-link>
                 </li>
                 <li class="list-group-item" id="changecolortext">
-                  <router-link  id="changepanel" to="/chiTietPhongKham">Chi
+                  <router-link id="changepanel" to="/chiTietPhongKham">Chi
                     tiết phòng khám</router-link>
                 </li>
                 <!-- <li class="list-group-item" id="changecolortext">
@@ -48,7 +49,7 @@
         </div>
 
         <div class="panel panel-default" id="changepanel">
-          <div class="panel-body"  :id="this.currentTab == 4? this.changecolor_now:this.changecolor">
+          <div class="panel-body" :id="this.currentTab == 4? this.changecolor_now:this.changecolor">
             <h4 class="panel-title">
               <a data-toggle="collapse" href="#collapse3">Phòng cận lâm sàng</a>
             </h4>
@@ -57,11 +58,15 @@
           <div id="collapse3" class="panel-collapse collapse">
             <ul class="list-group">
               <li class="list-group-item" id="changecolortext">
-                <router-link  id="changepanel" to="/chiTietCanLamSang">Chi tiếp
+                <router-link id="changepanel" to="/quanLyPhongCanLamSang">Quản lý phòng cận lâm sàng
+                </router-link>
+              </li>
+              <li class="list-group-item" id="changecolortext">
+                <router-link id="changepanel" to="/chiTietCanLamSang">Chi tiếp
                   phòng cận lâm sàng</router-link>
               </li>
               <li class="list-group-item" id="changecolortext">
-                <router-link  id="changepanel" to="/quanLySoCanLamSang">Quản lý
+                <router-link id="changepanel" to="/quanLySoCanLamSang">Quản lý
                   số</router-link>
               </li>
             </ul>
@@ -77,8 +82,8 @@
   /* eslint-disable */
   export default {
     name: "Sidebar",
-    props:{
-      currentTab:{
+    props: {
+      currentTab: {
         type: Number,
         default: 0
       }
@@ -86,10 +91,10 @@
     data() {
       return {
         activeItem: 'TiepNhan',
-        changecolor_now:'changecolor-now',
+        changecolor_now: 'changecolor-now',
         changecolor: 'changecolor'
       }
-    },  
+    },
   }
 </script>
 

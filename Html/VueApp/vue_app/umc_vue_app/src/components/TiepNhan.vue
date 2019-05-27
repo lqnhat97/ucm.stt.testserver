@@ -62,7 +62,7 @@
             <div class="row form-group">
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">Ngày sinh</label>
               <div class="col-sm-4">
-                <input type="text" value="" class="form-control" :disabled="isFound?true:false" v-model="NgaySinh"
+                <input type="text" value="" placeholder="mm/dd/yyyy" class="form-control" :disabled="isFound?true:false" v-model="NgaySinh"
                   v-text="NgaySinh">
               </div>
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
@@ -150,7 +150,7 @@
     methods: {
       checkCMND(e) {
         e.preventDefault();
-        axios.get(`http://192.168.1.110:8088/patient/checkBenhNhan/` + this.cmnd)
+        axios.get(process.env.SERVER_URI + `patient/checkBenhNhan/` + this.cmnd)
           .then(response => {
             let res = response.data;
             if (!res.hasOwnProperty("message")) {
@@ -199,7 +199,7 @@
           "phone": this.SoDienThoai,
           "address": this.DiaChi,
         };
-        axios.post(`http://192.168.1.110:8088/patient/taoThongTin`, {
+        axios.post(process.env.SERVER_URI + `patient/taoThongTin`, {
             body: posbody
           }).then(async response => {
             console.log(response);

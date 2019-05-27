@@ -7,7 +7,8 @@ import KhamBenh from '@/components/KhamBenh'
 import DanhSachPhongKham from '@/components/DanhSachPhongKham'
 import ChiTietPhongKham from '@/components/ChiTietPhongKham'
 import ChiTietCanLamSang from '@/components/ChiTietCanLamSang'
-import QuanLySoCanLamSang from '@/components/QuanLySoCanLamSang'
+import QuanLyPhongCanLamSang from '@/components/QuanLyPhongCanLamSang'
+import QuanLyBacSi from '@/components/QuanLyBacSi'
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -47,9 +48,14 @@ export default new Router({
       component: ChiTietCanLamSang
     },
     {
-      path: '/quanLySoCanLamSang',
-      name: 'Quan Ly So Can Lam Sang',
-      component: QuanLySoCanLamSang
+      path: '/quanLyBacSi',
+      name: 'Quan Ly Bac Si',
+      component: QuanLyBacSi
+    },
+    {
+      path: '/quanLyPhongCanLamSang',
+      name: 'Quan Ly Phong Can Lam Sang',
+      component: QuanLyPhongCanLamSang
     }
   ]
 })
