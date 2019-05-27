@@ -34,15 +34,25 @@ exports.taoPhieuKham = (data) => {
 }
 
 exports.phatSinhSttPkTheoBS = (data) => {
-    let d = new Date();
-    let n = d.getHours();
-    if (n <= 11) {
-        let sql = `exec PhatSinhSTTPhongKham_BacSiCa1 '${data.IDPhieuKham}','${data.IDChuyenKhoa}','${data.IDBacSi}'`
-        return db.executeQuery(sql);
-    } else {
-        let sql = `exec PhatSinhSTTPhongKham_BacSiCa2 '${data.IDPhieuKham}','${data.IDChuyenKhoa}','${data.IDBacSi}'`
-        return db.executeQuery(sql);
+    let sql = `exec PhatSinhSTTPhongKham_BacSiCa1 '${data.IDPhieuKham}','${data.IDChuyenKhoa}','${data.IDBacSi}'`
+    let sql2 = `exec PhatSinhSTTPhongKham_BacSiCa2 '${data.IDPhieuKham}','${data.IDChuyenKhoa}','${data.IDBacSi}'`
+
+    switch (data.CaKham) {
+        case '1':
+            return db.executeQuery(sql);
+        case '2':
+            console.log('th2');
+            return db.executeQuery(sql2);
+        default:
+            console.log('th3');
+            let d = new Date();
+            let n = d.getHours();
+            if (n <= 11) {
+                return db.executeQuery(sql);
+            } else
+                return db.executeQuery(sql2);
     }
+
 }
 
 exports.phatSinhSttPkTheoChuyenKhoa = (data) => {
@@ -51,12 +61,10 @@ exports.phatSinhSttPkTheoChuyenKhoa = (data) => {
         case '1':
             console.log('th1');
             return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa1');
-            break;
         case '2':
             console.log('th2');
 
             return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa2');
-            break;
         default:
             console.log('th3');
 
@@ -66,14 +74,7 @@ exports.phatSinhSttPkTheoChuyenKhoa = (data) => {
                 return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa1');
             } else
                 return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa2');
-            break;
     }
-}
-
-//Lấy danh sách dịch vụ CLS
-exports.loadAllCLS = () => {
-    let sql = `select * from DichVuCanLamSang`;
-    return db.executeQuery(sql);
 }
 
 //Check phiếu khám
@@ -81,23 +82,85 @@ exports.checkPk = (data) => {
     return db.executeProcedure('IDPhieuKham', data, 'CheckPhieuKham');
 }
 
-//Sinh số cls
+//Sinh số cls cho các dv ngoài xét nghiệm
 exports.sinhSoCLS = (idPk, idCls) => {
-    console.log(idPk, idCls);
-    return db.executeProcedure2input('IDPhieuKham', 'IDDichVuCLS', idPk, idCls, 'PhatSinhSTTCLS');
+    let d = new Date();
+    let n = d.getHours();
+    if (n < 11)
+        return db.executeProcedure2input('IDPhieuKham', 'IDDichVuCLS', idPk, idCls, 'PhatSinhSTTCLSCa1');
+    return db.executeProcedure2input('IDPhieuKham', 'IDDichVuCLS', idPk, idCls, 'PhatSinhSTTCLSCa2');
+}
+
+//Sinh số cls cho các dv xét nghiệm
+exports.sinhSoCLSXetNghiem = (idPk) => {
+    let d = new Date();
+    let n = d.getHours();
+    if (n < 11)
+        return db.executeProcedure('IDPhieuKham', idPk, 'PhatSinhSTTXetNghiemCa1');
+    return db.executeProcedure('IDPhieuKham', idPk, 'PhatSinhSTTXetNghiemCa2');
 }
 
 //Tìm & xuất danh sách phòng khám, bàn khám, STT hiện tại, bác sĩ, bệnh nhân  theo chuyên khoa
 exports.tinhTrangHienTaiTheoChuyenKhoa = (idChuyenKhoa) => {
-    return db.executeProcedure('IDChuyenKhoa', idChuyenKhoa, "TinhTrangHienTaiTheoChuyenKhoa");
+    let d = new Date();
+    let n = d.getHours();
+    if (n < 11) {
+        return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 1, "TinhTrangHienTaiTheoChuyenKhoa");
+
+    } else {
+        return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 2, "TinhTrangHienTaiTheoChuyenKhoa");
+    }
 }
 
 //Tìm và suất danh sách phòng khám chi tiết gồm có số còn chờ, tốc độ nhảy số, phòng khám
 exports.tinhTrangConChoTheoChuyenKhoa = (idChuyenKhoa) => {
-    return db.executeProcedure('IDChuyenKhoa', idChuyenKhoa, "TinhTrangConChoTheoChuyenKhoa");
+    let d = new Date();
+    let n = d.getHours();
+    if (n < 11) {
+        return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 1, "TinhTrangConChoTheoChuyenKhoa");
+    } else {
+        return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 2, "TinhTrangConChoTheoChuyenKhoa");
+    }
 }
 
 //Qua số lâm sàng
 exports.soKeTiepLS = (data) => {
     return db.executeProcedure2input('IDBanKham', 'IDPhong', data.idBanKham, data.idPhong, 'BamSoHienThiPhongKham');
+}
+
+//Ds dv cls
+exports.dsChuyenKhoaCls = () => {
+    let sql = 'exec DanhSachChuyenKhoaCLS';
+    return db.executeQuery(sql);
+}
+
+//Ds dv cls
+exports.dsdvCls = () => {
+    let sql = 'exec XuatLoaiDichVuCanLamSang';
+    return db.executeQuery(sql);
+}
+
+//Ds cls theo dv
+exports.dsClsTheoDv = (idDv) => {
+    return db.executeProcedure('IDLoaiDichVu', idDv, 'XuatDichVuCanLamSang');
+}
+
+//Ds phòng cls theo dv
+exports.dsPhongClsTheoChuyenKhoa = (idChuyenKhoa) => {
+    return db.executeProcedure('IDChuyenKhoa', idChuyenKhoa, 'DanhSachPhongCanLamSangTheoChuyenKhoa');
+}
+
+//Danh sách phòng khám, bàn khám theo chuyên khoa lâm sàng
+exports.pkbkTheoChuyenKhoa = (idChuyenKhoa) => {
+    return db.executeProcedure('IDChuyenKhoa', idChuyenKhoa, 'DanhSachPhongKhamBanKhamTheoChuyenKhoa');
+}
+
+//xuất danh sách bác sĩ thuộc chuyên khoa để phân công
+exports.dsBSThuocChuyenKhoa = (idChuyenKhoa) => {
+    return db.executeProcedure('IDChuyenKhoa', idChuyenKhoa, 'DanhSachBacSiThuocChuyenKhoa');
+}
+
+//Check một cận lâm sàng có phải là test hơi thở hay xét nghiệm hay không
+exports.checkCls = (idDichVu, idPhieuKham) => {
+    return db.executeProcedure2input('IDDichVu', 'IDPhieuKham', idDichVu, idPhieuKham, 'CheckCanLamSang');
 }

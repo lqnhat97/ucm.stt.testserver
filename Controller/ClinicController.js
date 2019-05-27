@@ -87,13 +87,13 @@ router.get('/dsBacSi/:idCK', (req, res) => {
 })
 
 //Tạo phiếu khám
-router.post('/taoPhieuKham', (req, res) => { 
-        console.log(req.body);
-        db.taoPhieuKham(req.body).then(rows => {
-            console.log(rows.recordset);
-            res.status(200).json(rows.recordset[0]);
-        })
-    
+router.post('/taoPhieuKham', (req, res) => {
+    console.log(req.body);
+    db.taoPhieuKham(req.body).then(rows => {
+        console.log(rows.recordset);
+        res.status(200).json(rows.recordset[0]);
+    })
+
 })
 
 //Kích hoạt Phát sinh STT phòng khám lâm sàng theo chuyên khoa
@@ -114,13 +114,6 @@ router.post('/phatSinhSttTheoBS', (req, res) => {
     }).catch(err => console.log(err))
 })
 
-//Load danh sách cận lâm sàng
-router.get('/loadCLS', (req, res) => {
-    db.loadAllCLS().then(rows => {
-        res.status(200).json(rows.recordset);
-    })
-})
-
 //Check phiếu khám
 router.get('/checkPK/:idPk', (req, res) => {
     db.checkPk(req.params.idPk).then(rows => {
@@ -128,17 +121,36 @@ router.get('/checkPK/:idPk', (req, res) => {
     })
 })
 
+async function phanLoaiCls(data, dsCLS) {
+    let xetNghiem = [];
+    let len = dsCLS.length;
+    for (let i = 0; i < len; i++) {
+        let value = data.idDichVuCls[i];
+        result = await db.checkCls(value, data.idPhieuKham);
+        if (result.recordset[0].KetQua == 1) {
+            xetNghiem.push(dsCLS.splice(dsCLS.indexOf(value), 1)[0]);
+        }
+    }
+    return xetNghiem;
+};
+
 //Kích hoạt phát sinh STT CLS
 router.post('/phatSinhCLS', async (req, res) => {
     let data = req.body;
-    let dsCLS = [...data.CLS];
-    await dsCLS.forEach((value) => {
-        console.log(value);
-        db.sinhSoCLS(data.IDPhieuKham, value.idCLS).catch(err => {
-            if (err) throw err
-        })
+    var dsCLS = [...data.idDichVuCls];
+    let msg = [];
+    phanLoaiCls(data, dsCLS).then(async (xetNghiem) => {
+        let s_len = dsCLS.length;
+        for(let i = 0;i<s_len;i++){
+            let cls_result = await  db.sinhSoCLS(data.idPhieuKham, dsCLS[i]);
+            console.log(cls_result.recordset);
+        }
+        if (xetNghiem.length != 0) {
+            let xn_result = await db.sinhSoCLSXetNghiem(data.idPhieuKham);
+            console.log(xn_result);
+        }
+        res.status(200).end();
     })
-    res.status(200).end();
 })
 
 //Tìm & xuất danh sách phòng khám, bàn khám, STT hiện tại, bác sĩ, bệnh nhân  theo chuyên khoa
@@ -170,17 +182,15 @@ function handlingDsPhong(data) {
     let arrSoPhong = dataRes.map((data) => {
         return data.SoPhong;
     });
-    
+
     let rightArraySoPhong = arrSoPhong.filter((v, i) => arrSoPhong.indexOf(v) === i);
     rightArraySoPhong.forEach((soPhong, index) => {
         let data = dataRes.filter((dataInside) => {
             return dataInside.SoPhong === soPhong;
         });
-    console.log(data);
-
         ketQua.push({
-            phongKham:soPhong,
-            thongTin:data
+            phongKham: soPhong,
+            thongTin: data
         });
     });
     return ketQua;
@@ -196,11 +206,71 @@ router.get('/tinhTrangConChoTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
 })
 
 //Bấm qua số kế tiếp phòng lâm sàng( khám)
-router.post('/soKeTiepLamSang',(req,res)=>{
+router.post('/soKeTiepLamSang', (req, res) => {
     let data = req.body;
-    db.soKeTiepLS(data).then((rows)=>{
+    db.soKeTiepLS(data).then((rows) => {
         res.status(200).json(rows.recordset[0]).end();
     })
 })
 
+//Xuất danh sách chuyên khoa cận lâm sàng
+router.get('/dsChuyenKhoaCls', (req, res) => {
+    db.dsChuyenKhoaCls().then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
+
+//Xuất danh sách dịch vụ cận lâm sàng
+router.get('/dsCls', (req, res) => {
+    db.dsdvCls().then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
+
+//Xuất danh sách cận lâm sàng theo dịch vụ
+router.get('/dsClsTheoDv/:idDv', (req, res) => {
+    db.dsClsTheoDv(req.params.idDv).then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
+
+//Danh sách phòng khám, bàn khám theo chuyên khoa lâm sàng
+router.get('/dspkbkTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
+    let ketQua = [];
+    let data = req.params.idChuyenKhoa;
+    db.pkbkTheoChuyenKhoa(data).then(rows => {
+        let dataRes = rows.recordset;
+        let arrSoPhong = dataRes.map((data) => {
+            return data.IDPhong;
+        })
+        let rightArraySoPhong = arrSoPhong.filter((v, i) => arrSoPhong.indexOf(v) === i);
+        rightArraySoPhong.forEach((soPhong, index) => {
+            let data = dataRes.filter((dataInside) => {
+                return dataInside.IDPhong === soPhong;
+            });
+            ketQua.push({
+                phongKham: data[0].SoPhong,
+                thongTin: data
+            });
+        });
+        res.status(200).json(ketQua).end();
+    })
+})
+
+//xuất danh sách bác sĩ thuộc chuyên khoa để phân công (chỉ có id,họ tên)
+router.get('/dsBsTheoChuyenKhoa/:idChuyenkhoa', (req, res) => {
+    let data = req.params.idChuyenkhoa;
+    db.dsBSThuocChuyenKhoa(data).then(rows => {
+        let dataRes = rows.recordset;
+        res.status(200).json(dataRes).end();
+    })
+})
+
+//Danh sách phòng cận lâm sàng
+router.get('/dsClsTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
+    let data = req.params.idChuyenKhoa;
+    db.dsPhongClsTheoChuyenKhoa(data).then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
 module.exports = router;
