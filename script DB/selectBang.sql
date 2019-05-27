@@ -356,9 +356,9 @@ exec TimBenhNhanTheoSDT '953621258'
 create proc DanhSachChuyenKhoaCLS
 as
 begin
-select p.TrucThuoc as ChuyenKhoaCLS, ck.TenChuyenKhoa
-from PhongCanLamSang p
-inner join ChuyenKhoa ck on ck.IDChuyenKhoa=p.TrucThuoc
+select ck.IDChuyenKhoa, ck.TenChuyenKhoa
+from  ChuyenKhoa ck 
+where ck.IDDonViChucNang=5
 end;
 go
 exec DanhSachChuyenKhoaCLS
@@ -367,7 +367,7 @@ exec DanhSachChuyenKhoaCLS
 create proc DanhSachPhongCanLamSangTheoChuyenKhoa @IDChuyenKhoa nvarchar(10)
 as
 begin
-	select P.SoPhong , P.ID as IDPhong
+	select  P.ID as IDPhong,P.SoPhong 
 	from PhongCanLamSang P
 where @IDChuyenKhoa =P.TrucThuoc
 end;
@@ -389,9 +389,9 @@ exec DanhSachDichVuCanLamSangTheoChuyenKhoa 'DH'
 create proc DanhSachChuyenKhoaLamSang
 as
 begin
-select p.ChuyenKhoa, ck.TenChuyenKhoa
-from PhongKhamChuyenKhoa p
-inner join ChuyenKhoa ck on ck.IDChuyenKhoa=p.ChuyenKhoa
+select ck.IDChuyenKhoa, ck.TenChuyenKhoa
+from  ChuyenKhoa ck 
+where ck.IDDonViChucNang = 1
 end;
 go
 
@@ -400,7 +400,7 @@ exec DanhSachChuyenKhoaLamSang
 create proc DanhSachPhongKhamBanKhamTheoChuyenKhoa @IDChuyenKhoa nvarchar(10)
 as
 begin
-select p.ID as IDPhong,bk.IDBan, bk.SoBan,p.ChuyenKhoa as IDChuyenKhoa, ck.TenChuyenKhoa
+select p.ID as IDPhong,p.SoPhong,bk.IDBan, bk.SoBan,p.ChuyenKhoa as IDChuyenKhoa, ck.TenChuyenKhoa
 from PhongKhamChuyenKhoa p
 inner join ChuyenKhoa ck on ck.IDChuyenKhoa=p.ChuyenKhoa
 inner join BanKham bk on bk.Phong=p.ID
@@ -421,3 +421,55 @@ end;
 go
 
 exec DanhSachBacSiThuocChuyenKhoa 'PH'
+
+-----------------27/5/2019
+
+------------thêm ngày, phòng, ca, bàn, bác sĩ 27/5/2019
+CREATE PROC ThemLichKhamBacSi
+@Ngay date, @IDPhong nvarchar(10), @IDCa int, @IDBan nvarchar(10), @IDBacSi nvarchar(10)
+as
+begin
+INSERT INTO LichKhamBacSi(Ngay, Phong, CaKham, IDBan, IDBacSi)
+VALUES (@Ngay, @IDPhong, @IDCa, @IDBan,@IDBacSi) 
+end;
+go
+----------update lịch khám bác sĩ 27/5/2019
+
+CREATE PROCEDURE CapNhatLichKham
+@Ngay date, @IDPhong nvarchar(10), @IDCa int, @IDBan nvarchar(10), @IDBacSi nvarchar(10)
+AS 
+BEGIN 
+UPDATE LichKhamBacSi(Ngay, Phong, CaKham, IDBan, IDBacSi)
+SET Ngay=@Ngay, Phong=@IDPhong, CaKham=@IDCa, IDBan=@IDBan, IDBacSi=@IDBacSi
+WHERE IDBacSi = @IDBacSi
+END 
+-----------thêm ngày, phòng ca, thời gian kham, IDDich vụ vào lịch phòng cận lâm sàng và thực hiện cận lâm sàng 27/5/2019
+
+CREATE PROC ThemLichPhongCanLamSang
+@Ngay date, @IDPhong nvarchar(10), @IDCa int, @GioBatDau time,  @GioKetThuc time,@IDDichVuCLS nvarchar(10)
+as
+begin
+INSERT INTO LichPhongCanLamSang(IDPhongCLS, Ngay, CaKham, GioBatDau, GioKetThuc)
+VALUES (@IDPhong, @Ngay,  @IDCa,  @GioBatDau,  @GioKetThuc) 
+INSERT INTO ThucHienCLS(IDPhongCLS, DichVuCLSThucHien,CaKham, Ngay)
+VALUES(@IDPhong, @IDDichVuCLS, @IDCa,  @Ngay)
+end;
+go
+
+-----------update ngày, phòng ca, thời gian kham, IDDich vụ vào lịch phòng cận lâm sàng và thực hiện cận lâm sàng 27/5/2019
+
+CREATE PROC CapNhatLichPhongCanLamSang
+@Ngay date, @IDPhong nvarchar(10), @IDCa int, @GioBatDau time,  @GioKetThuc time,@IDDichVuCLS nvarchar(10)
+as
+begin
+UPDATE LichPhongCanLamSang(IDPhongCLS, Ngay, CaKham, GioBatDau, GioKetThuc)
+SET  Ngay=@Ngay,CaKham=@IDCa, GioBatDau=@GioBatDau, GioKetThuc=@GioKetThuc
+WHERE IDPhongCLS=@IDPhong
+
+UPDATE ThucHienCLS(IDPhongCLS, DichVuCLSThucHien,CaKham, Ngay)
+SET  DichVuCLSThucHien=@IDDichVuCLS, Ngay=@Ngay, CaKham=@IDCa
+WHERE IDPhongCLS=@IDPhong
+
+end;
+go
+
