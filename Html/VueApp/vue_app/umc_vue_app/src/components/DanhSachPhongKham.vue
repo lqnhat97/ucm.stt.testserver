@@ -7,7 +7,7 @@
       <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
         <form style=" border-bottom: 2px solid #bbbbbb">
           <div class="row" style="padding:5pt">
-            <div class="col-sm-2"> <label class="control-label" for="chuyenkhoa"
+            <div class="col-sm-4"> <label class="control-label" for="chuyenkhoa"
                 style="color:#969696;padding:8pt;margin-left: 3pt">Chuyên khoa</label></div>
 
             <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
@@ -18,7 +18,7 @@
 
             </select>
 
-            <div class="col-sm-2"> <label for="sophong" style="color:#969696;padding:8pt;margin-left: 15pt">Số
+            <div class="col-sm-4"> <label for="sophong" style="color:#969696;padding:8pt;margin-left: 15pt">Số
                 phòng</label></div>
             <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
               v-model="selectedPhongKham" @change="handleChangeSoPhong">
