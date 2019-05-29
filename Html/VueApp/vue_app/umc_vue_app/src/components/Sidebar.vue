@@ -65,10 +65,10 @@
                 <router-link id="changepanel" to="/chiTietCanLamSang">Chi tiếp
                   phòng cận lâm sàng</router-link>
               </li>
-              <li class="list-group-item" id="changecolortext">
+              <!-- <li class="list-group-item" id="changecolortext">
                 <router-link id="changepanel" to="/quanLySoCanLamSang">Quản lý
                   số</router-link>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="ChiTietCanLamSang">
-      <Header/>
-      <Sidebar :currentTab="4"/>
+    <Header />
+    <Sidebar :currentTab="4" />
     <div class="col-sm-9 ">
       <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
         <form style=" border-bottom: 2px solid #bbbbbb">
@@ -9,30 +9,35 @@
             <div class="col-sm-6 form-group" style="display:flex; align-items:center">
               <div class="col-sm-4"> <label class="control-label" for="chuyenkhoa" id="search-name">Chuyên khoa</label>
               </div>
-              <div class="search-box col-sm-8" style="height:30pt">
-                <input type="text" id="chuyenkhoa" class="form-control" placeholder="Nội soi">
-                <button class="btn btn-link search-btn"> <i class="glyphicon glyphicon-search"></i>
-                </button>
+              <div class="col-sm-8">
+                <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control"
+                  placeholder="Chuyên khoa" v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
+                  <option :selected="true" disabled>Chọn chuyên khoa cận lâm sàng</option>
+                  <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
+                    {{option.TenChuyenKhoa}}</option>
+                </select>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="row">
                 <div class="col-sm-4"> <label for="sophong" id="search-name">Loại dịch vụ</label>
                 </div>
-                <div class="search-box col-sm-7" style="height:30pt"> <input type="text" id="sophong"
-                    class="form-control" placeholder="Nội soi">
-                  <button class="btn btn-link search-btn"> <i class="glyphicon glyphicon-search"></i>
-                  </button>
-                </div>
+                <select v-bind:style="{ margin_top:'10%' }" id="dichVu" class="form-control"
+                  placeholder="Chuyên khoa" v-model="selectedDichVu" @change="handleChangeDichVu">
+                  <option :selected="true" disabled>Chọn chuyên khoa cận lâm sàng</option>
+                  <option v-for="option in dichVu" :value="option.IDDichVu" :key="option.IDChuyenKhoa">
+                    {{option.TenDichVu}}</option>
+                </select>
               </div>
               <div class="row">
                 <div class="col-sm-4"> <label for="sophong" id="search-name">Tên dịch vụ</label>
                 </div>
-                <div class="search-box col-sm-7" style="height:30pt"> <input type="text" id="sophong"
-                    class="form-control" placeholder="Nội soi thực quản-dạ dày, lấy dị vật">
-                  <button class="btn btn-link search-btn"> <i class="glyphicon glyphicon-search"></i>
-                  </button>
-                </div>
+                <select v-bind:style="{ margin_top:'10%' }" id="dichVu" class="form-control"
+                  placeholder="Chuyên khoa" v-model="selectedCls" @change="handleChangeDichVu">
+                  <option :selected="true" disabled>Chọn chuyên khoa cận lâm sàng</option>
+                  <option v-for="option in dichVu" :value="option.LoaiDichVu" :key="option.IDChuyenKhoa">
+                    {{option.TenLoaiDichVu}}</option>
+                </select>
               </div>
             </div>
 
@@ -55,6 +60,7 @@
                 <th>Số còn chờ</th>
                 <th>Tốc độ nhảy số</th>
                 <th>Thời gian khám số cuối</th>
+                <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -65,46 +71,7 @@
                 <td class="number">5</td>
                 <td class="number">5 phút</td>
                 <td class="number">9h15</td>
-              </tr>
-              <tr>
-                <td class="number">402</td>
-                <td class="number">2002</td>
-                <td>Nguyễn Hoàng Sơn</td>
-                <td class="number">5</td>
-                <td class="number">5 phút</td>
-                <td class="number">9h15</td>
-              </tr>
-              <tr>
-                <td class="number">403</td>
-                <td class="number">2011</td>
-                <td>Nguyễn Hoàng Sơn</td>
-                <td class="number">5</td>
-                <td class="number">5 phút</td>
-                <td class="number">9h15</td>
-              </tr>
-              <tr>
-                <td class="number">404</td>
-                <td class="number">2020</td>
-                <td>Nguyễn Hoàng Sơn</td>
-                <td class="number">5</td>
-                <td class="number">5 phút</td>
-                <td class="number">9h15</td>
-              </tr>
-              <tr>
-                <td class="number">405</td>
-                <td class="number">2045</td>
-                <td>Nguyễn Hoàng Sơn</td>
-                <td class="number">5</td>
-                <td class="number">5 phút</td>
-                <td class="number">9h15</td>
-              </tr>
-              <tr>
-                <td class="number">406</td>
-                <td class="number">2015</td>
-                <td>Nguyễn Hoàng Sơn</td>
-                <td class="number">5</td>
-                <td class="number">5 phút</td>
-                <td class="number">9h15</td>
+                <td class="number"><button class="btn-success">+</button></td>
               </tr>
             </tbody>
           </table>
@@ -124,5 +91,34 @@
       Header,
       Sidebar
     },
+    data() {
+      return {
+        chuyenKhoa: "",
+        selectedChuyenKhoa: "",
+        selectedDichVu: "",
+        dichVu: "",
+        selectedCls:"",
+        cls:""
+      }
+    },
+    created() {
+      axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoaCls`).then(res => {
+        this.chuyenKhoa = res.data;
+      })
+    },
+    methods: {
+      handleChangeChuyenKhoa() {
+        axios.get(process.env.SERVER_URI + `clinic/dsCls/`+this.selectedChuyenKhoa).then(res => {
+          this.dichVu = res.data;
+        })
+      },
+      handleChangeDichVu() {
+        axios.get(process.env.SERVER_URI + `clinic/dsClsTheoDv/` + this.selectedDichVu).then(res => {
+          console.log(res.data)
+          this.cls = res.data;
+        })
+      }
+    }
   }
+
 </script>

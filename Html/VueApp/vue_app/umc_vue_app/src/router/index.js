@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import TiepNhan from '@/components/TiepNhan'
 import TaoPhieuKham from '@/components/TaoPhieuKham'
-import QuanLySoPhongKham from '@/components/QuanLySoPhongKham'
 import KhamBenh from '@/components/KhamBenh'
 import DanhSachPhongKham from '@/components/DanhSachPhongKham'
 import ChiTietPhongKham from '@/components/ChiTietPhongKham'
@@ -21,11 +20,6 @@ export default new Router({
       path: '/taoPhieuKham',
       name: 'Tao Phieu Kham',
       component: TaoPhieuKham
-    },
-    {
-      path: '/quanLySoPhongKham',
-      name: 'Quan Ly So Phong Kham',
-      component: QuanLySoPhongKham
     },
     {
       path: '/khamBenh',

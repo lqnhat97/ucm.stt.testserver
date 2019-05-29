@@ -236,6 +236,13 @@ router.get('/dsCls', (req, res) => {
     })
 })
 
+//Xuất danh sách dịch vụ cận lâm sàng theo chuyên khoa
+router.get('/dsCls/:idChuyenKhoa', (req, res) => {
+    db.dsdvClsTheoChuyenKhoa(req.params.idChuyenKhoa).then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
+
 //Xuất danh sách cận lâm sàng theo dịch vụ
 router.get('/dsClsTheoDv/:idDv', (req, res) => {
     db.dsClsTheoDv(req.params.idDv).then(rows => {
@@ -275,7 +282,7 @@ router.get('/dsBsTheoChuyenKhoa/:idChuyenkhoa', (req, res) => {
     })
 })
 
-//Danh sách phòng cận lâm sàng
+//Danh sách phòng cận lâm sàng theo chuyên khoa
 router.get('/dsClsTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
     let data = req.params.idChuyenKhoa;
     db.dsPhongClsTheoChuyenKhoa(data).then(rows => {

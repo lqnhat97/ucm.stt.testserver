@@ -140,6 +140,11 @@ exports.dsdvCls = () => {
     return db.executeQuery(sql);
 }
 
+//Ds dv cls theo chuyên khoa
+exports.dsdvClsTheoChuyenKhoa = (idChuyenKhoa) => {
+    return db.executeProcedure('IDChuyenKhoa',idChuyenKhoa,'DanhSachDichVuCanLamSangTheoChuyenKhoa');
+}
+
 //Ds cls theo dv
 exports.dsClsTheoDv = (idDv) => {
     return db.executeProcedure('IDLoaiDichVu', idDv, 'XuatDichVuCanLamSang');

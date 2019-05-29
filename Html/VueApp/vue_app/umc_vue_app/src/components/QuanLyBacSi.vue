@@ -51,11 +51,11 @@
               <template v-for="(option,index) in soLuongPhong">
                 <tr>
                   <td class="number" :rowspan="option.thongTin.length*2">{{option.phongKham}} <button
-                      style="margin:10%;" class="btn btn-danger" :click="huyLichTheoPhong(index)">X</button></td>
+                      style="margin:10%;" class="btn-danger" :click="huyLichTheoPhong(index)">X</button></td>
                   <td class="text" id="Ca" :rowspan="option.thongTin.length">Ca 1 <button style="margin:10%;"
-                      class="btn btn-danger" :click="huyLichTheoCa('ca1',index)">X</button></td>
+                      class="btn-danger" :click="huyLichTheoCa('ca1',index)">X</button></td>
                   <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;"
-                      class="btn btn-danger" :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
+                      class="btn-danger" :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
                   <td class="text" id="BacSi"><select>
                       <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi" >
                         {{singleBacSi.HovaTen}}</option>
@@ -63,7 +63,7 @@
 
                 </tr>
                 <tr v-for="singleBan in soLuongBan[index]">
-                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn btn-danger":click="huyLichTheoBan('ca1',singleBan.IDBan,index)">X</button>
+                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger":click="huyLichTheoBan('ca1',singleBan.IDBan,index)">X</button>
                   </td>
                   <td class="text" id="BacSi"><select>
                       <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi" >
@@ -72,9 +72,9 @@
                 </tr>
                 <tr>
                   <td class="text" id="Ca" :rowspan="option.thongTin.length">Ca 2 <button style="margin:10%;"
-                      class="btn btn-danger" :click="huyLichTheoCa('ca2',index)">X</button></td>
+                      class="btn-danger" :click="huyLichTheoCa('ca2',index)">X</button></td>
                   <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;"
-                      class="btn btn-danger" :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
+                      class="btn-danger" :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
 
                   <td class="text"><select>
                       <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi" >
@@ -84,7 +84,7 @@
                 </tr>
 
                 <tr v-for="singleBan in soLuongBan[index]">
-                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn btn-danger" :click="huyLichTheoBan('ca2',singleBan.IDBan,index)">X</button>
+                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger" :click="huyLichTheoBan('ca2',singleBan.IDBan,index)">X</button>
                   </td>
                   <td class="text" id="BacSi"><select>
                       <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi" >
