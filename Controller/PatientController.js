@@ -6,8 +6,7 @@ var db = require('../Repos/PatientRepos');
 router.get('/:id', (req, res) => {
     var id = req.params.id;
     db.loadPatientById(id).then(rows => {
-        res.json(rows.recordsets[0]);
-        res.end(200);
+        res.status(200).json(rows.recordset[0]).end();
     })
 })
 

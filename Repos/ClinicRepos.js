@@ -125,7 +125,10 @@ exports.tinhTrangConChoTheoChuyenKhoa = (idChuyenKhoa) => {
 
 //Qua số lâm sàng
 exports.soKeTiepLS = (data) => {
-    return db.executeProcedure2input('IDBanKham', 'IDPhong', data.idBanKham, data.idPhong, 'BamSoHienThiPhongKham');
+    let d = new Date();
+    let n = d.getHours();
+    let sql = `exec BamSoHienThiPhongKham '${data.idBanKham}','${data.idPhong}','${n>11?2:1}'`
+    return db.executeQuery(sql);
 }
 
 //Ds dv cls

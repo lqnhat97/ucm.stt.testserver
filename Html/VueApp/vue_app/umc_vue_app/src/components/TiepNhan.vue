@@ -63,7 +63,7 @@
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">Ngày sinh</label>
               <div class="col-sm-4">
                 <date-picker valueType="format" :lang='lang' v-model="NgaySinh" :shortcuts="false"
-                format="MM/YY/YYYY"></date-picker>
+                format="MM/DD/YYYY"></date-picker>
               </div>
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
               <div class="col-sm-4">
