@@ -138,18 +138,27 @@ async function phanLoaiCls(data, dsCLS) {
 router.post('/phatSinhCLS', async (req, res) => {
     let data = req.body;
     var dsCLS = [...data.idDichVuCls];
-    let msg = [];
+    console.log(dsCLS);
+    let msg = {
+        CLS: [],
+        XetNghiem: []
+    };
     phanLoaiCls(data, dsCLS).then(async (xetNghiem) => {
+        console.log(xetNghiem);
         let s_len = dsCLS.length;
-        for(let i = 0;i<s_len;i++){
-            let cls_result = await  db.sinhSoCLS(data.idPhieuKham, dsCLS[i]);
-            console.log(cls_result.recordset);
-        }
+        if (dsCLS.length != 0) {
+            for (let i = 0; i < s_len; i++) {
+                let cls_result = await db.sinhSoCLS(data.idPhieuKham, dsCLS[i]);
+                msg.CLS.push(cls_result.recordset[0])
+            }
+        } else
+            delete msg.CLS;
         if (xetNghiem.length != 0) {
             let xn_result = await db.sinhSoCLSXetNghiem(data.idPhieuKham);
-            console.log(xn_result);
-        }
-        res.status(200).end();
+            msg.XetNghiem.push(xn_result.recordset[0]);
+        } else
+            delete msg.XetNghiem;
+        res.status(200).json(msg).end();
     })
 })
 

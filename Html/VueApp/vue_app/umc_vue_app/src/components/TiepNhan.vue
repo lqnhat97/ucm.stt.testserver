@@ -62,8 +62,8 @@
             <div class="row form-group">
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">Ngày sinh</label>
               <div class="col-sm-4">
-                <input type="text" value="" placeholder="mm/dd/yyyy" class="form-control" :disabled="isFound?true:false" v-model="NgaySinh"
-                  v-text="NgaySinh">
+                <date-picker valueType="format" :lang='lang' v-model="NgaySinh" :shortcuts="false"
+                format="MM/YY/YYYY"></date-picker>
               </div>
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
               <div class="col-sm-4">
@@ -122,12 +122,14 @@
   import Header from './Header.vue'
   import Sidebar from './Sidebar.vue'
   import Modal from './modal.vue'
+  import DatePicker from 'vue2-datepicker'
   export default {
     name: 'TiepNhan',
     components: {
       Header,
       Sidebar,
-      Modal
+      Modal,
+      DatePicker
     },
     data() {
       return {
@@ -144,7 +146,18 @@
         message: "",
         handleBtn: "",
         idBenhNhan: "",
-        isFound: false
+        isFound: false,
+        lang: {
+          days: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
+          months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9',
+            'Tháng 10', 'Tháng 11', 'Tháng 12'
+          ],
+          pickers: ['next 7 days', 'next 30 days', 'previous 7 days', 'previous 30 days'],
+          placeholder: {
+            date: 'Chọn ngày',
+            dateRange: 'Chọn khoảng ngày'
+          },
+        }
       }
     },
     methods: {

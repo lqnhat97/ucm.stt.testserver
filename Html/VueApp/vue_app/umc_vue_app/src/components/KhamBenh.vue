@@ -8,14 +8,14 @@
           <form action="" style=" border-bottom: 2px solid #bbbbbb">
             <p>Thông tin bệnh nhân</p>
             <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label">Họ và tên</label>
+              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Họ và tên</label>
               <div class="col-sm-9">
                 <input type="text" value="" class="form-control" v-model="HoVaTen" v-text="HoVaTen" disabled>
               </div>
 
             </div>
             <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:left">Giới
+              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Giới
                 tính</label>
               <div class="col-sm-3">
                 <input type="text" value="" class="form-control" style="margin-right: 10px;" v-model="GioiTinh"
@@ -23,7 +23,7 @@
               </div>
             </div>
             <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label">Ngày sinh</label>
+              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày sinh</label>
               <div class="col-sm-5">
                 <input type="text" value="" class="form-control" v-model="NgaySinh" v-text="NgaySinh" disabled>
               </div>
@@ -31,7 +31,7 @@
             </div>
 
             <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label">Quê quán</label>
+              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Quê quán</label>
               <div class="col-sm-9">
                 <input type="text" value="" class="form-control" v-model="QueQuan" v-text="QueQuan" disabled>
               </div>
@@ -46,21 +46,21 @@
             </div>
 
             <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label">Địa chỉ</label>
+              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Địa chỉ</label>
               <div class="col-sm-9">
                 <input type="text" value="" class="form-control" v-model="DiaChi" v-text="DiaChi" disabled>
               </div>
             </div>
 
             <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label">Nghề nghiệp</label>
+              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Nghề nghiệp</label>
               <div class="col-sm-9">
                 <input type="text" value="" class="form-control" v-model="NgheNghiep" v-text="NgheNghiep" disabled>
               </div>
 
             </div>
             <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:left">Số điện
+              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Số điện
                 thoại</label>
               <div class="col-sm-9">
                 <input type="text" value="" class="form-control" v-model="SoDienThoai" v-text="SoDienThoai" disabled>
@@ -77,8 +77,8 @@
           <div>
             <form action="" style="margin-top: 10px">
               <div class="row form-group">
-                <label for="" class="col-sm-3 col-form-label">Mã phiếu khám</label>
-                <div class="col-sm-3">
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Mã phiếu khám</label>
+                <div class="col-sm-4">
                   <input type="text" value="" class="form-control" v-model="MaPhieuKham" v-text="MaPhieuKham"
                     @change="checkMaPhieuKham">
                   <small v-if="correct" id="passwordHelpBlock" class="form-text text-muted">
@@ -100,7 +100,7 @@
               </div>
 
               <div class="row form-group">
-                <label for="" class="col-sm-3 col-form-label">Triệu chứng</label>
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Triệu chứng</label>
                 <div class="col-sm-9">
                   <input type="text" value="" class="form-control">
                 </div>
@@ -147,25 +147,7 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="findCmndModal" tabindex="-1" role="dialog" aria-labelledby="findCmndModalTitle"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="findCmndModalTitle">Thông báo</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body" v-text="message">
-
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <modal :message="this.message" />
 
   </div>
 
@@ -176,11 +158,13 @@
   import axios from 'axios'
   import Header from './Header.vue'
   import Sidebar from './Sidebar.vue'
+  import modal from './modal'
   export default {
     name: 'KhamBenh',
     components: {
       Header,
-      Sidebar
+      Sidebar,
+      modal
     },
     data() {
       return {
@@ -198,8 +182,8 @@
         MaPhieuKham: "",
         correct: false,
         bodyRequestChiDinh: {
-          IDPhieuKham: "",
-          CLS: []
+          idPhieuKham: "",
+          idDichVuCls: []
         },
         soLuongChiDinh: [{
           stt: 1,
@@ -213,11 +197,12 @@
       insertNewSubClinical(e) {
         this.soLuongChiDinh.push({
           stt: this.soLuongChiDinh.length + 1
-        })
+        });
+        console.log(this.bodyRequestChiDinh);
       },
 
       checkMaPhieuKham(e) {
-        axios.get(process.env.SERVER_URI+`clinic/checkPK/` + this.MaPhieuKham).then(response => {
+        axios.get(process.env.SERVER_URI + `clinic/checkPK/` + this.MaPhieuKham).then(response => {
           let res = response.data;
 
           if (!res.hasOwnProperty("message")) {
@@ -246,13 +231,18 @@
         })
       },
       chiDinhCanLamSang(e) {
-        this.bodyRequestChiDinh.IDPhieuKham = this.MaPhieuKham;
-        axios.post(process.env.SERVER_URI+`clinic/phatSinhCLS`,
+        e.preventDefault();
+        this.bodyRequestChiDinh.idPhieuKham = this.MaPhieuKham;
+        axios.post(process.env.SERVER_URI + `clinic/phatSinhCLS`,
           this.bodyRequestChiDinh
         ).then(e => {
-          if (e.status === 200) {
-            this.message = "Đã sinh số thành công";
+          console.log(e);
+          if (e.data.hasOwnProperty('CLS') || e.data.hasOwnProperty('XetNghiem')) {
+            this.message = 'Phát sinh số cận lâm sàng thành công cho phiếu khám <strong><span style="color: #41B883;">' + this.MaPhieuKham + '</span></strong>';
             $('#findCmndModal').modal('show');
+          }
+          else{
+            this.message = 'Phát sinh số lỗi';
           }
         })
       }
@@ -262,29 +252,21 @@
       dynamicComponent: function (parent = this) {
         return {
           template: ` <div class="row form-group">
-                <label for="" class="col-sm-5 col-form-label" v-text="label"> </label>
+                <label for="" class="col-sm-5 col-form-label" v-text="label"></label>
                 <div class="col-sm-7">
-                  <select style ="width:100%" class="browser-default custom-select-lg form-group" v-model="selectedCanLamSang"
+                  <select style ="width:100%" class="form-group form-control" v-model="selectedCanLamSang"
                   @change="selectCLS">
-                  <option selected disabled>Chọn chuyên khoa</option>
+                  <option selected disabled value="0">Chọn dịch vụ</option>
                   <option v-for="option in data" :value="option.LoaiDichVu" :key="option.LoaiDichVu">{{option.TenLoaiDichVu}}</option>
                 </select>
 
-                <select style ="width:100%" class="browser-default custom-select-lg form-group" v-model="selectedDichVu"
+                <select style ="width:100%" class="form-group form-control" v-model="selectedDichVu"
                   @change="selectDichVu">
-                  <option selected disabled>Chọn chuyên khoa</option>
+                  <option selected disabled value="0">Chỉ định cận lâm sàng</option>
                   <option v-for="option in dichVu" :value="option.IDDichVu" :key="option.IDDichVu">{{option.TenDichVu}}</option>
                 </select>
-                </div>
-                
-
-                <!--<table class="table">
-                  <thead>
-                    <td>Tên dịch vụ</td>
-                    <td>Chọn</td>
-                  </thead>
-                </table>-->
-                <a id="add" class="col-sm-6" style="text-align:right" @click="removeNewSubClinical">Xóa chỉ định</a>
+                </div>              
+                <a id="add" class="col-sm-3" style="text-align:left" @click="removeNewSubClinical">Xóa chỉ định</a>
               </div>`,
           data() {
             return {
@@ -304,35 +286,34 @@
           },
           created() {
             this.selectedChuyenKhoa = ""
-            axios.get(process.env.SERVER_URI+`clinic/dsCls`).then(response => {
+            axios.get(process.env.SERVER_URI + `clinic/dsCls`).then(response => {
               this.data = response.data;
               //this.label += this.stt;
             })
           },
           methods: {
             selectDichVu() {
-
+              parent.bodyRequestChiDinh.idDichVuCls.splice(this.stt - 1, 1, this.selectedDichVu);
             },
             selectCLS() {
-              parent.bodyRequestChiDinh.CLS.splice(this.stt - 1, 1, {
-                idCLS: this.selectDichVu
-              });
-
-              axios.get(process.env.SERVER_URI+`clinic/dsClsTheoDv/` + this.selectedCanLamSang).then(
-                response => {
-                  if (response != null) {
-                    this.dichVu = response.data;
+              if (this.selectedCanLamSang != 0) {
+                axios.get(process.env.SERVER_URI + `clinic/dsClsTheoDv/` + this.selectedCanLamSang).then(
+                  response => {
+                    if (response != null) {
+                      this.dichVu = response.data;
+                    }
                   }
-                }
-              )
+                )
+              }
             },
             removeNewSubClinical() {
               parent.soLuongChiDinh.splice(this.index, 1);
-              parent.bodyRequestChiDinh.CLS.splice(this.index, 1);
+              parent.bodyRequestChiDinh.idDichVuCls.splice(this.index, 1);
             },
           }
         }
       }
     },
   }
+
 </script>
