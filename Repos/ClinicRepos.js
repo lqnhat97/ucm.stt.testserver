@@ -172,3 +172,10 @@ exports.dsBSThuocChuyenKhoa = (idChuyenKhoa) => {
 exports.checkCls = (idDichVu, idPhieuKham) => {
     return db.executeProcedure2input('IDDichVu', 'IDPhieuKham', idDichVu, idPhieuKham, 'CheckCanLamSang');
 }
+
+//Tìm &xuất danh sách phòng CLS, STT hiện tại, bệnh nhân, số còn chờ theo chuyên khoa
+exports.tinhTrangPhongCLSTheoChuyenKhoa = (idChuyenKhoa)=>{
+    let d = new Date();
+    let n = d.getHours();
+    return db.executeProcedure2input('IDChuyenKhoa','CaKham',idChuyenKhoa,n>11?2:1,'TinhTrangPhongCLSTheoChuyenKhoa')
+}
