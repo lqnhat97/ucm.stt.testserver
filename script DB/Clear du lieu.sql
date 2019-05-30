@@ -12,7 +12,6 @@ alter table LichSuTraCuu drop constraint FK_LichSu_NgDuocTim;
 alter table LichSuTraCuu drop constraint FK_LichSu_NgTim;
 alter table SoHienThiPhongCanLamSang drop constraint FK_HienThi_STTPhongCanLamSang;
 alter table SoHienThiPhongKham drop constraint FK_HienThi_STTPhongKham;
-alter table SoHienThiPhongCanLamSang drop constraint FK_HienThi_PhongCanLamSang;
 alter table SoThuTuPhongKham drop constraint Fk_STT_PKPhongKham;
 alter table SoThuTuPhongCLS drop constraint FK_STT_PhongCanLamSang;
 alter table SoThuTuPhongCLS drop constraint Fk_STT_PKCLS;
@@ -31,15 +30,18 @@ alter table LichKhamBacSi drop constraint FK_LK_BacSi;
 ------------------------TRUNCATE BẢNG
 update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
 update ThongKePhongCLS set SoLuongDoi=0 where SoLuongDoi>0;
-truncate table SoHienThiPhongCanLamSang;
-truncate table SoHienThiPhongKham;
-truncate table SoThuTuPhongKham;
-truncate table SoThuTuPhongCLS;
+delete SoHienThiPhongKham where Gio is not null;
+delete SoHienThiPhongCanLamSang where Gio is not null;
+delete SoHienThiPhongXetNghiem where Gio is not null;
+
+delete SoThuTuPhongKham where Gio is not null;
+delete SoThuTuPhongCLS where Gio is not null;
+delete SoThuTuPhongXetNghiem where Gio is not null;
+
 truncate table PhieuKham;
 truncate table BenhNhanXetNghiem;
 truncate table HienThiSTTXetNghiem;
-truncate table SoHienThiPhongXetNghiem;
-truncate table SoThuTuPhongXetNghiem;
+
 
 
 ------------------ ADD CONSTRAINT
@@ -140,10 +142,10 @@ add constraint Fk_STT_PKPhongKham
 foreign key(IDPhieuKham)
 references PhieuKham(IDPhieuKham);
 
-alter table SoHienThiPhongCanLamSang
+/*alter table SoHienThiPhongCanLamSang
 add constraint FK_HienThi_PhongCanLamSang
 foreign key(IDPhongCanLamSang)
-references PhongCanLamSang(ID)
+references PhongCanLamSang(ID)*/
 
 alter table SoHienThiPhongKham
 add constraint FK_HienThi_STTPhongKham
@@ -152,8 +154,8 @@ references SoThuTuPhongKham(IDPhieuKham,STT,BanKham,PhongKham)
 
 alter table SoHienThiPhongCanLamSang
 add constraint FK_HienThi_STTPhongCanLamSang
-foreign key(IDPhieuKham,STT,CanLamSang)
-references SoThuTuPhongCLS(IDPhieuKham,STT,CanLamSang)
+foreign key(IDPhieuKham,STT,CanLamSang,IDPhongCanLamSang)
+references SoThuTuPhongCLS(IDPhieuKham,STT,CanLamSang,PhongCanLamSang)
 
 alter table LichSuTraCuu
 add constraint FK_LichSu_NgTim
