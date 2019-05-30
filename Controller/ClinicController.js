@@ -290,3 +290,11 @@ router.get('/dsClsTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
     })
 })
 module.exports = router;
+
+//Tìm &xuất danh sách phòng CLS, STT hiện tại, bệnh nhân, số còn chờ theo chuyên khoa
+router.get('/tinhTrangPhongClsTheoChuyenKhoa/:idChuyenKhoa',(req,res)=>{
+    let data = req.params.idChuyenKhoa;
+    db.tinhTrangPhongCLSTheoChuyenKhoa(data).then(rows=>{
+        res.json(rows);
+    })
+})

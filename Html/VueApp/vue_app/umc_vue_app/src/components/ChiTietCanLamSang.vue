@@ -29,16 +29,6 @@
                     {{option.TenDichVu}}</option>
                 </select>
               </div>
-              <div class="row">
-                <div class="col-sm-4"> <label for="sophong" id="search-name">Tên dịch vụ</label>
-                </div>
-                <select v-bind:style="{ margin_top:'10%' }" id="dichVu" class="form-control"
-                  placeholder="Chuyên khoa" v-model="selectedCls" @change="handleChangeDichVu">
-                  <option :selected="true" disabled>Chọn chuyên khoa cận lâm sàng</option>
-                  <option v-for="option in dichVu" :value="option.LoaiDichVu" :key="option.IDChuyenKhoa">
-                    {{option.TenLoaiDichVu}}</option>
-                </select>
-              </div>
             </div>
 
           </div>
