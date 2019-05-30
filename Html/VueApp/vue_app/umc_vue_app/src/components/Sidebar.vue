@@ -6,6 +6,7 @@
       </div>
       <div class="container-fluid list-option">
         <div class="panel-group">
+
           <div class="panel panel-default" id="changepanel">
             <div class="panel-body" :id="this.currentTab == 1? this.changecolor_now:this.changecolor">
               <h4 class=" panel-title">
@@ -71,6 +72,14 @@
               </li> -->
             </ul>
           </div>
+
+        </div>
+        <div class="panel panel-default" id="changepanel">
+          <div class="panel-body" :id="this.currentTab == 5? this.changecolor_now:this.changecolor">
+            <h4 class=" panel-title">
+              <router-link to="/dashboard">Dashboard</router-link>
+            </h4>
+          </div>
         </div>
       </div>
     </div>
@@ -96,6 +105,7 @@
       }
     },
   }
+
 </script>
 
 <style scoped>
