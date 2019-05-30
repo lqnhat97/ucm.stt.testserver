@@ -22,7 +22,7 @@
             </div>
             <div class="col-sm-3">
               <date-picker valueType="format" :lang='lang' v-model="datetimepicker1" :shortcuts="false"
-                format="DD-MM-YYYY">
+                format="MM/DD/YYYY">
               </date-picker>
             </div>
           </div>
@@ -49,45 +49,51 @@
             </thead>
             <tbody>
               <template v-for="(option,index) in soLuongPhong">
-                <tr>
+                <tr :key="index+'ca1'+option.thongTin[0].SoBan">
                   <td class="number" :rowspan="option.thongTin.length*2">{{option.phongKham}} <button
                       style="margin:10%;" class="btn-danger" :click="huyLichTheoPhong(index)">X</button></td>
                   <td class="text" id="Ca" :rowspan="option.thongTin.length">Ca 1 <button style="margin:10%;"
                       class="btn-danger" :click="huyLichTheoCa('ca1',index)">X</button></td>
-                  <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;"
-                      class="btn-danger" :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
+                  <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;" class="btn-danger"
+                      :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
                   <td class="text" id="BacSi"><select>
-                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi" >
+                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
+                        :key="singleBacSi.IDBacSi+'ca1'+option.thongTin[0].SoBan">
                         {{singleBacSi.HovaTen}}</option>
                     </select></td>
 
                 </tr>
-                <tr v-for="singleBan in soLuongBan[index]">
-                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger":click="huyLichTheoBan('ca1',singleBan.IDBan,index)">X</button>
+                <tr v-for="singleBan in soLuongBan[index]" :key="index+'ca1'+singleBan.SoBan">
+                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger"
+                      :click="huyLichTheoBan('ca1',singleBan.IDBan,index)">X</button>
                   </td>
                   <td class="text" id="BacSi"><select>
-                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi" >
+                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
+                        :key="singleBacSi.IDBacSi+'ca1'+singleBan.SoBan">
                         {{singleBacSi.HovaTen}}</option>
                     </select></td>
                 </tr>
-                <tr>
+                <tr :key="index+'ca2'+option.thongTin[0].SoBan">
                   <td class="text" id="Ca" :rowspan="option.thongTin.length">Ca 2 <button style="margin:10%;"
                       class="btn-danger" :click="huyLichTheoCa('ca2',index)">X</button></td>
-                  <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;"
-                      class="btn-danger" :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
+                  <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;" class="btn-danger"
+                      :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
 
                   <td class="text"><select>
-                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi" >
+                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
+                        :key="singleBacSi.IDBacSi+'ca2'+option.thongTin[0].SoBan">
                         {{singleBacSi.HovaTen}}</option>
 
                     </select></td>
                 </tr>
 
-                <tr v-for="singleBan in soLuongBan[index]">
-                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger" :click="huyLichTheoBan('ca2',singleBan.IDBan,index)">X</button>
+                <tr v-for="singleBan in soLuongBan[index]" :key="index+'ca2'+singleBan.SoBan">
+                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger"
+                      :click="huyLichTheoBan('ca2',singleBan.IDBan,index)">X</button>
                   </td>
                   <td class="text" id="BacSi"><select>
-                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi" >
+                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
+                        :key="singleBacSi.IDBacSi+'ca2'+singleBan.SoBan">
                         {{singleBacSi.HovaTen}}</option>
 
                     </select></td>
@@ -136,9 +142,7 @@
         soLuongPhong: "",
         soLuongBan: [],
         soLuongBacSi: [],
-        bodyRequest:{
-
-        },
+        bodyRequest: [],
         lang: {
           days: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
           months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9',
@@ -165,27 +169,52 @@
         axios.get(process.env.SERVER_URI + `clinic/dspkbkTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(response => {
           this.soLuongPhong = response.data;
           this.soLuongPhong.forEach(element => {
+            element.thongTin.forEach(item => {
+              this.bodyRequest.push({
+                Ngay: this.datetimepicker1,
+                Phong: item.IDPhong,
+                Ca: 1,
+                Ban: item.IDBan,
+                BacSi: "",
+              })
+            })
+          })
+          this.soLuongPhong.forEach(element => {
+            element.thongTin.forEach(item => {
+              this.bodyRequest.push({
+                Ngay: this.datetimepicker1,
+                Phong: item.IDPhong,
+                Ca: 2,
+                Ban: item.IDBan,
+                BacSi: "",
+              })
+            })
+          })
+          this.soLuongPhong.forEach(element => {
             this.soLuongBan.push(element.thongTin.filter((value, index) => {
               return index > 0;
             }));
+
           });
         })
         axios.get(process.env.SERVER_URI + `clinic/dsBsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(response => {
           this.soLuongBacSi = response.data;
         })
+        console.log(this.bodyRequest);
       },
-      quyDinh(){
+      quyDinh() {
 
       },
-      huyLichTheoBan(ca,ban,phong){
-        
-      },
-      huyLichTheoCa(ca,phong){
+      huyLichTheoBan(ca, ban, phong) {
 
       },
-      huyLichTheoPhong(phong){
+      huyLichTheoCa(ca, phong) {
+
+      },
+      huyLichTheoPhong(phong) {
 
       }
     }
   }
+
 </script>
