@@ -1,12 +1,31 @@
 <template>
   <div id="app">
-    <router-view/>
+      <Header @update="handleIsOpen"/>
+      <Sidebar/>
+    <router-view :isOpen="headerIsOpen"/>
   </div>
 </template>
 
 <script>
+import Header from './components/Header';
+import Sidebar from './components/Sidebar.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+  data(){
+    return {
+      headerIsOpen:false,
+    }
+  },
+  components:{
+    Header,
+    Sidebar
+  },
+  methods:{
+    handleIsOpen(isOpen){
+      this.headerIsOpen = isOpen;
+    },
+  }
 }
 </script>
 

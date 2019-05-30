@@ -9,7 +9,7 @@ p{
 }
 
 th{
-  font-size: 11px;
+  font-size: 15px;
   text-align: center !important
 }
 
@@ -61,10 +61,14 @@ button {
   -webkit-border-radius: 5px;
 }
 
-.head {
+#bodyHeader {
   background-color: #e7f5ed;
-  display: flex;
-  justify-content:space-between; 
+  border-radius: 5pt;
+  transition: margin-left .5s;
+}
+
+#bodyContent{
+  transition: margin-left .5s;
 }
 
 .search-box {  
@@ -149,16 +153,6 @@ top:0;
   margin-left: 3pt
 }
 
-#cliente{
-  border:1px;
-  margin-top: 10px;
-  margin-right:10px;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  background-color: white;
-}
-
 #normal{
   display: flex;
   justify-content: space-between;
@@ -209,21 +203,44 @@ h1#head{
     color:#67cf9c; 
     font-weight: 900;
     font-family: Segoe UI;
-    margin: 13pt;
+    margin: 10pt;
   }
 
 #cliente{
     border:1pt;
     padding-top: 10pt;
     margin-top:10pt;
-    margin-right:15pt;
-    margin-left: 15pt;
     padding-left:10pt;
     padding-right:10pt;
     border-radius: 5pt;
     -moz-border-radius: 5pt;
     -webkit-border-radius: 5pt;
     background-color: white;
+}
+
+#cliente-left{
+    border:1pt;
+    padding-top: 10pt;
+    margin-top:10pt;
+    margin-right:5pt;
+    padding-left:10pt;
+    padding-right:10pt;
+    border-radius: 5pt;
+    -moz-border-radius: 5pt;
+    -webkit-border-radius: 5pt;
+    background-color: white;
+}
+#cliente-right{
+  border:1pt;
+  padding-top: 10pt;
+  margin-top:10pt;
+  margin-left:5pt;
+  padding-left:10pt;
+  padding-right:10pt;
+  border-radius: 5pt;
+  -moz-border-radius: 5pt;
+  -webkit-border-radius: 5pt;
+  background-color: white;
 }
 
 #buttom{
