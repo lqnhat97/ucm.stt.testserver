@@ -19,13 +19,13 @@
               </div>
               <div class="col-sm-6">
                 <div class="row">
-                  <div class="col-sm-4"> <label for="sophong" id="search-name">Loại dịch vụ</label>
+                  <div class="col-sm-4"> <label for="sophong" id="search-name">Phòng</label>
                   </div>
                   <select v-bind:style="{ margin_top:'10%' }" id="dichVu" class="form-control" placeholder="Chuyên khoa"
-                    v-model="selectedDichVu" @change="handleChangeDichVu">
-                    <option :selected="true" disabled>Chọn chuyên khoa cận lâm sàng</option>
-                    <option v-for="option in dichVu" :value="option.IDDichVu" :key="option.IDChuyenKhoa">
-                      {{option.TenDichVu}}</option>
+                    v-model="selectedPhong" @change="handleChangeDichVu">
+                    <option :selected="true" disabled>Chọn phòng</option>
+                    <option v-for="(option,index) in dsPhong" :value="option.IDPhong" :key="index">
+                      {{option.SoPhong}}</option>
                   </select>
                 </div>
               </div>
@@ -45,10 +45,8 @@
                 <tr>
                   <th>Phòng</th>
                   <th>Số hiện tại</th>
-                  <th>Bệnh nhân</th>
-                  <th>Số còn chờ</th>
-                  <th>Tốc độ nhảy số</th>
-                  <th>Thời gian khám số cuối</th>
+                  <th>Số cuối</th>
+                  <th>Bệnh nhân hiện tại</th>
                   <th>Thao tác</th>
                 </tr>
               </thead>
@@ -56,10 +54,8 @@
                 <tr>
                   <td class="number">401</td>
                   <td class="number">2000</td>
-                  <td>Nguyễn Hoàng Sơn</td>
                   <td class="number">5</td>
-                  <td class="number">5 phút</td>
-                  <td class="number">9h15</td>
+                  <td>Nguyễn Hoàng Sơn</td>
                   <td class="number"><button class="btn-success">+</button></td>
                 </tr>
               </tbody>
@@ -78,8 +74,8 @@
       return {
         chuyenKhoa: "",
         selectedChuyenKhoa: "",
-        selectedDichVu: "",
-        dichVu: "",
+        selectedPhong: "",
+        dsPhong: "",
         selectedCls: "",
         cls: ""
       }
@@ -100,8 +96,8 @@
     },
     methods: {
       handleChangeChuyenKhoa() {
-        axios.get(process.env.SERVER_URI + `clinic/dsCls/` + this.selectedChuyenKhoa).then(res => {
-          this.dichVu = res.data;
+        axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(res => {console.log(res.data);
+          this.dsPhong = res.data;
         })
       },
       handleChangeDichVu() {

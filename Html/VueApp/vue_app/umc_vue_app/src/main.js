@@ -10,12 +10,16 @@ dotenv.config()
 
 Vue.use(cors)
 /* eslint-disable no-new */
+var socket = null;
 
 new Vue({
   el: '#app',
   router,
   components: {
     App
+  },
+  created(){
+    socket=io(process.env.SERVER_URI);
   },
   template: '<App/>'
 })

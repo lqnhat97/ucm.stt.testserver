@@ -1,6 +1,26 @@
 <template>
   <div id="bodyContent">
     <div class="container">
+          <div class="row" id="cliente" >
+            <div class="col-sm-4" style="text-align:right;margin: 0 auto"> <label class="control-label" for="chuyenkhoa"
+                style="color:#969696;text-align:center;margin: 0 auto">Chuyên khoa</label></div>
+
+            <select id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
+              v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
+              <option :selected="true" disabled>Chọn chuyên khoa</option>
+              <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
+                {{option.TenChuyenKhoa}}</option>
+            </select>
+
+            <div class="col-sm-4" style="text-align:right;margin: 0 auto"> <label for="sophong" style="color:#969696">Số
+                phòng</label></div>
+            <select id="phongKham" class="form-control" placeholder="Chuyên khoa"
+              v-model="selectedPhongKham" @change="handleChangeSoPhong">
+              <option :selected="true" disabled>Chọn số phòng</option>
+              <option v-for="option in soLuongPhong" :value="option.phongKham" :key="option.Phong">
+                {{option.phongKham}}</option>
+            </select>
+          </div>
       <div class="form-group">
         <div class="row">
           <div class="col-sm-6" id="cliente-left">

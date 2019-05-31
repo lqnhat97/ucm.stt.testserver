@@ -283,7 +283,7 @@ router.get('/dsBsTheoChuyenKhoa/:idChuyenkhoa', (req, res) => {
 })
 
 //Danh sách phòng cận lâm sàng theo chuyên khoa
-router.get('/dsClsTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
+router.get('/dsPhongClsTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
     let data = req.params.idChuyenKhoa;
     db.dsPhongClsTheoChuyenKhoa(data).then(rows => {
         res.status(200).json(rows.recordset);

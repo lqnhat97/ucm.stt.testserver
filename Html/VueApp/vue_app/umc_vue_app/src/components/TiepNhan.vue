@@ -1,24 +1,24 @@
 <template>
   <div id="bodyContent">
-      <div>
-        <div class="container">
-          <div id="cliente">
-            <form style=" border-bottom: 2px solid #bbbbbb">
-              <div class="row form-group" style="padding:5pt">
-                <div class="col-sm-3"> <label class="control-label" for="chuyenkhoa"
-                    style="color:#969696;padding:8pt;margin-left: 3pt; ">Số CMND/CCCD</label>
-                </div>
-                <div class="search-box col-sm-3" style="height:30pt; margin-bottom: 10px">
-                  <input type="text" id="cmnd" value="" class="form-control" v-model="cmnd">
-                  <button class="btn btn-link search-btn" @click="checkCMND" data-toggle="modal"
-                    data-target="#findCmndModal"> <i class="glyphicon glyphicon-search"></i>
-                  </button>
-                </div>
+    <div>
+      <div class="container">
+        <div id="cliente">
+          <form style=" border-bottom: 2px solid #bbbbbb">
+            <div class="row form-group" style="padding:5pt">
+              <div class="col-sm-3"> <label class="control-label" for="chuyenkhoa"
+                  style="color:#969696;padding:8pt;margin-left: 3pt; ">Số CMND/CCCD</label>
               </div>
-            </form>
-            <Modal :message="this.message" />
-            <form action="">
-              <p>Thông tin bệnh nhân</p>
+              <div class="search-box col-sm-3" style="height:30pt; margin-bottom: 10px">
+                <input type="text" id="cmnd" value="" class="form-control" v-model="cmnd">
+                <button class="btn btn-link search-btn" @click="checkCMND" data-toggle="modal"
+                  data-target="#findCmndModal"> <i class="glyphicon glyphicon-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+          <Modal :message="this.message" />
+          <form action="">
+            <p>Thông tin bệnh nhân</p>
               <div class="row form-group">
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Họ và tên</label>
                 <div class="col-sm-4">
@@ -38,8 +38,8 @@
               <div class="row form-group">
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">Ngày sinh</label>
                 <div class="col-sm-4">
-                  <date-picker valueType="format" :lang='lang' :placeholder="NgaySinh" v-model="NgaySinh" :shortcuts="false"
-                    :disabled="isFound?true:false" format="MM/DD/YYYY"></date-picker>
+                  <date-picker style="width:100%" valueType="format" :lang='lang' :placeholder="NgaySinh" v-model="NgaySinh"
+                    :shortcuts="false" :disabled="isFound?true:false" format="MM/DD/YYYY"></date-picker>
                 </div>
                 <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
                 <div class="col-sm-4">
@@ -76,20 +76,19 @@
                     v-text="DiaChi">
                 </div>
               </div>
-
-            </form>
-            <div>
-              <div style="text-align:center; width:30%; margin:0 auto">
-                <router-link to="#" v-if="idBenhNhan == ''"><input class="form-group" id="buttom" type="submit"
-                    value="Tạo hồ sơ" @click="taoHoSo"></router-link>
-                <router-link to="/taoPhieuKham" v-else><input class="form-group" id="buttom" type="submit"
-                    value="Tạo phiếu khám" v-text="handleBtn"></router-link>
-              </div>
+          </form>
+          <div>
+            <div style="text-align:center; width:30%; margin:0 auto">
+              <router-link to="#" v-if="idBenhNhan == ''"><input class="form-group" id="buttom" type="submit"
+                  value="Tạo hồ sơ" @click="taoHoSo"></router-link>
+              <router-link to="/taoPhieuKham" v-else><input class="form-group" id="buttom" type="submit"
+                  value="Tạo phiếu khám" v-text="handleBtn"></router-link>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
 </template>
 
@@ -138,8 +137,9 @@
         }
       }
     },
-    mounted(){
-      this.isOpen==true?document.getElementById("bodyContent").style.marginLeft = "300px":document.getElementById("bodyContent").style.marginLeft = "0";
+    mounted() {
+      this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
+        "bodyContent").style.marginLeft = "0";
     },
     methods: {
       checkCMND(e) {

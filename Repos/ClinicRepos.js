@@ -105,10 +105,10 @@ exports.tinhTrangHienTaiTheoChuyenKhoa = (idChuyenKhoa) => {
     let d = new Date();
     let n = d.getHours();
     if (n < 11) {
-        return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 1, "TinhTrangHienTaiTheoChuyenKhoa");
+        return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 1, "TinhTrangPhongKhamHienTaiTheoChuyenKhoa");
 
     } else {
-        return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 2, "TinhTrangHienTaiTheoChuyenKhoa");
+        return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 2, "TinhTrangPhongKhamHienTaiTheoChuyenKhoa");
     }
 }
 
