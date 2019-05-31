@@ -1,9 +1,7 @@
 <template>
-  <div class="QuanLyBacSi">
-    <Header />
-    <Sidebar :currentTab="3" />
-    <div class="col-sm-9 ">
-      <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
+  <div id="bodyContent">
+    <div class="container">
+      <div id="cliente" style="background-color: #F8F8F8;position:center">
         <form style=" border-bottom: 2px solid #bbbbbb">
           <div class="row" style="display:flex; align-items: baseline;">
             <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="chuyenkhoa"
@@ -124,15 +122,17 @@
 <script>
   import DatePicker from 'vue2-datepicker'
   import axios from 'axios'
-  import Header from './Header.vue'
-  import Sidebar from './Sidebar.vue'
   import modal from './modal.vue'
   export default {
     name: 'QuanLyBacSi',
     components: {
-      Header,
-      Sidebar,
       DatePicker
+    },
+    props: {
+      isOpen: {
+        type: Boolean,
+        default: false
+      }
     },
     data() {
       return {
@@ -162,6 +162,10 @@
         this.chuyenKhoa = response.data;
       });
 
+    },
+    mounted() {
+      this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
+        "bodyContent").style.marginLeft = "0";
     },
     methods: {
       handleChangeChuyenKhoa() {

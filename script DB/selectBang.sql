@@ -429,20 +429,75 @@ CREATE PROC ThemLichKhamBacSi
 @Ngay date, @IDPhong nvarchar(10), @IDCa int, @IDBan nvarchar(10), @IDBacSi nvarchar(10)
 as
 begin
-INSERT INTO LichKhamBacSi(Ngay, Phong, CaKham, IDBan, IDBacSi)
-VALUES (@Ngay, @IDPhong, @IDCa, @IDBan,@IDBacSi) 
+	if exists (select * from LichKhamBacSi lk where lk.IDBacSi=@IDBacSi)
+	begin
+		if exists (select * from LichKhamBacSi lk where IDBacSi = @IDBacSi and lk.Ngay=@Ngay)
+		begin
+		-- CO 1 Ca
+			if ((select count(CaKham) from LichKhamBacSi where IDBacSi = @IDBacSi and Ngay=@Ngay group by IDBacSi, NGAY)= 1 )
+				begin
+					if not exists (select * from LichKhamBacSi lk where lk.IDBacSi=@IDBacSi and lk.Ngay=@Ngay and lk.CaKham=@IDCa)
+						BEGIN
+						INSERT INTO LichKhamBacSi(Ngay, Phong, CaKham, IDBan, IDBacSi)
+						VALUES (@Ngay, @IDPhong, @IDCa, @IDBan,@IDBacSi) 
+						END
+				end
+			else IF ((select count(CaKham) from LichKhamBacSi where IDBacSi = @IDBacSi and Ngay=@Ngay group by IDBacSi, NGAY) = 2 )
+				begin
+					RETURN;
+				end
+			ELSE 
+			BEGIN
+					INSERT INTO LichKhamBacSi(Ngay, Phong, CaKham, IDBan, IDBacSi)
+					VALUES (@Ngay, @IDPhong, @IDCa, @IDBan,@IDBacSi) 
+			END
+		end
+	
+	end
+	else if not exists (select * from LichKhamBacSi lk where lk.IDBacSi=@IDBacSi)
+	begin
+		INSERT INTO LichKhamBacSi(Ngay, Phong, CaKham, IDBan, IDBacSi)
+		VALUES (@Ngay, @IDPhong, @IDCa, @IDBan,@IDBacSi) 
+	end
 end;
 go
+DELETE FROM LichKhamBacSi WHERE IDBacSi='BS819' AND IDBan='BK1' AND CaKham=2 AND Phong='1' AND NGAY='2019-03-28'
+exec ThemLichKhamBacSi '2019-03-28', '1', 1 , 'BK1','BS819'
 ----------update lịch khám bác sĩ 27/5/2019
 
 CREATE PROCEDURE CapNhatLichKham
 @Ngay date, @IDPhong nvarchar(10), @IDCa int, @IDBan nvarchar(10), @IDBacSi nvarchar(10)
 AS 
 BEGIN 
-UPDATE LichKhamBacSi(Ngay, Phong, CaKham, IDBan, IDBacSi)
-SET Ngay=@Ngay, Phong=@IDPhong, CaKham=@IDCa, IDBan=@IDBan, IDBacSi=@IDBacSi
-WHERE IDBacSi = @IDBacSi
+	if exists (select * from LichKhamBacSi lk where lk.IDBacSi=@IDBacSi)
+	begin
+		if exists (select * from LichKhamBacSi lk where IDBacSi = @IDBacSi and lk.Ngay=@Ngay)
+		begin
+		if ((select count(CaKham) from LichKhamBacSi where IDBacSi = @IDBacSi and Ngay=@Ngay group by IDBacSi, NGAY)=1 )
+				begin
+					--if not exists (select * from LichKhamBacSi lk where lk.IDBacSi=@IDBacSi and lk.Ngay=@Ngay and lk.CaKham=@IDCa)
+					--	BEGIN
+					--	INSERT INTO LichKhamBacSi(Ngay, Phong, CaKham, IDBan, IDBacSi)
+					--	VALUES (@Ngay, @IDPhong, @IDCa, @IDBan,@IDBacSi) 
+					--	END
+						--UPDATE CA KHI TRUNG BS, NGAY, CA
+					
+						UPDATE LichKhamBacSi
+						SET  Phong=@IDPhong, IDBan=@IDBan, CaKham=@IDCa
+						WHERE IDBacSi = @IDBacSi AND Ngay=@Ngay			
+				end
+		if ((select count(CaKham) from LichKhamBacSi where IDBacSi = @IDBacSi and Ngay=@Ngay group by IDBacSi, NGAY)=2 )
+				begin
+				UPDATE LichKhamBacSi 
+				SET Phong=@IDPhong, IDBan=@IDBan
+				WHERE IDBacSi = @IDBacSi and Ngay=@Ngay and CaKham=@IDCa
+				end
+		END
+	END
 END 
+
+
+exec CapNhatLichKham'2019-03-28', '1', 2 , 'BK1','BS819'
 -----------thêm ngày, phòng ca, thời gian kham, IDDich vụ vào lịch phòng cận lâm sàng và thực hiện cận lâm sàng 27/5/2019
 
 CREATE PROC ThemLichPhongCanLamSang
@@ -455,6 +510,25 @@ INSERT INTO ThucHienCLS(IDPhongCLS, DichVuCLSThucHien,CaKham, Ngay)
 VALUES(@IDPhong, @IDDichVuCLS, @IDCa,  @Ngay)
 end;
 go
+
+
+
+
+
+
+CREATE PROC ThemLichPhongCanLamSang
+@Ngay date, @IDPhong nvarchar(10), @IDCa int, @GioBatDau time,  @GioKetThuc time,@IDDichVuCLS nvarchar(10)
+as
+begin
+	if exists (select * from LichPhongCanLamSang l where l.IDPhongCLS=@IDPhong)
+	begin
+
+
+
+
+
+
+
 
 -----------update ngày, phòng ca, thời gian kham, IDDich vụ vào lịch phòng cận lâm sàng và thực hiện cận lâm sàng 27/5/2019
 

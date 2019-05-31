@@ -1,11 +1,7 @@
 <template>
-  <div class="Dashboard">
-    <Header />
-    <Sidebar :currentTab="3" />
-    <div class="col-sm-9 ">
-
-      <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
-
+  <div id="bodyContent">
+    <div class="container">
+      <div id="cliente" style="background-color: #F8F8F8;position:center">
         <form style="padding-bottom:8pt;padding-left:5pt">
           <div class="row">
             <div class="col-sm-4">
@@ -19,7 +15,7 @@
                   <h3 style="display:inline-block;margin:10pt; color:rgb(9, 173, 214)" v-text="phongKham"></h3>
                   <h3 style="display:inline-block; margin:10pt;color:#67cf9c" v-text="soPhong"></h3>
                 </div>
-                <modal :message="this.message" />
+                <!-- <modal :message="this.message" /> -->
 
                 <table class="table">
                   <thead>
@@ -54,24 +50,29 @@
 
 <script>
   import axios from 'axios'
-  import Header from './Header.vue'
-  import Sidebar from './Sidebar.vue'
   export default {
     name: 'Dashboard',
-    components: {
-      Header,
-      Sidebar,
-    },
     data() {
       return {
-          danhSachPhongKham:"",
+        danhSachPhongKham: "",
       }
     },
-    created(){
-         axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoa`).then(response => {
+    props: {
+      isOpen: {
+        type: Boolean,
+        default: false
+      }
+    },
+    created() {
+      axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoa`).then(response => {
+        console.log(response.data);
         this.danhSachPhongKham = response.data;
       })
-    }
+    },
+    mounted() {
+      this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
+        "bodyContent").style.marginLeft = "0";
+    },
   }
 
 </script>

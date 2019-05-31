@@ -1,9 +1,7 @@
 <template>
-  <div class="QuanLyCanLamSang">
-    <Header />
-    <Sidebar :currentTab="4" />
-    <div class="col-sm-9 ">
-      <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
+  <div id="bodyContent">
+    <div class="container">
+      <div id="cliente" style="background-color: #F8F8F8;position:center">
         <form style=" border-bottom: 2px solid #bbbbbb">
           <div class="row" style="display:flex; align-items: baseline;">
             <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="chuyenkhoa"
@@ -47,7 +45,8 @@
             <tbody>
               <template v-for="(option,index) in dichVu">
                 <tr>
-                  <td class="number" :rowspan="option.danhSachDichVu.ca1.length + option.danhSachDichVu.ca2.length + 4">{{option.phong}}</td>
+                  <td class="number" :rowspan="option.danhSachDichVu.ca1.length + option.danhSachDichVu.ca2.length + 4">
+                    {{option.phong}}</td>
                   <td class="text" :rowspan="option.danhSachDichVu.ca1.length + 2">Ca 1</td>
                   <td class="number"><input type="time" step="600" value="07:45"> - <input type="time" step="600"
                       value="11:30">
@@ -81,7 +80,8 @@
                   </td>
                 </tr>
                 <tr>
-                  <td ALIGN=CENTER><input type="button" class="ThemCLS" value="Thêm dịch vụ" @click="addService('ca2',index)">
+                  <td ALIGN=CENTER><input type="button" class="ThemCLS" value="Thêm dịch vụ"
+                      @click="addService('ca2',index)">
                   </td>
                 </tr>
               </template>
@@ -105,14 +105,10 @@
 <script>
   import DatePicker from 'vue2-datepicker'
   import axios from 'axios'
-  import Header from './Header.vue'
-  import Sidebar from './Sidebar.vue'
   import modal from './modal.vue'
   export default {
     name: 'QuanLyCanLamSang',
     components: {
-      Header,
-      Sidebar,
       DatePicker
     },
     data() {
@@ -134,15 +130,25 @@
         }
       }
     },
+    props: {
+      isOpen: {
+        type: Boolean,
+        default: false
+      }
+    },
     created() {
       this.selectedChuyenKhoa = ""
       axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoaCls`).then(response => {
         this.chuyenKhoa = response.data;
       });
     },
+    mounted() {
+      this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
+        "bodyContent").style.marginLeft = "0";
+    },
     methods: {
       handleChangeChuyenKhoa() {
-        this.dichVu=[];
+        this.dichVu = [];
         axios.get(process.env.SERVER_URI + `clinic/dsClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(response => {
           response.data.forEach(element => {
             this.dichVu.push({
@@ -170,7 +176,7 @@
             IDDichVu: "",
             ThoiGianThucHien: ""
           })
-        } else{
+        } else {
           this.dichVu[phong].danhSachDichVu.ca2.push({
             IDDichVu: "",
             ThoiGianThucHien: ""
@@ -179,4 +185,5 @@
       }
     },
   }
+
 </script>

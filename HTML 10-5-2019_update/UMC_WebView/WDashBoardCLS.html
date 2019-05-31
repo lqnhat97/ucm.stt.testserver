@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UMC-Dashboard Cận Lâm Sàng</title>
+    <link rel="stylesheet" type="text/css" href="UMCC.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <header>
+            <div class="head">
+                <div>
+                    <h1 id="head">UMC</h1>
+                </div>
+                <div class="head" style=" margin:15pt">
+                    <div style="padding-right:5pt"><img src="h2.png" alt="Avartar" height="42pt" width="42pt"></div>
+                    <div>
+                        <h4>Hoàng Công Lương</h4>
+                    </div>
+                    <div class="dropdown" style="margin-top:7pt">
+
+                        <a href="#" class="dropdown-toggle " data-toggle="dropdown"><span class="caret"></span></a>
+
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li class="menu-item"><a href="#">Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="row justify-content-space-between" style="  background-color:#ece9e9">
+            <div class=" col-sm-3">
+                <div class="nav-left">
+                    <div class="ava"><img src="h3.jpg" alt="" class="relative; background-left">
+                    </div>
+                    <div class="container-fluid list-option">
+                        <div class="panel-group">
+                            <div class="panel panel-default" id="changepanel">
+                                <div class="panel-body" id="changecolor">
+                                    <h4 class="panel-title">
+                                        <a href="WTiepNhan.html">Tiếp nhận</a>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="panel panel-default" id="changepanel">
+                                <div class="panel-body" id="changecolor">
+                                    <h4 class="panel-title">
+                                        <a href="WKhamBenh.html">Khám bệnh</a>
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default" id="changepanel">
+                                <div class="panel-body" id="changecolor-now">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" href="#collapse2">Phòng khám</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse2" class="panel-collapse collapse">
+                                    <ul class="list-group">
+                                        <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                                href="WQuanLyBacSi.html">Phân công lịch khám</a></li>
+                                        <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                                href="WDanhSachPhongKham.html">Danh
+                                                sách phòng khám</a></li>
+                                        <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                                href="WChiTietPhongKham.html">Chi tiết phòng khám</a></li>
+                                        <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                                href="WQuanLySoPhongKham.html">Quản lý số</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default" id="changepanel">
+                            <div class="panel-body" id="changecolor">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse3">Phòng cận lâm sàng</a>
+                                </h4>
+                            </div>
+                            <div id="collapse3" class="panel-collapse collapse">
+                                <ul class="list-group">
+                                    <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                            href="WQuanLyPhongCanLamSang.html">Quản lý phòng cận lâm sàng</a></li>
+                                    <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                            href="WChiTietPhongCanLamSang.html">Chi tiết phòng cận lâm sàng</a></li>
+                                    <li class="list-group-item" id="changecolortext"><a id="changepanel"
+                                            href="WQuanLySoPhongCanLamSang.html">Quản lý số</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" id="changepanel">
+                            <div class="panel-body" id="changecolor">
+                                <h4 class="panel-title">
+                                    <a href="WDinhNghiaCauTruc.html">Định nghĩa cấu trúc</a>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-sm-9 ">
+                <div class="col-sm-11  form-group" id="cliente" style="background-color: #F8F8F8;position:center">
+                    <form style=" border-bottom: 2px solid #bbbbbb">
+                        <div class="row" style="padding:5pt">
+                            <div class="col-sm-2"> <label class="control-label" for=""
+                                    style="color:#969696;padding:8pt;margin-left: 3pt">Chọn</label></div>
+                            <div class="col-sm-4" style="height:30pt">
+                                <select class="search-box form-control" style="height:30pt">
+                                    <option value="2">Cận lâm sàng</option>
+                                    <option value="1">Lâm sàng</option>
+                                    <option value="3">Xét nghiệm</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <form style="padding-bottom:8pt;padding-left:5pt">
+                        <div class="row" style="margin-top:1pt;margin-left:10pt">
+                            <h3>Dashboard</h3>
+                        </div>
+                    </form>
+                    <form style="padding-bottom:8pt;padding-left:5pt">
+                        <div class="row" style="margin-top:1pt; display:flex;justify-content:space-between">
+                            <h3>Khu vực A</h3>
+                        </div>
+                    </form>
+                    <div class="row "
+                        style="padding-left:5pt;display:flex;justify-content:space-between ; padding-top:10pt">
+                        <div class="col-sm-5" style="background-color: white;    ">
+                            <div class="row"
+                                style="border-bottom: 1pt solid #bbbbbb; display:flex;justify-content:space-around">
+                                <div>
+                                    <h3 style="display:inline-block; color:rgb(9, 173, 214)">Lầu 1</h3>
+                                </div>
+                                <div>
+                                    <h3 style="display:inline-block; color:rgb(9, 173, 214)">Phòng </h3>
+                                    <h3 style="display:inline-block; color:#67cf9c; text-align-last: right ">X-quang</h3>
+                                </div>
+                            </div>
+                            <div style="display:flex;justify-content:space-between">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Số hiện tại </th>
+                                            <th>Số đã cấp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                            
+                                            <td class="number">2</td>
+                                            <td class="number">20</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-5" style="background-color: white;   ">
+                            <div class="row"
+                                style="border-bottom: 1pt solid #bbbbbb; display:flex;justify-content:space-between">
+                                <div>
+                                    <h3 style="display:inline-block; color:rgb(9, 173, 214)">Lầu 1</h4>
+                                </div>
+                                <div>
+                                    <h3 style="display:inline-block; color:rgb(9, 173, 214)">Phòng </h4>
+                                        <h3 style="display:inline-block; color:#67cf9c">Siêu Âm</h5>
+                                </div>
+                            </div>
+                            <div style="display:flex;justify-content:space-between">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Số hiện tại </th>
+                                            <th>Số đã cấp</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                            
+                                            <td class="number">2</td>
+                                            <td class="number">20</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

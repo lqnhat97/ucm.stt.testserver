@@ -1,154 +1,139 @@
 <template>
-  <div class="KhamBenh">
-    <Header />
-    <Sidebar :currentTab="2" />
-    <div class="col-md-9 form-group">
-      <div class="row">
-        <div class="col-sm-5" id="cliente">
-          <form action="" style=" border-bottom: 2px solid #bbbbbb">
-            <p>Thông tin bệnh nhân</p>
-            <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Họ và tên</label>
-              <div class="col-sm-9">
-                <input type="text" value="" class="form-control" v-model="HoVaTen" v-text="HoVaTen" disabled>
-              </div>
-
-            </div>
-            <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Giới
-                tính</label>
-              <div class="col-sm-3">
-                <input type="text" value="" class="form-control" style="margin-right: 10px;" v-model="GioiTinh"
-                  v-text="GioiTinh" disabled>
-              </div>
-            </div>
-            <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày sinh</label>
-              <div class="col-sm-5">
-                <input type="text" value="" class="form-control" v-model="NgaySinh" v-text="NgaySinh" disabled>
-              </div>
-
-            </div>
-
-            <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Quê quán</label>
-              <div class="col-sm-9">
-                <input type="text" value="" class="form-control" v-model="QueQuan" v-text="QueQuan" disabled>
-              </div>
-
-            </div>
-
-            <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:right">CMND/CCCD</label>
-              <div class="col-sm-9">
-                <input type="text" value="" class="form-control" v-model="cmnd" v-text="cmnd" disabled>
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Địa chỉ</label>
-              <div class="col-sm-9">
-                <input type="text" value="" class="form-control" v-model="DiaChi" v-text="DiaChi" disabled>
-              </div>
-            </div>
-
-            <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Nghề nghiệp</label>
-              <div class="col-sm-9">
-                <input type="text" value="" class="form-control" v-model="NgheNghiep" v-text="NgheNghiep" disabled>
-              </div>
-
-            </div>
-            <div class="row form-group">
-              <label for="" class="col-sm-3 col-form-label" style="text-align:right">Số điện
-                thoại</label>
-              <div class="col-sm-9">
-                <input type="text" value="" class="form-control" v-model="SoDienThoai" v-text="SoDienThoai" disabled>
-              </div>
-            </div>
-
-
-          </form>
-        </div>
-        <div class="col-sm-6" id="cliente">
-          <form style=" border-bottom: 2px solid #bbbbbb; padding:10pt">
-            <p>Phiếu khám và chỉ định</p>
-          </form>
-          <div>
-            <form action="" style="margin-top: 10px">
+  <div id="bodyContent">
+    <div class="container">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-6" id="cliente-left">
+            <form action="" style=" border-bottom: 2px solid #bbbbbb">
+              <p>Thông tin bệnh nhân</p>
               <div class="row form-group">
-                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Mã phiếu khám</label>
-                <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" v-model="MaPhieuKham" v-text="MaPhieuKham"
-                    @change="checkMaPhieuKham">
-                  <small v-if="correct" id="passwordHelpBlock" class="form-text text-muted">
-                    <div class="small">
-                      <span>Có bệnh nhân</span>
-                    </div>
-                  </small>
-                  <small v-if="!correct" id="passwordHelpBlock" class="form-text text-muted">
-                    <div class="small">
-                      <span>Không có phiếu khám này</span>
-                    </div>
-                  </small>
-                </div>
-                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày
-                  khám</label>
-                <div class="col-sm-3">
-                  <input type="text" value="" class="form-control" disabled v-model="date" v-text="date">
-                </div>
-              </div>
-
-              <div class="row form-group">
-                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Triệu chứng</label>
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Họ và tên</label>
                 <div class="col-sm-9">
-                  <input type="text" value="" class="form-control">
+                  <input type="text" value="" class="form-control" v-model="HoVaTen" v-text="HoVaTen" disabled>
+                </div>
+
+              </div>
+              <div class="row form-group">
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Giới
+                  tính</label>
+                <div class="col-sm-3">
+                  <input type="text" value="" class="form-control" style="margin-right: 10px;" v-model="GioiTinh"
+                    v-text="GioiTinh" disabled>
                 </div>
               </div>
-              <hr color="black" />
+              <div class="row form-group">
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày sinh</label>
+                <div class="col-sm-5">
+                  <input type="text" value="" class="form-control" v-model="NgaySinh" v-text="NgaySinh" disabled>
+                </div>
 
-              <div id="chiDinhCanLamSang">
-                <component v-for="(option,index) in soLuongChiDinh" :key="option.stt" :is="dynamicComponent"
-                  :index="index" />
               </div>
-              <a id="add" class="col-sm-6" @click="insertNewSubClinical">Thêm chỉ định</a>
 
+              <div class="row form-group">
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Quê quán</label>
+                <div class="col-sm-9">
+                  <input type="text" value="" class="form-control" v-model="QueQuan" v-text="QueQuan" disabled>
+                </div>
 
-              <br><br><br><br>
-              <hr />
-              <div class="row">
-                <div class="col-sm-4"></div>
-                <div class="col-sm-4">
-                  <input class="form-group" id="buttom" type="submit" value="Chỉ định" @click="chiDinhCanLamSang">
+              </div>
+
+              <div class="row form-group">
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">CMND/CCCD</label>
+                <div class="col-sm-9">
+                  <input type="text" value="" class="form-control" v-model="cmnd" v-text="cmnd" disabled>
                 </div>
               </div>
-              <!-- <div class="small">
-                                    <span>Tổng cộng</span>
-                                    <span>450.000 VNĐ</span>
-                                </div>
-                                <hr />
-                                <div class="row">
-                                    <label for="" class="col-sm-9 col-form-label">Số tài khoản</label>
-                                    <label for="" class="col-sm-3 col-form-label">Tình trạng</label>
-                                </div>
-                                <div class="row" style="margin-bottom:10px;">
-                                    <div class="col-sm-9"><input type="text" value="" class="form-control"></div>
-                                    <div class="col-sm-3"><small id="passwordHelpInline" class="text-muted"><span
-                                                style="color: rgb(9, 173, 214); text-align: right">Số dư
-                                                đủ</span></small></div>
-                                </div> -->
+
+              <div class="row form-group">
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Địa chỉ</label>
+                <div class="col-sm-9">
+                  <input type="text" value="" class="form-control" v-model="DiaChi" v-text="DiaChi" disabled>
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Nghề nghiệp</label>
+                <div class="col-sm-9">
+                  <input type="text" value="" class="form-control" v-model="NgheNghiep" v-text="NgheNghiep" disabled>
+                </div>
+
+              </div>
+              <div class="row form-group">
+                <label for="" class="col-sm-3 col-form-label" style="text-align:right">Số điện
+                  thoại</label>
+                <div class="col-sm-9">
+                  <input type="text" value="" class="form-control" v-model="SoDienThoai" v-text="SoDienThoai" disabled>
+                </div>
+              </div>
+
+
             </form>
-
           </div>
+          <div class="col-sm-6" id="cliente-right">
+            <form style=" border-bottom: 2px solid #bbbbbb; padding:10pt">
+              <p>Phiếu khám và chỉ định</p>
+            </form>
+            <div>
+              <form action="" style="margin-top: 10px">
+                <div class="row form-group">
+                  <label for="" class="col-sm-3 col-form-label" style="text-align:right">Mã phiếu khám</label>
+                  <div class="col-sm-4">
+                    <input type="text" value="" class="form-control" v-model="MaPhieuKham" v-text="MaPhieuKham"
+                      @change="checkMaPhieuKham">
+                    <small v-if="correct" id="passwordHelpBlock" class="form-text text-muted">
+                      <div class="small">
+                        <span>Có bệnh nhân</span>
+                      </div>
+                    </small>
+                    <small v-if="!correct" id="passwordHelpBlock" class="form-text text-muted">
+                      <div class="small">
+                        <span>Không có phiếu khám này</span>
+                      </div>
+                    </small>
+                  </div>
+                  <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày
+                    khám</label>
+                  <div class="col-sm-3">
+                    <input type="text" value="" class="form-control" disabled v-model="date" v-text="date">
+                  </div>
+                </div>
+
+                <div class="row form-group">
+                  <label for="" class="col-sm-3 col-form-label" style="text-align:right">Triệu chứng</label>
+                  <div class="col-sm-9">
+                    <input type="text" value="" class="form-control">
+                  </div>
+                </div>
+                <hr color="black" />
+
+                <div id="chiDinhCanLamSang">
+                  <component v-for="(option,index) in soLuongChiDinh" :key="option.stt" :is="dynamicComponent"
+                    :index="index" />
+                </div>
+                <a id="add" class="col-sm-6" @click="insertNewSubClinical">Thêm chỉ định</a>
+
+
+                <br><br><br><br>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-4">
+                    <input class="form-group" id="buttom" type="submit" value="Chỉ định" @click="chiDinhCanLamSang">
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+
         </div>
-
       </div>
+
+
+      <!-- Modal -->
+      <modal :message="this.message" />
+
     </div>
-
-
-    <!-- Modal -->
-    <modal :message="this.message" />
-
   </div>
 
 
@@ -156,15 +141,17 @@
 
 <script>
   import axios from 'axios'
-  import Header from './Header.vue'
-  import Sidebar from './Sidebar.vue'
   import modal from './modal'
   export default {
     name: 'KhamBenh',
     components: {
-      Header,
-      Sidebar,
       modal
+    },
+    props: {
+      isOpen: {
+        type: Boolean,
+        default: false
+      }
     },
     data() {
       return {
@@ -238,15 +225,20 @@
         ).then(e => {
           console.log(e);
           if (e.data.hasOwnProperty('CLS') || e.data.hasOwnProperty('XetNghiem')) {
-            this.message = 'Phát sinh số cận lâm sàng thành công cho phiếu khám <strong><span style="color: #41B883;">' + this.MaPhieuKham + '</span></strong>';
+            this.message =
+              'Phát sinh số cận lâm sàng thành công cho phiếu khám <strong><span style="color: #41B883;">' + this
+              .MaPhieuKham + '</span></strong>';
             $('#findCmndModal').modal('show');
-          }
-          else{
+          } else {
             this.message = 'Phát sinh số lỗi';
           }
         })
       }
 
+    },
+    mounted() {
+      this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document
+        .getElementById("bodyContent").style.marginLeft = "0";
     },
     computed: {
       dynamicComponent: function (parent = this) {
