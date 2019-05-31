@@ -36,3 +36,11 @@ app.use('/history',historyController);
 http.listen(port, () => {
     console.log('Connected at port:' + port);
 })
+
+global.io = require('socket.io')(http);
+io.on("connection", (socket) => {
+    console.log(socket.id);
+    socket.on("disconnect",()=>{
+        console.log("socket id:"+socket.id+" disconnect");
+    })
+})
