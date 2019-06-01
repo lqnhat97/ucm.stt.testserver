@@ -30,17 +30,18 @@ alter table LichKhamBacSi drop constraint FK_LK_BacSi;
 ------------------------TRUNCATE BẢNG
 update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
 update ThongKePhongCLS set SoLuongDoi=0 where SoLuongDoi>0;
-delete SoHienThiPhongKham where Gio is not null;
-delete SoHienThiPhongCanLamSang where Gio is not null;
-delete SoHienThiPhongXetNghiem where Gio is not null;
+delete SoHienThiPhongKham where STT !=0;
+delete SoHienThiPhongCanLamSang where  STT !=0;
+delete SoHienThiPhongXetNghiem where STT !=0;
 
-delete SoThuTuPhongKham where Gio is not null;
-delete SoThuTuPhongCLS where Gio is not null;
-delete SoThuTuPhongXetNghiem where Gio is not null;
+delete SoThuTuPhongKham where STT !=0;
+delete SoThuTuPhongCLS where STT !=0;
+delete SoThuTuPhongXetNghiem where STT !=0;
 
-truncate table PhieuKham;
+delete PhieuKham where IDPhieuKham !='TEMP1' and IDPhieuKham!='TEMP2';
+
 truncate table BenhNhanXetNghiem;
-truncate table HienThiSTTXetNghiem;
+
 
 
 
@@ -194,15 +195,3 @@ foreign key (DichVuCLSThucHien)
 references  DichVuCanLamSang(IDDichVu)
 
 
-
-/*-----------------------CLEAR STT PHONG KHAM  ( DỮ LIỆU CỦA RỚT)
-update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
-delete SoThuTuPhongKham where CaKham=1;
-delete SoHienThiPhongKham where BanKham='BK1';
-delete SoHienThiPhongKham where BanKham='BK2';
-delete SoHienThiPhongKham where BanKham='BK3';
------------------------CLEAR STT PHONG CLS
-update ThongKePhongCLS set SoLuongDoi=0 where SoLuongDoi>0;
-delete SoThuTuPhongCLS where CaKham=1;
-delete SoHienThiPhongCanLamSang where IDPhongCanLamSang='TMH1';
-delete SoHienThiPhongCanLamSang where IDPhongCanLamSang='TMH2';*/
