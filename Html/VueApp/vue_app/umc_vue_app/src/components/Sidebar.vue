@@ -44,10 +44,6 @@
                   <router-link id="changepanel" to="/danhSachPhongKham">Danh sách phòng khám
                   </router-link>
                 </li>
-                <li class="list-group-item" id="changecolortext">
-                  <router-link @click="handleClicked" id="changepanel" to="/chiTietPhongKham">Chi tiết phòng khám
-                  </router-link>
-                </li>
                 <!-- <li class="list-group-item" id="changecolortext">
                   <router-link  id="changepanel" to="/quanLySoPhongKham">Quản
                     lý số</router-link>
@@ -66,12 +62,12 @@
           </div>
           <div id="collapse3" class="panel-collapse collapse">
             <ul class="list-group">
-              <li class="list-group-item" id="changecolortext">
+              <li class="list-group-item" id="changecolortext"  @click="handleClicked">
                 <router-link id="changepanel" to="/quanLyPhongCanLamSang">Quản lý phòng cận lâm sàng
                 </router-link>
               </li>
-              <li class="list-group-item" id="changecolortext">
-                <router-link id="changepanel" to="/chiTietCanLamSang">Chi tiếp
+              <li class="list-group-item" id="changecolortext" @click="handleClicked">
+                <router-link id="changepanel" to="/chiTietCanLamSang" >Chi tiếp
                   phòng cận lâm sàng</router-link>
               </li>
               <!-- <li class="list-group-item" id="changecolortext">

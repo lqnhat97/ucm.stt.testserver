@@ -4,6 +4,16 @@
       <div id="cliente" style="background-color: #F8F8F8;position:center">
         <form style=" border-bottom: 2px solid #bbbbbb">
           <div class="row" style="display:flex; align-items: baseline;">
+
+            <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="ngayThang"
+                id="search-name">Ngày</label>
+            </div>
+            <div class="col-sm-3">
+              <date-picker valueType="format" :lang='lang' v-model="datetimepicker1" :shortcuts="false"
+                format="MM/DD/YYYY" @change="handleChangeNgay">
+              </date-picker>
+            </div>
+
             <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="chuyenkhoa"
                 id="search-name">Chuyên khoa</label>
             </div>
@@ -15,14 +25,7 @@
                   {{option.TenChuyenKhoa}}</option>
               </select>
             </div>
-            <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="ngayThang"
-                id="search-name">Ngày</label>
-            </div>
-            <div class="col-sm-3">
-              <date-picker valueType="format" :lang='lang' v-model="datetimepicker1" :shortcuts="false"
-                format="MM/DD/YYYY">
-              </date-picker>
-            </div>
+
           </div>
 
 
@@ -54,9 +57,9 @@
                       class="btn-danger" :click="huyLichTheoCa('ca1',index)">X</button></td>
                   <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;" class="btn-danger"
                       :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
-                  <td class="text" id="BacSi"><select>
+                  <td class="text" id="BacSi"><select @change="handleChangeBacSi(1,$event,option.thongTin[0].IDBan,option.phongKham)">
                       <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
-                        :key="singleBacSi.IDBacSi+'ca1'+option.thongTin[0].SoBan">
+                        :key="singleBacSi.IDBacSi+'ca1'+option.thongTin[0].SoBan" >
                         {{singleBacSi.HovaTen}}</option>
                     </select></td>
 
@@ -65,9 +68,9 @@
                   <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger"
                       :click="huyLichTheoBan('ca1',singleBan.IDBan,index)">X</button>
                   </td>
-                  <td class="text" id="BacSi"><select>
+                  <td class="text" id="BacSi"><select @change="handleChangeBacSi(1,$event,singleBan.IDBan,option.phongKham)">
                       <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
-                        :key="singleBacSi.IDBacSi+'ca1'+singleBan.SoBan">
+                        :key="singleBacSi.IDBacSi+'ca1'+singleBan.SoBan" >
                         {{singleBacSi.HovaTen}}</option>
                     </select></td>
                 </tr>
@@ -77,9 +80,9 @@
                   <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;" class="btn-danger"
                       :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
 
-                  <td class="text"><select>
+                  <td class="text"><select @change="handleChangeBacSi(2,$event,option.thongTin[0].IDBan,option.phongKham)">
                       <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
-                        :key="singleBacSi.IDBacSi+'ca2'+option.thongTin[0].SoBan">
+                        :key="singleBacSi.IDBacSi+'ca2'+option.thongTin[0].SoBan" >
                         {{singleBacSi.HovaTen}}</option>
 
                     </select></td>
@@ -89,9 +92,9 @@
                   <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger"
                       :click="huyLichTheoBan('ca2',singleBan.IDBan,index)">X</button>
                   </td>
-                  <td class="text" id="BacSi"><select>
+                  <td class="text" id="BacSi"><select @change="handleChangeBacSi(2,$event,singleBan.IDBan,option.phongKham)">
                       <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
-                        :key="singleBacSi.IDBacSi+'ca2'+singleBan.SoBan">
+                        :key="singleBacSi.IDBacSi+'ca2'+singleBan.SoBan"  >
                         {{singleBacSi.HovaTen}}</option>
 
                     </select></td>
@@ -168,15 +171,35 @@
         "bodyContent").style.marginLeft = "0";
     },
     methods: {
+      handleChangeBacSi(ca,event,ban,phong){
+        this.bodyRequest.forEach(element=>{
+          if(element.Ca == ca){
+            if(element.Phong == phong){
+              if(element.Ban==ban){
+                element.BacSi = event.target.value;
+              }
+            }
+          }
+        })
+       
+      },
+      handleChangeNgay() {
+        if (this.bodyRequest != []) {
+          this.bodyRequest.forEach(element => {
+            element.Ngay = this.datetimepicker1;
+          })
+        }
+      },
       handleChangeChuyenKhoa() {
         this.soLuongBan = [];
+        this.bodyRequest = [];
         axios.get(process.env.SERVER_URI + `clinic/dspkbkTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(response => {
           this.soLuongPhong = response.data;
           this.soLuongPhong.forEach(element => {
             element.thongTin.forEach(item => {
               this.bodyRequest.push({
                 Ngay: this.datetimepicker1,
-                Phong: item.IDPhong,
+                Phong: element.phongKham,
                 Ca: 1,
                 Ban: item.IDBan,
                 BacSi: "",
@@ -198,11 +221,13 @@
             this.soLuongBan.push(element.thongTin.filter((value, index) => {
               return index > 0;
             }));
-
           });
         })
         axios.get(process.env.SERVER_URI + `clinic/dsBsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(response => {
           this.soLuongBacSi = response.data;
+          this.bodyRequest.forEach(element =>{
+            element.BacSi = this.soLuongBacSi[0].IDBacSi;
+          })
         })
         console.log(this.bodyRequest);
       },
@@ -220,5 +245,4 @@
       }
     }
   }
-
 </script>

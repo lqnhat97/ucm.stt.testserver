@@ -1,7 +1,7 @@
 <template>
   <div id="bodyHeader">
     <div class="col-sm-offset banner-name">
-      <h1 style="color:#67cf9c">HỆ THỐNG BỆNH VIỆN<br></h1>
+      <h1 style="color:#67cf9c"><br></h1>
       <div id="main">
         <button v-if="this.isOpen==false" class="openbtn" @click="openNav">☰ Menu </button>
         <button v-else class="openbtn" @click="closeNav">☰ Menu</button>
