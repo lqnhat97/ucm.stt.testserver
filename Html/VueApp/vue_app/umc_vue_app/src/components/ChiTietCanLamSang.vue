@@ -1,45 +1,40 @@
 <template>
   <div id="bodyContent">
     <div class="container">
-        <div id="cliente" style="background-color: #F8F8F8;position:center">
-          <form style=" border-bottom: 2px solid #bbbbbb">
-            <div class="row">
-              <div class="col-sm-6 form-group" style="display:flex; align-items:center">
-                <div class="col-sm-4"> <label class="control-label" for="chuyenkhoa" id="search-name">Chuyên
-                    khoa</label>
-                </div>
-                <div class="col-sm-8">
-                  <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control"
-                    placeholder="Chuyên khoa" v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
-                    <option :selected="true" disabled>Chọn chuyên khoa cận lâm sàng</option>
-                    <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
-                      {{option.TenChuyenKhoa}}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="row">
-                  <div class="col-sm-4"> <label for="sophong" id="search-name">Phòng</label>
-                  </div>
-                  <select v-bind:style="{ margin_top:'10%' }" id="dichVu" class="form-control" placeholder="Chuyên khoa"
-                    v-model="selectedPhong" @change="handleChangeDichVu">
-                    <option :selected="true" disabled>Chọn phòng</option>
-                    <option v-for="(option,index) in dsPhong" :value="option.IDPhong" :key="index">
-                      {{option.SoPhong}}</option>
-                  </select>
-                </div>
-              </div>
+      <div id="cliente" style="background-color: #F8F8F8;position:center">
+        <div class="row">
+          <div class="col-sm-2" style="text-align:right"> <label class="control-label" for="chuyenkhoa"
+              id="search-name">Chuyên
+              khoa</label>
+          </div>
+          <div class="col-sm-4">
+            <select v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
+              v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
+              <option :selected="true" disabled>Chọn chuyên khoa cận lâm sàng</option>
+              <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
+                {{option.TenChuyenKhoa}}</option>
+            </select>
+          </div>
+          <div class="col-sm-2" style="text-align:right"> <label for="sophong" id="search-name">Phòng</label>
+          </div>
+          <div class="col-sm-4">
+            <select v-bind:style="{ margin_top:'10%' }" id="dichVu" class="form-control" placeholder="Chuyên khoa"
+              v-model="selectedPhong" @change="handleChangePhong">
+              <option :selected="true" disabled>Chọn phòng</option>
+              <option v-for="(option,index) in dsPhong" :value="option.IDPhong" :key="index">
+                {{option.SoPhong}}</option>
+            </select>
+          </div>
 
-            </div>
-          </form>
-          <form style="padding-bottom:8pt;padding-left:5pt">
-            <div class="row">
-              <div class="col-sm-5">
-                <h3>Chi tiết dịch vụ cận lâm sàng</h3>
-              </div>
-            </div>
-          </form>
-          <div class="row " style="padding-left:5pt;display:flex;justify-content:space-between">
+        </div>
+
+        <div class="row">
+          <div class="col-sm-5">
+            <h3>Chi tiết dịch vụ cận lâm sàng</h3>
+          </div>
+        </div>
+        <div class="row " style="padding-left:5pt;display:flex;justify-content:space-between">
+          <template v-if='selectedPhong != ""'>
             <table class="table">
               <thead>
                 <tr>
@@ -48,36 +43,56 @@
                   <th>Số cuối</th>
                   <th>Bệnh nhân hiện tại</th>
                   <th>Thao tác</th>
+                  <th>Tình trạng</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td class="number">401</td>
-                  <td class="number">2000</td>
-                  <td class="number">5</td>
-                  <td>Nguyễn Hoàng Sơn</td>
-                  <td class="number"><button class="btn-success">+</button></td>
+                  <td class="number">{{cls.SoPhong}}</td>
+                  <td class="number">{{cls.STTHienTai}}</td>
+                  <td class="number">{{cls.STTCuoi}}</td>
+                  <td>{{cls.BenhNhan==null?"Không có bệnh nhân":cls.BenhNhan}}</td>
+                  <template v-if="cls.STTHienTai!=cls.STTCuoi">
+                    <td class="number"><button @click="nextNumber" class="btn btn-success">+</button></td>
+                    <td class="number">
+                      <div class="checkbox form-control-lg"><label><input type="checkbox" value="">Khám </label></div>
+                    </td>
+                  </template>
+                  <template v-else>
+                    <td class="number">Không thể thao tác</td>
+                    <td class="number">Không thể thao tác</td>
+                  </template>>
                 </tr>
               </tbody>
             </table>
-          </div>
+          </template>
+          <h3 v-else>Vui lòng chọn phòng</h3>
+          <modal :message="this.message" />
         </div>
       </div>
+    </div>
   </div>
+
 </template>
 
 <script>
   import axios from 'axios'
+  import modal from './modal.vue'
   export default {
     name: 'ChiTietPhongKham',
+    components: {
+      modal
+    },
     data() {
       return {
         chuyenKhoa: "",
         selectedChuyenKhoa: "",
         selectedPhong: "",
         dsPhong: "",
-        selectedCls: "",
-        cls: ""
+        cls: "",
+        isXetNghiem: false,
+        khoangSoXetNghiem: "",
+        message: "aaaa"
       }
     },
     props: {
@@ -87,23 +102,56 @@
       }
     },
     created() {
-      axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoaCls`).then(res => {
+      axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoaClsCoLich`).then(res => {
         this.chuyenKhoa = res.data;
       })
     },
-    mounted(){
-      this.isOpen==true?document.getElementById("bodyContent").style.marginLeft = "300px":document.getElementById("bodyContent").style.marginLeft = "0";
+    mounted() {
+      this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
+        "bodyContent").style.marginLeft = "0";
     },
     methods: {
       handleChangeChuyenKhoa() {
-        axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(res => {console.log(res.data);
+        axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(res => {
+
           this.dsPhong = res.data;
+          this.isXetNghiem = false;
         })
       },
-      handleChangeDichVu() {
-        axios.get(process.env.SERVER_URI + `clinic/dsClsTheoDv/` + this.selectedDichVu).then(res => {
-          console.log(res.data)
+      handleChangePhong() {
+        axios.get(process.env.SERVER_URI + `clinic/thongTinClsTheoPhong/` + this.selectedPhong).then(res => {
+          console.log(res.data);
           this.cls = res.data;
+          console.log(this.cls.hasOwnProperty('STTHienTai'));
+          if (!this.cls.hasOwnProperty('STTHienTai')) {
+            this.cls.STTHienTai = (this.cls.STTHientai - this.cls.STTHientai % 10 + 1) + " -> " + (this.cls
+              .STTHientai - this.cls.STTHientai % 10 + 10);
+            this.isXetNghiem = true;
+            this.khoangSoXetNghiem = Math.floor(this.cls.STTHientai / 10);
+          }
+        })
+      },
+      nextNumber() {
+        axios.post(process.env.SERVER_URI + `clinic/soKeTiepCanLamSang`, {
+          idPhong: this.cls.IDPhong,
+          isXetNghiem: this.isXetNghiem
+        }).then(response => {
+          if (response.status == 200) {
+              console.log(response.data);
+            if (this.isXetNghiem) {
+              if (this.khoangSoXetNghiem == Math.floor(response.data.STTCuoi/10))
+                this.message = 'Qua số xét nghiệm không thành công';
+                else
+                this.message = 'Qua số xét nghiệm thành công';
+
+            } else {
+
+                this.message = 'Qua số cận lâm sàng thành công';
+            }
+              $('#findCmndModal').modal('show');
+
+            //this.soLuongBan = parent.soPhong[this.index].thongTin;
+          };
         })
       }
     }

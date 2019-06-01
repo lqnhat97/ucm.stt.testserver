@@ -131,6 +131,7 @@
     },
     methods: {
       handleChangeCaKham(index) {
+        console.log(this.soLuongChuyenKhoa);
         this.soLuongChuyenKhoa[index].loadedDoctor = this.soLuongChuyenKhoa[index].fetchedDoctor.filter(value => {
           return value.CaKham == this.soLuongChuyenKhoa[index].caKham
         })

@@ -9,8 +9,16 @@ Vue.config.productionTip = false
 dotenv.config()
 
 Vue.use(cors)
-/* eslint-disable no-new */
 var socket = null;
+
+Vue.mixin({
+  data: function() {
+    return {
+      socket:socket
+    }
+  }
+})
+/* eslint-disable no-new */
 
 new Vue({
   el: '#app',

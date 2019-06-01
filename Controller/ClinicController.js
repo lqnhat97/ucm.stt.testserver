@@ -3,17 +3,22 @@ var router = express.Router();
 var db = require('../Repos/ClinicRepos');
 
 router.get('/thongtinkhambenh/:id', async (req, res) => {
+    // db.layPhongKhamHienTai(req.params.id).then(rows=>{
+    //     res.json(rows.recordsets)
+    // });
     try {
         var id = req.params.id;
         var thongTinKhamBenh = [];
         var lamSang = [];
         var canLamSang = [];
         await db.layPhongKhamHienTai(id).then(rows => {
-            var maPhong, tenPhong, tenChuyenKhoa, maPhongCls, stt, sttHienTai, thoiGianDuKien, tinhTrang;
+            var maPhong, tenKhu, tenLau, tenPhong, tenChuyenKhoa, maPhongCls, stt, sttHienTai, thoiGianDuKien, tinhTrang;
             if (Object.keys(rows.recordsets).length > 0) {
                 for (let i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
                     tenChuyenKhoa = rows.recordsets[0][i].TenChuyenKhoa;
                     maPhong = rows.recordsets[0][i].SoPhong;
+                    tenKhu = rows.recordsets[0][i].TenKhuVuc;
+                    tenLau = rows.recordsets[0][i].TenLau;
                     stt = rows.recordsets[0][i].STTPhongKham;
                     timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
                     thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
@@ -21,6 +26,8 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                     sttHienTai = rows.recordsets[0][i].SoHienTaiCuaPhong;
                     lamSang.push({
                         maPhong,
+                        tenKhu,
+                        tenLau,
                         tenChuyenKhoa,
                         stt,
                         sttHienTai,
@@ -32,14 +39,18 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                 var clsLength = Object.keys(rows.recordsets[1]).length;
                 for (let k = 0; k < clsLength; k++) {
                     maPhongCls = rows.recordsets[1][k].SoPhong;
+                    tenKhu = rows.recordsets[1][k].TenKhuVuc;
+                    tenLau = rows.recordsets[1][k].TenLau;
                     tenPhong = rows.recordsets[1][k].TenCanLamSang;
                     stt = rows.recordsets[1][k].STTPhongCLS;
                     timeTemp = new Date(rows.recordsets[1][k].ThoiGianDuKien);
                     thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
                     tinhTrang = rows.recordsets[1][k].TinhTrang;
-                    sttHienTai = rows.recordsets[1][k].SoHienTaiCuaPhong;
+                    sttHienTai = rows.recordsets[1][k].SoHienTaiCuaPhong+'';
                     canLamSang.push({
                         maPhongCls,
+                        tenKhu,
+                        tenLau,
                         tenPhong,
                         stt,
                         sttHienTai,
@@ -47,12 +58,34 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tinhTrang
                     });
                 }
+
+                var clsLength = Object.keys(rows.recordsets[2]).length;
+                var xnRange = rows.recordsets[2][0].STTCheckedCuoi;
+                tenPhong = rows.recordsets[2][0].SoPhong;
+                tenKhu = rows.recordsets[2][0].TenKhuVuc;
+                tenLau = rows.recordsets[2][0].TenLau;
+                stt = rows.recordsets[2][0].STTXetNghiem;
+                timeTemp = new Date(rows.recordsets[2][0].Gio);
+                thoiGianDuKien = timeTemp.getHours().toString() + ":" + timeTemp.getMinutes();
+                tinhTrang = rows.recordsets[2][0].TinhTrang;
+                sttHienTai =( xnRange - xnRange%10 + 1) + " -> " + ( xnRange - xnRange%10 + 10);
+                canLamSang.push({
+                    maPhongCls:"null",
+                    tenPhong,
+                    tenKhu,
+                    tenLau,
+                    stt,
+                    sttHienTai,
+                    thoiGianDuKien,
+                    tinhTrang
+                });
             }
 
         })
 
         thongTinKhamBenh.push(lamSang);
         thongTinKhamBenh.push(canLamSang);
+
 
         if (thongTinKhamBenh[0] == 'null') {
             res.json({
@@ -62,7 +95,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
         } else {
             res.json({
                 lamSang: thongTinKhamBenh[0],
-                canLamSang: thongTinKhamBenh[1]
+                canLamSang: thongTinKhamBenh[1],
             });
             res.end(200);
         }
@@ -218,6 +251,16 @@ router.get('/tinhTrangConChoTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
 router.post('/soKeTiepLamSang', (req, res) => {
     let data = req.body;
     db.soKeTiepLS(data).then((rows) => {
+        global.io.sockets.emit('next-number', rows.recordset[0]);
+        res.status(200).json(rows.recordset[0]).end();
+    })
+})
+
+//Bấm qua số kế tiếp phòng cận lâm sàng
+router.post('/soKeTiepCanLamSang', (req, res) => {
+    let data = req.body;
+    db.soKeTiepCLS(data).then((rows) => {
+       // global.io.sockets.emit('next-number', rows.recordset[0]);
         res.status(200).json(rows.recordset[0]).end();
     })
 })
@@ -225,6 +268,13 @@ router.post('/soKeTiepLamSang', (req, res) => {
 //Xuất danh sách chuyên khoa cận lâm sàng
 router.get('/dsChuyenKhoaCls', (req, res) => {
     db.dsChuyenKhoaCls().then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
+
+//Xuất danh sách chuyên khoa cận lâm sàng có lịch
+router.get('/dsChuyenKhoaClsCoLich', (req, res) => {
+    db.dsChuyenKhoaClsCoLich().then(rows => {
         res.status(200).json(rows.recordset);
     })
 })
@@ -273,6 +323,13 @@ router.get('/dspkbkTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
     })
 })
 
+//Thông tin CLS theo chuyên phòng cận lâm sàng
+router.get('/thongTinClsTheoPhong/:idPhong', (req, res) => {
+    db.thongTinClsTheoPhong(req.params.idPhong).then(rows => {
+        res.status(200).json(rows.recordset[0]);
+    })
+})
+
 //xuất danh sách bác sĩ thuộc chuyên khoa để phân công (chỉ có id,họ tên)
 router.get('/dsBsTheoChuyenKhoa/:idChuyenkhoa', (req, res) => {
     let data = req.params.idChuyenkhoa;
@@ -292,9 +349,9 @@ router.get('/dsPhongClsTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
 module.exports = router;
 
 //Tìm &xuất danh sách phòng CLS, STT hiện tại, bệnh nhân, số còn chờ theo chuyên khoa
-router.get('/tinhTrangPhongClsTheoChuyenKhoa/:idChuyenKhoa',(req,res)=>{
+router.get('/tinhTrangPhongClsTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
     let data = req.params.idChuyenKhoa;
-    db.tinhTrangPhongCLSTheoChuyenKhoa(data).then(rows=>{
-        res.json(rows);
+    db.tinhTrangPhongCLSTheoChuyenKhoa(data).then(rows => {
+        res.json(rows.recordset);
     })
 })

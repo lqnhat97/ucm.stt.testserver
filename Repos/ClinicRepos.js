@@ -127,14 +127,36 @@ exports.tinhTrangConChoTheoChuyenKhoa = (idChuyenKhoa) => {
 exports.soKeTiepLS = (data) => {
     let d = new Date();
     let n = d.getHours();
-    let sql = `exec BamSoHienThiPhongKham '${data.idBanKham}','${data.idPhong}','${n>11?2:1}'`
+    let sql = `exec BamSoHienThiPhongKham '${data.idBanKham}','${data.idPhong}',${n>11?2:1}`
     return db.executeQuery(sql);
 }
 
-//Ds dv cls
+//Qua số cận lâm sàng
+exports.soKeTiepCLS = (data) => {
+    let d = new Date();
+    let n = d.getHours();
+    if (!data.isXetNghiem)
+    return db.executeProcedure2input('IDPhong', 'Cakham', data.idPhong, n>11?2:1, "BamSoHienThiPhongCLS");
+    else
+    return db.executeProcedure2input('IDPhong', 'Cakham', data.idPhong, n>11?2:1, "CapNhatSTTPhongXetNghiem");    
+}
+
+//Ds chuyên khoa cls
 exports.dsChuyenKhoaCls = () => {
     let sql = 'exec DanhSachChuyenKhoaCLS';
     return db.executeQuery(sql);
+}
+
+//Ds chuyên khoa cls có lịch khám
+exports.dsChuyenKhoaClsCoLich = () => {
+    let sql = 'exec DanhSachChuyenKhoaCLS_CoLichKham';
+    return db.executeQuery(sql);
+}
+//Tìm &xuất danh sách phòng CLS, STT hiện tại, bệnh nhân, cuối theo phòng cận lâm sàng
+exports.thongTinClsTheoPhong = (idPhong) => {
+    let d = new Date();
+    let n = d.getHours();
+    return db.executeProcedure2input('IDPhong','CaKham',idPhong,n>11?2:1,'TinhTrangPhongCLSHienTaiTheoPhongCLS');
 }
 
 //Ds dv cls

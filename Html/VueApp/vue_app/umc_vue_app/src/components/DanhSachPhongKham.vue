@@ -2,26 +2,28 @@
   <div id="bodyContent">
     <div class="container">
       <div id="cliente" style="background-color: #F8F8F8;position:center">
-        <div class="row">
-            <div class="col-sm-4" style="text-align:right;margin: 0 auto"> <label class="control-label" for="chuyenkhoa"
-                style="color:#969696;text-align:center;margin: 0 auto">Chuyên khoa</label></div>
-
-            <select id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa"
-              v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
+        <div class="row" style="padding-right:10pt;display:flex;justify-content:space-between">
+          <div class="col-sm-2" style="text-align:right;margin: 0 auto"> <label class="control-label" for="chuyenkhoa"
+              style="color:#969696;text-align:center;margin: 0 auto">Chuyên khoa</label></div>
+          <div class="col-sm-4">
+            <select id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa" v-model="selectedChuyenKhoa"
+              @change="handleChangeChuyenKhoa">
               <option :selected="true" disabled>Chọn chuyên khoa</option>
               <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
                 {{option.TenChuyenKhoa}}</option>
             </select>
-
-            <div class="col-sm-4" style="text-align:right;margin: 0 auto"> <label for="sophong" style="color:#969696">Số
-                phòng</label></div>
-            <select id="phongKham" class="form-control" placeholder="Chuyên khoa"
-              v-model="selectedPhongKham" @change="handleChangeSoPhong">
+          </div>
+          <div class="col-sm-2" style="text-align:right;margin: 0 auto"> <label for="sophong" style="color:#969696">Số
+              phòng</label></div>
+          <div class="col-sm-4">
+            <select id="phongKham" class="form-control" placeholder="Chuyên khoa" v-model="selectedPhongKham"
+              @change="handleChangeSoPhong">
               <option :selected="true" disabled>Chọn số phòng</option>
               <option v-for="option in soLuongPhong" :value="option.phongKham" :key="option.Phong">
                 {{option.phongKham}}</option>
             </select>
           </div>
+        </div>
         <form style="padding-bottom:8pt;padding-left:5pt">
           <div class="row">
             <div class="col-sm-4">
@@ -106,7 +108,8 @@
                   <th>Số cuối</th>
                   <th>Bác sĩ</th>
                   <th>Bệnh nhân</th>
-                  <th>Thao tác</th>
+                  <th>Qua số</th>
+                  <th>Tình trạng</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,7 +120,9 @@
                   <td>{{option.BacSi}}</td>
                   <td>{{option.BenhNhan==null?"Chưa có bệnh nhân":option.BenhNhan}}</td>
                   <td v-if="option.STTHienTai==option.STTCuoi">Không thể thao tác</td>
-                  <td v-else><button class="btn btn-primary" @click="nextNumber(option)">+</button> <button class="btn btn-danger" @click="nextNumber(option)">x</button></td>
+                  <td v-else><button class="btn btn-primary" @click="nextNumber(option)">+</button></td>
+                  <td v-if="option.STTHienTai==option.STTCuoi">Không thể thao tác</td>                  
+                  <td v-else><div class="checkbox form-control-lg"><label><input type="checkbox" value="">Khám  </label></div></td>                  
                 </tr>
               </tbody>
             </table>
@@ -144,15 +149,19 @@
             }
           },
           created() {
-
             this.soLuongBan = this.option.thongTin;
             this.soPhong += this.option.phongKham;
+          },
+          mounted: () => {
+            parent.socket.on('next-number', dataRes => {
+              alert(dataRes);
+            })
           },
           methods: {
             nextNumber(data) {
               axios.post(process.env.SERVER_URI + `clinic/soKeTiepLamSang`, {
                 idBanKham: data.IDBan,
-                idPhong: data.IDPhongKham
+                idPhong: data.IDPhong
               }).then(response => {
                 if (response.status == 200) {
                   this.message = 'Đã qua số cho bàn <strong><span style="color: #41B883;">' + response.data
@@ -160,8 +169,7 @@
                     .SoPhong + '</span></strong>' +
                     '</span></strong>  ca <strong><span style="color: #41B883;">' + response.data.CaKham;
                   $('#findCmndModal').modal('show');
-                  this.soLuongBan = parent.soPhong[this.index].thongTin;
-
+                  //this.soLuongBan = parent.soPhong[this.index].thongTin;
                 };
               })
             }
