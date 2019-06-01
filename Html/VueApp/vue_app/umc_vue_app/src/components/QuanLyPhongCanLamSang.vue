@@ -15,14 +15,8 @@
                   {{option.TenChuyenKhoa}}</option>
               </select>
             </div>
-            <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="ngayThang"
-                id="search-name">Ngày</label>
-            </div>
-            <div class="col-sm-3">
-              <date-picker valueType="format" :lang='lang' v-model="datetimepicker1" :shortcuts="false"
-                format="DD-MM-YYYY">
-              </date-picker>
-            </div>
+
+
           </div>
         </form>
         <form style="padding-bottom:8pt;padding-left:5pt">
@@ -45,50 +39,31 @@
             <tbody>
               <template v-for="(option,index) in dichVu">
                 <tr>
-                  <td class="number" :rowspan="option.danhSachDichVu.ca1.ds.length + option.danhSachDichVu.ca2.ds.length + 4">
+                  <td class="number" :rowspan="3">
                     {{option.phong}}</td>
-                  <td class="text" :rowspan="option.danhSachDichVu.ca1.ds.length + 2">Ca 1</td>
+                  <td class="text">Ca 1</td>
                   <td class="number"><input v-model="option.danhSachDichVu.ca1.ThoiGianBatDau"> - <input
                       v-model="option.danhSachDichVu.ca1.ThoiGianKetThuc">
                   </td>
                 </tr>
-                <tr v-for="(singleDichVu,dvDex) in option.danhSachDichVu.ca1.ds">
-                  <td ALIGN=CENTER>
-                    <select :style="{ width:'30%' }" class="form-control"
-                      @change="changeDichVu('ca1',index,$event,dvDex)">
-                      <option :selected="true" disabled>Chọn dịch vụ</option>
-                      <option v-for="singleDichVu in fetchedDsDichVu" :value="singleDichVu.IDDichVu"
-                        :key="'ca1'+index+singleDichVu.IDDichVu">{{singleDichVu.TenDichVu}}</option>
-                    </select>
-
-                  </td>
-                </tr>
-
                 <tr>
-                  <td ALIGN=CENTER><input type="button" class="ThemCLS" value="Thêm dịch vụ"
-                      @click="addService('ca1',index)">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text" :rowspan="option.danhSachDichVu.ca2.ds.length + 2">Ca 2</td>
+                  <td class="text">Ca 2</td>
                   <td class="number"><input v-model="option.danhSachDichVu.ca2.ThoiGianBatDau"> - <input
                       v-model="option.danhSachDichVu.ca2.ThoiGianKetThuc">
                   </td>
                 </tr>
-                <tr v-for="(singleDichVu,dvDex) in option.danhSachDichVu.ca2.ds">
-                  <td ALIGN=CENTER>
-                    <select :style="{ width:'30%' }" class="form-control"
-                      @change="changeDichVu('ca2',index,$event,dvDex)">
-                      <option :selected="true" disabled>Chọn dịch vụ</option>
-                      <option v-for="singleDichVu in fetchedDsDichVu" :value="singleDichVu.IDDichVu"
-                        :key="'ca2'+index+singleDichVu.IDDichVu">{{singleDichVu.TenDichVu}}</option>
-                    </select>
 
-                  </td>
-                </tr>
                 <tr>
-                  <td ALIGN=CENTER><input type="button" class="ThemCLS" value="Thêm dịch vụ"
-                      @click="addService('ca2',index)">
+                  <td colspan="2"><select multiple>
+                      <option v-for="optionDichVu in fetchedDsDichVu" :key="optionDichVu.IDDichVu ">
+                        {{optionDichVu.TenDichVu}}</option>
+                    </select>
+                    <button type="button" class="btn btn-primary">Chọn</button>
+                    <button type="button" class="btn btn-info">Xóa</button>
+                    <select multiple>
+                      <option v-for="optionDichVu in  fetchedDsDichVu" :key="optionDichVu.IDDichVu ">
+                        {{optionDichVu.TenDichVu}}</option>
+                    </select>
                   </td>
                 </tr>
               </template>
@@ -194,7 +169,7 @@
           this.fetchedDsDichVu = response.data;
         })
       },
-      addService(ca, phong) {
+      addService(phong) {
         if (ca == 'ca1') {
           this.dichVu[phong].danhSachDichVu.ca1.ds.push({
             IDDichVu: "",
