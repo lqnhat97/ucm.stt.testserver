@@ -45,19 +45,22 @@
             <tbody>
               <template v-for="(option,index) in dichVu">
                 <tr>
-                  <td class="number" :rowspan="option.danhSachDichVu.ca1.length + option.danhSachDichVu.ca2.length + 4">
+                  <td class="number" :rowspan="option.danhSachDichVu.ca1.ds.length + option.danhSachDichVu.ca2.ds.length + 4">
                     {{option.phong}}</td>
-                  <td class="text" :rowspan="option.danhSachDichVu.ca1.length + 2">Ca 1</td>
-                  <td class="number"><input type="time" step="600" value="07:45"> - <input type="time" step="600"
-                      value="11:30">
+                  <td class="text" :rowspan="option.danhSachDichVu.ca1.ds.length + 2">Ca 1</td>
+                  <td class="number"><input v-model="option.danhSachDichVu.ca1.ThoiGianBatDau"> - <input
+                      v-model="option.danhSachDichVu.ca1.ThoiGianKetThuc">
                   </td>
                 </tr>
-                <tr v-for="singleDichVu in option.danhSachDichVu.ca1">
+                <tr v-for="(singleDichVu,dvDex) in option.danhSachDichVu.ca1.ds">
                   <td ALIGN=CENTER>
-                    <select :style="{ height:'100%' }">
+                    <select :style="{ width:'30%' }" class="form-control"
+                      @change="changeDichVu('ca1',index,$event,dvDex)">
                       <option :selected="true" disabled>Chọn dịch vụ</option>
+                      <option v-for="singleDichVu in fetchedDsDichVu" :value="singleDichVu.IDDichVu"
+                        :key="'ca1'+index+singleDichVu.IDDichVu">{{singleDichVu.TenDichVu}}</option>
                     </select>
-                    <input type="time" step="10">
+
                   </td>
                 </tr>
 
@@ -67,16 +70,20 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="text" :rowspan="option.danhSachDichVu.ca2.length + 2">Ca 2</td>
-                  <td class="number"><input type="time" step="600" value="07:45"> - <input type="time" step="600"
-                      value="11:30">
+                  <td class="text" :rowspan="option.danhSachDichVu.ca2.ds.length + 2">Ca 2</td>
+                  <td class="number"><input v-model="option.danhSachDichVu.ca2.ThoiGianBatDau"> - <input
+                      v-model="option.danhSachDichVu.ca2.ThoiGianKetThuc">
                   </td>
                 </tr>
-                <tr v-for="singleDichVu in option.danhSachDichVu.ca2">
+                <tr v-for="(singleDichVu,dvDex) in option.danhSachDichVu.ca2.ds">
                   <td ALIGN=CENTER>
-                    <select :style="{ height:'100%' }">
+                    <select :style="{ width:'30%' }" class="form-control"
+                      @change="changeDichVu('ca2',index,$event,dvDex)">
                       <option :selected="true" disabled>Chọn dịch vụ</option>
-                    </select> <input type="time" step="10">
+                      <option v-for="singleDichVu in fetchedDsDichVu" :value="singleDichVu.IDDichVu"
+                        :key="'ca2'+index+singleDichVu.IDDichVu">{{singleDichVu.TenDichVu}}</option>
+                    </select>
+
                   </td>
                 </tr>
                 <tr>
@@ -117,6 +124,7 @@
         chuyenKhoa: "",
         selectedChuyenKhoa: "",
         dichVu: [],
+        fetchedDsDichVu: "",
         lang: {
           days: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
           months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9',
@@ -147,43 +155,56 @@
         "bodyContent").style.marginLeft = "0";
     },
     methods: {
+      changeDichVu(ca, phong, event, dvDex) {
+        if (ca == 'ca1') {
+          this.dichVu[phong].danhSachDichVu.ca1.ds[dvDex].IDDichVu = event.target.value
+        } else {
+          this.dichVu[phong].danhSachDichVu.ca2.ds[dvDex].IDDichVu = event.target.value
+        }
+        console.log(this.dichVu);
+      },
       handleChangeChuyenKhoa() {
         this.dichVu = [];
-        axios.get(process.env.SERVER_URI + `clinic/dsClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(response => {
-          response.data.forEach(element => {
-            this.dichVu.push({
-              IDPhong: element.IDPhong,
-              phong: element.SoPhong,
-              danhSachDichVu: {
-                ca1: [{
-                  IDDichVu: "",
-                  ThoiGianThucHien: ""
-                }],
-                ca2: [{
-                  IDDichVu: "",
-                  ThoiGianThucHien: ""
-                }]
-              }
+        axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
+          response => {
+            response.data.forEach(element => {
+              this.dichVu.push({
+                IDPhong: element.IDPhong,
+                phong: element.SoPhong,
+                danhSachDichVu: {
+                  ca1: {
+                    ThoiGianBatDau: "7:30",
+                    ThoiGianKetThuc: "11:30",
+                    ds: [{
+                      IDDichVu: "",
+                    }]
+                  },
+                  ca2: {
+                    ThoiGianBatDau: "7:30",
+                    ThoiGianKetThuc: "11:30",
+                    ds: [{
+                      IDDichVu: "",
+                    }]
+                  }
+                }
+              })
             })
-          })
-          console.log(response.data);
-          console.log(this.dichVu)
-        });
+          });
+        axios.get(process.env.SERVER_URI + `clinic/dsCls/` + this.selectedChuyenKhoa).then(response => {
+          this.fetchedDsDichVu = response.data;
+        })
       },
       addService(ca, phong) {
         if (ca == 'ca1') {
-          this.dichVu[phong].danhSachDichVu.ca1.push({
+          this.dichVu[phong].danhSachDichVu.ca1.ds.push({
             IDDichVu: "",
-            ThoiGianThucHien: ""
           })
         } else {
-          this.dichVu[phong].danhSachDichVu.ca2.push({
+          this.dichVu[phong].danhSachDichVu.ca2.ds.push({
             IDDichVu: "",
-            ThoiGianThucHien: ""
           })
         }
       }
     },
   }
-
 </script>
