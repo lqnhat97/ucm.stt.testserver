@@ -20,7 +20,7 @@
           <div class="col-sm-4">
             <select v-bind:style="{ margin_top:'10%' }" id="dichVu" class="form-control" placeholder="Chuyên khoa"
               v-model="selectedPhong" @change="handleChangePhong">
-              <option :selected="true" disabled>Chọn phòng</option>
+              <option :selected="true" disabled value="">Chọn phòng</option>
               <option v-for="(option,index) in dsPhong" :value="option.IDPhong" :key="index">
                 {{option.SoPhong}}</option>
             </select>
@@ -28,7 +28,7 @@
 
         </div>
 
-        <div class="row">
+        <div class="row" id="tbCls">
           <div class="col-sm-5">
             <h3>Chi tiết dịch vụ cận lâm sàng</h3>
           </div>
@@ -113,21 +113,22 @@
     methods: {
       handleChangeChuyenKhoa() {
         axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(res => {
-
           this.dsPhong = res.data;
           this.isXetNghiem = false;
+          this.selectedPhong = "";
+          this.cls = "";
         })
       },
       handleChangePhong() {
         axios.get(process.env.SERVER_URI + `clinic/thongTinClsTheoPhong/` + this.selectedPhong).then(res => {
-          console.log(res.data);
-          this.cls = res.data;
-          console.log(this.cls.hasOwnProperty('STTHienTai'));
-          if (!this.cls.hasOwnProperty('STTHienTai')) {
-            this.cls.STTHienTai = (this.cls.STTHientai - this.cls.STTHientai % 10 + 1) + " -> " + (this.cls
-              .STTHientai - this.cls.STTHientai % 10 + 10);
-            this.isXetNghiem = true;
-            this.khoangSoXetNghiem = Math.floor(this.cls.STTHientai / 10);
+          if (this.selectedPhong != "") {
+            this.cls = res.data;
+            if (!this.cls.hasOwnProperty('STTHienTai')) {
+              this.cls.STTHienTai = (this.cls.STTHientai - this.cls.STTHientai % this.cls.SoNhay + 1) + " -> " + (this.cls
+                .STTHientai - this.cls.STTHientai % this.cls.SoNhay + this.cls.SoNhay);
+              this.isXetNghiem = true;
+              this.khoangSoXetNghiem = Math.floor(this.cls.STTHientai / this.cls.SoNhay);
+            }
           }
         })
       },
@@ -137,18 +138,20 @@
           isXetNghiem: this.isXetNghiem
         }).then(response => {
           if (response.status == 200) {
-              console.log(response.data);
+            console.log(response.data);
             if (this.isXetNghiem) {
-              if (this.khoangSoXetNghiem == Math.floor(response.data.STTCuoi/10))
+              if (this.khoangSoXetNghiem == Math.floor(response.data.STTCuoi / 10))
                 this.message = 'Qua số xét nghiệm không thành công';
-                else
+              else
                 this.message = 'Qua số xét nghiệm thành công';
 
             } else {
 
-                this.message = 'Qua số cận lâm sàng thành công';
+              this.message = 'Qua số cận lâm sàng thành công';
             }
-              $('#findCmndModal').modal('show');
+            $('#findCmndModal').modal('show');
+            this.handleChangePhong();
+            $mount('#tbCls');
 
             //this.soLuongBan = parent.soPhong[this.index].thongTin;
           };

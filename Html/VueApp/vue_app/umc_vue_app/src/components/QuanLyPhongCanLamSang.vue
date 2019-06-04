@@ -54,16 +54,27 @@
                 </tr>
 
                 <tr>
-                  <td colspan="2"><select multiple>
-                      <option v-for="optionDichVu in fetchedDsDichVu" :key="optionDichVu.IDDichVu ">
-                        {{optionDichVu.TenDichVu}}</option>
-                    </select>
-                    <button type="button" class="btn btn-primary">Chọn</button>
-                    <button type="button" class="btn btn-info">Xóa</button>
-                    <select multiple>
-                      <option v-for="optionDichVu in  fetchedDsDichVu" :key="optionDichVu.IDDichVu ">
-                        {{optionDichVu.TenDichVu}}</option>
-                    </select>
+                  <td colspan="2">
+                    <div style="display:flex;justify-content:space-between">
+                      <div>
+                        <select :size="fetchedDsDichVu.length" multiple class="form-control" :id='"selectCls"+index'>
+                          <option v-for="optionDichVu,rindex in f_dvClsConLai[index]" :value="optionDichVu.IDDichVu"
+                            :key="rindex">
+                            {{optionDichVu.TenDichVu}}</option>
+                        </select>
+                      </div>
+                      <div style="display: flex; flex-direction: column; justify-content: center;">
+                        <button type="button" @click="selectCls(index)" class="btn btn-primary">Chọn</button>
+                        <button type="button" @click="unSelectCls(index)" class="btn btn-info">Xóa</button>
+                      </div>
+                      <div>
+                        <select :size="fetchedDsDichVu.length" multiple class="form-control" :id='"unSelectCls"+index'>
+                          <option v-for="(optionDichVuDaLam,key) in  f_dvClsDaLam[index]" :key="key"
+                            :value="optionDichVuDaLam.DichVuCLSThucHien ">
+                            {{optionDichVuDaLam.TenDichVu}}</option>
+                        </select>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -75,7 +86,7 @@
           <div class="row" style="display:flex ; justify-content: space-around">
 
             <div class="col-sm-4">
-              <input class="form-group" id="buttom" type="submit" value="Quy định">
+              <input class="form-group" id="buttom" @click="quyDinhCls" type="submit" value="Quy định">
             </div>
           </div>
         </form>
@@ -100,6 +111,10 @@
         selectedChuyenKhoa: "",
         dichVu: [],
         fetchedDsDichVu: "",
+        dsDv: [],
+        fetchedDsDichVuDaLam: "",
+        f_dvClsDaLam: [],
+        f_dvClsConLai: [],
         lang: {
           days: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
           months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9',
@@ -124,6 +139,7 @@
       axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoaCls`).then(response => {
         this.chuyenKhoa = response.data;
       });
+
     },
     mounted() {
       this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
@@ -139,10 +155,18 @@
         console.log(this.dichVu);
       },
       handleChangeChuyenKhoa() {
+        this.fetchedDsDichVu = "";
         this.dichVu = [];
+        this.f_dvClsConLai = [];
         axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
           response => {
-            response.data.forEach(element => {
+            if (this.fetchedDsDichVu == "") {
+              axios.get(process.env.SERVER_URI + `clinic/dsCls/` + this.selectedChuyenKhoa).then(response => {
+                this.fetchedDsDichVu = response.data;
+              })
+            };
+            this.f_dvClsDaLam = new Array(response.data.length);
+            response.data.forEach((element, index) => {
               this.dichVu.push({
                 IDPhong: element.IDPhong,
                 phong: element.SoPhong,
@@ -162,24 +186,77 @@
                     }]
                   }
                 }
-              })
-            })
+              });
+              axios.get(process.env.SERVER_URI + `clinic/dvClsDaThucHien/` + element.IDPhong).then(
+                response => {
+                  this.f_dvClsDaLam[index] = (response.data);
+                  //this.delDuplicateID(this.fetchedDsDichVu, this.f_dvClsDaLam[index]);
+                  this.f_dvClsConLai.push(this.delDuplicateID(this.fetchedDsDichVu, this.f_dvClsDaLam[index]));
+                  this.$mount('#bodyContent');
+
+                });
+            });
+
           });
-        axios.get(process.env.SERVER_URI + `clinic/dsCls/` + this.selectedChuyenKhoa).then(response => {
-          this.fetchedDsDichVu = response.data;
-        })
       },
-      addService(phong) {
-        if (ca == 'ca1') {
-          this.dichVu[phong].danhSachDichVu.ca1.ds.push({
-            IDDichVu: "",
+      delDuplicateID(list1, list2) {
+        let len = list2.length;
+        var tmp = [...list1];
+        list2.forEach(value => {
+          tmp = tmp.filter(v => {
+            return v.IDDichVu != value.DichVuCLSThucHien;
           })
-        } else {
-          this.dichVu[phong].danhSachDichVu.ca2.ds.push({
-            IDDichVu: "",
+        });
+        return tmp;
+      },
+      selectCls(index) {
+        let data = $("#selectCls" + index).val();
+        this.addComplete(data, index, this.f_dvClsDaLam, this.f_dvClsConLai,1);
+        this.$mount('#bodyContent');
+      },
+      unSelectCls(index) {
+        let data = $("#unSelectCls" + index).val();
+        this.addComplete(data, index, this.f_dvClsConLai, this.f_dvClsDaLam,2);
+        this.$mount('#bodyContent');
+      },
+      addedItem(data) {
+        let res = [];
+        data.forEach((value, index) => {
+          let tmp = this.fetchedDsDichVu.filter(v => {
+            return v.IDDichVu == value;
+          })[0];
+          res.push({
+            DichVuCLSThucHien: tmp.IDDichVu,
+            TenDichVu: tmp.TenDichVu
           })
-        }
+        });
+        return res;
+      },
+      deletedItem(data) {
+        let res = [];
+        data.forEach((value, index) => {
+          let tmp = this.fetchedDsDichVu.filter(v => {
+            return v.IDDichVu == value;
+          })[0];
+          console.log(tmp);
+          res.push({
+            IDDichVu: tmp.IDDichVu,
+            TenDichVu: tmp.TenDichVu
+          })
+        });
+        return res;
+      },
+      addComplete(data, index, data1, data2,type) {
+        let res = type==1?this.addedItem(data):this.deletedItem(data);
+        data1[index] = data1[index].concat(res);
+        data2[index] = this.delDuplicateID(this.fetchedDsDichVu, data1[index]);
+      },
+      quyDinhCls(e) {
+        e.preventDefault;
+        let data = $('button').data('btn');
+        console.log(data);
       }
     },
   }
+
 </script>
