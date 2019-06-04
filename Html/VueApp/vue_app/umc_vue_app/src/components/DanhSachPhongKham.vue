@@ -8,7 +8,7 @@
           <div class="col-sm-4">
             <select id="chuyenkhoa" class="form-control" placeholder="Chuyên khoa" v-model="selectedChuyenKhoa"
               @change="handleChangeChuyenKhoa">
-              <option :selected="true" disabled>Chọn chuyên khoa</option>
+              <option :selected="true" disabled value="">Chọn chuyên khoa</option>
               <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
                 {{option.TenChuyenKhoa}}</option>
             </select>
@@ -18,7 +18,7 @@
           <div class="col-sm-4">
             <select id="phongKham" class="form-control" placeholder="Chuyên khoa" v-model="selectedPhongKham"
               @change="handleChangeSoPhong">
-              <option :selected="true" disabled>Chọn số phòng</option>
+              <option :selected="true" value="" disabled>Chọn số phòng</option>
               <option v-for="option in soLuongPhong" :value="option.phongKham" :key="option.Phong">
                 {{option.phongKham}}</option>
             </select>
@@ -81,10 +81,16 @@
           response => {
             this.soPhong = response.data;
             this.soLuongPhong = response.data;
-            this.selectedPhongKham = ""
+            this.selectedPhongKham = '';
           })
       },
       handleChangeSoPhong(e) {
+        // axios.get(process.env.SERVER_URI + `clinic/thongTinLsTheoPhong/` + this.selectedChuyenKhoa).then(
+        //   response => {
+        //     this.soPhong = response.data;
+        //     this.soLuongPhong = response.data;
+        //     this.selectedPhongKham = ""
+        //   })
         this.soPhong = this.soLuongPhong.filter(value => {
           return value.phongKham === this.selectedPhongKham
         })
@@ -153,9 +159,9 @@
             this.soPhong += this.option.phongKham;
           },
           mounted: () => {
-            parent.socket.on('next-number', dataRes => {
-              alert(dataRes);
-            })
+            // parent.socket.on('next-number', dataRes => {
+            //   alert(dataRes);
+            // })
           },
           methods: {
             nextNumber(data) {
@@ -169,6 +175,14 @@
                     .SoPhong + '</span></strong>' +
                     '</span></strong>  ca <strong><span style="color: #41B883;">' + response.data.CaKham;
                   $('#findCmndModal').modal('show');
+                  axios.get(process.env.SERVER_URI + `clinic/thongTinLsTheoPhong/` + this.soLuongBan[0].IDPhong)
+                    .then(
+                      response => {
+                        console.log(response.data)
+                        this.soLuongBan = response.data.thongTin;
+                        this.soPhong = response.data.phongKham;
+                        parent.$mount('#chiDinhCanLamSang');
+                      })
                   //this.soLuongBan = parent.soPhong[this.index].thongTin;
                 };
               })

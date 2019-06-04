@@ -59,15 +59,10 @@ exports.phatSinhSttPkTheoChuyenKhoa = (data) => {
     console.log(data);
     switch (data.CaKham) {
         case '1':
-            console.log('th1');
             return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa1');
         case '2':
-            console.log('th2');
-
             return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa2');
         default:
-            console.log('th3');
-
             let d = new Date();
             let n = d.getHours();
             if (n <= 11) {
@@ -110,6 +105,13 @@ exports.tinhTrangHienTaiTheoChuyenKhoa = (idChuyenKhoa) => {
     } else {
         return db.executeProcedure2input('IDChuyenKhoa', 'Cakham', idChuyenKhoa, 2, "TinhTrangPhongKhamHienTaiTheoChuyenKhoa");
     }
+}
+
+//Tìm &xuất danh sách thông tin, STT hiện tại, bệnh nhân, cuối theo phòng lâm sàng
+exports.thongTinLsTheoPhong = (idPhong) => {
+    let d = new Date();
+    let n = d.getHours();
+    return db.executeProcedure2input('IDPhong','CaKham',idPhong,n>11?2:1,'TinhTrangPhongKhamHienTaiTheoPhongKham');
 }
 
 //Tìm và suất danh sách phòng khám chi tiết gồm có số còn chờ, tốc độ nhảy số, phòng khám
@@ -200,4 +202,48 @@ exports.tinhTrangPhongCLSTheoChuyenKhoa = (idChuyenKhoa)=>{
     let d = new Date();
     let n = d.getHours();
     return db.executeProcedure2input('IDChuyenKhoa','CaKham',idChuyenKhoa,n>11?2:1,'TinhTrangPhongCLSTheoChuyenKhoa')
+}
+
+//Xuất các dịch vụ mà phòng cls đó đã làm
+exports.showDvClsDaLamTheoPhong = (idPhong) =>{
+    return db.executeProcedure('IDPhong',idPhong,'ShowDichVuPhongCLS');
+}
+
+//thêm ngày, phòng ca, thời gian kham vào lịch phòng cận lâm sàng và thực hiện cận lâm sàng
+exports.themLichCls1 = (data)=>{
+    let sql=`exec ThemLichPhongCanLamSang '${data.idPhong}',1,'${data.gioBdCa1}','${data.gioKtCa1}'`;
+    return db.executeQuery(sql);
+}
+exports.themLichCls2 = (data)=>{
+    let sql=`exec ThemLichPhongCanLamSang '${data.idPhong}',2,'${data.gioBdCa2}','${data.gioKtCa2}'`;
+    return db.executeQuery(sql);
+}
+
+//chỉ định dịch vụ cho một phòng cận lâm sàng
+exports.chiDinhDvClsChoPhong = (idPhong,idDvCls)=>{
+    return db.executeProcedure2input('IDPhong','IDDichVuCLS',idPhong,idDvCls,'ThemDichVuPhongCanLamSang');
+}
+
+//hiển thi dashboard lâm sàng
+exports.dashBoardLs=()=>{
+    let d = new Date();
+    let n = d.getHours();
+    let sql = `exec Dashboard_LamSang ${n>11?2:1}`;
+    return db.executeQuery(sql);
+}
+
+//hiển thi dashboard cận lâm sàng
+exports.dashBoardCls=()=>{
+    let d = new Date();
+    let n = d.getHours();
+    let sql = `exec Dashboard_CanLamSang ${n>11?2:1}`;
+    return db.executeQuery(sql);
+}
+
+//hiển thi dashboard xét nghiệm
+exports.dashBoardXn=()=>{
+    let d = new Date();
+    let n = d.getHours();
+    let sql = `exec DashBoard_XetNghiem ${n>11?2:1}`;
+    return db.executeQuery(sql);
 }
