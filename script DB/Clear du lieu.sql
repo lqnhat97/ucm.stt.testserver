@@ -26,6 +26,7 @@ alter table ChuyenKhoa drop constraint FK_CK_KhuVuc;
 alter table LichKhamBacSi drop constraint FK_LK_Ban;
 alter table LichKhamBacSi drop constraint FK_LK_Ca;
 alter table LichKhamBacSi drop constraint FK_LK_BacSi;
+alter table NhanVien drop constraint FK_NV_CV;
 
 ------------------------TRUNCATE BẢNG
 update ThongKePhongKham set SoLuongDoi=0 where SoLuongDoi>0;
@@ -193,5 +194,10 @@ alter table ThucHienCLS
 add constraint FK_THCLS_DV
 foreign key (DichVuCLSThucHien)
 references  DichVuCanLamSang(IDDichVu)
+
+alter table NhanVien
+add constraint FK_NV_CV
+foreign key(ChucVu)
+references  PhanHe(IDPhanHe);
 
 
