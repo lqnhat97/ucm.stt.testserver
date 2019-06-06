@@ -4,7 +4,7 @@ var db = require('../Repos/ClinicRepos');
 
 router.get('/thongtinkhambenh/:id', async (req, res) => {
     // db.layPhongKhamHienTai(req.params.id).then(rows=>{
-    //     res.json(rows.recordsets)
+    //     res.json(rows)
     // });
     try {
         var id = req.params.id;
@@ -12,78 +12,82 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
         var lamSang = [];
         var canLamSang = [];
         await db.layPhongKhamHienTai(id).then(rows => {
-            var maPhong, maPhieuKham, tenKhu, tenLau, tenPhong, tenChuyenKhoa, maPhongCls, stt, sttHienTai, sttXetNghiem, thoiGianDuKien, tinhTrang;
-            if (Object.keys(rows.recordsets).length > 0) {
-                for (let i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
-                    maPhieuKham = rows.recordsets[0][i].IDPhieuKham;
-                    tenChuyenKhoa = rows.recordsets[0][i].TenChuyenKhoa;
-                    maPhong = rows.recordsets[0][i].SoPhong;
-                    tenKhu = rows.recordsets[0][i].TenKhuVuc;
-                    tenLau = rows.recordsets[0][i].TenLau;
-                    stt = rows.recordsets[0][i].STTPhongKham;
-                    timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
-                    thoiGianDuKien = (timeTemp.getHours()-7).toString() + ":" + timeTemp.getMinutes();
-                    tinhTrang = rows.recordsets[0][i].TinhTrang;
-                    sttHienTai = rows.recordsets[0][i].SoHienTaiCuaPhong;
-                    lamSang.push({
-                        maPhieuKham,
-                        maPhong,
-                        tenKhu,
-                        tenLau,
-                        tenChuyenKhoa,
-                        stt,
-                        sttHienTai,
-                        thoiGianDuKien,
-                        tinhTrang
-                    });
-                }
+            if (rows.recordsets.length == 0) {
+                res.status(404).end();
+            } else {
+                var maPhong, maPhieuKham, tenKhu, tenLau, tenPhong, tenChuyenKhoa, maPhongCls, stt, sttHienTai, sttXetNghiem, thoiGianDuKien, tinhTrang;
+                if (Object.keys(rows.recordsets).length > 0) {
+                    for (let i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
+                        maPhieuKham = rows.recordsets[0][i].IDPhieuKham;
+                        tenChuyenKhoa = rows.recordsets[0][i].TenChuyenKhoa;
+                        maPhong = rows.recordsets[0][i].SoPhong;
+                        tenKhu = rows.recordsets[0][i].TenKhuVuc;
+                        tenLau = rows.recordsets[0][i].TenLau;
+                        stt = rows.recordsets[0][i].STTPhongKham;
+                        timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
+                        thoiGianDuKien = (timeTemp.getHours() - 7).toString() + ":" + timeTemp.getMinutes();
+                        tinhTrang = rows.recordsets[0][i].TinhTrang;
+                        sttHienTai = rows.recordsets[0][i].SoHienTaiCuaPhong;
+                        lamSang.push({
+                            maPhieuKham,
+                            maPhong,
+                            tenKhu,
+                            tenLau,
+                            tenChuyenKhoa,
+                            stt,
+                            sttHienTai,
+                            thoiGianDuKien,
+                            tinhTrang
+                        });
+                    }
 
-                var clsLength = Object.keys(rows.recordsets[1]).length;
-                for (let k = 0; k < clsLength; k++) {
-                    maPhongCls = rows.recordsets[1][k].SoPhong;
-                    tenKhu = rows.recordsets[1][k].TenKhuVuc;
-                    tenLau = rows.recordsets[1][k].TenLau;
-                    tenPhong = rows.recordsets[1][k].TenCanLamSang;
-                    stt = rows.recordsets[1][k].STTPhongCLS;
-                    timeTemp = new Date(rows.recordsets[1][k].ThoiGianDuKien);
-                    thoiGianDuKien = (timeTemp.getHours()-7).toString() + ":" + timeTemp.getMinutes();
-                    tinhTrang = rows.recordsets[1][k].TinhTrang;
-                    sttHienTai = rows.recordsets[1][k].SoHienTaiCuaPhong + '';
-                    canLamSang.push({
-                        maPhongCls,
-                        tenKhu,
-                        tenLau,
-                        sttXetNghiem:"null",
-                        tenPhong,
-                        stt,
-                        sttHienTai,
-                        thoiGianDuKien,
-                        tinhTrang
-                    });
-                }
+                    var clsLength = Object.keys(rows.recordsets[1]).length;
+                    for (let k = 0; k < clsLength; k++) {
+                        maPhongCls = rows.recordsets[1][k].SoPhong;
+                        tenKhu = rows.recordsets[1][k].TenKhuVuc;
+                        tenLau = rows.recordsets[1][k].TenLau;
+                        tenPhong = rows.recordsets[1][k].TenCanLamSang;
+                        stt = rows.recordsets[1][k].STTPhongCLS;
+                        timeTemp = new Date(rows.recordsets[1][k].ThoiGianDuKien);
+                        thoiGianDuKien = (timeTemp.getHours() - 7).toString() + ":" + timeTemp.getMinutes();
+                        tinhTrang = rows.recordsets[1][k].TinhTrang;
+                        sttHienTai = rows.recordsets[1][k].SoHienTaiCuaPhong + '';
+                        canLamSang.push({
+                            maPhongCls,
+                            tenKhu,
+                            tenLau,
+                            sttXetNghiem: "null",
+                            tenPhong,
+                            stt,
+                            sttHienTai,
+                            thoiGianDuKien,
+                            tinhTrang
+                        });
+                    }
 
-                var clsLength = Object.keys(rows.recordsets[2]).length;
-                if (clsLength > 0) {
-                    var xnRange = rows.recordsets[2][0].STTCheckedCuoi;
-                    tenPhong = rows.recordsets[2][0].SoPhong;
-                    tenKhu = rows.recordsets[2][0].TenKhuVuc;
-                    tenLau = rows.recordsets[2][0].TenLau;
-                    stt = rows.recordsets[2][0].STTXetNghiem;
-                    timeTemp = new Date(rows.recordsets[2][0].Gio);
-                    thoiGianDuKien = (timeTemp.getHours()-7).toString() + ":" + timeTemp.getMinutes();
-                    tinhTrang = rows.recordsets[2][0].TinhTrang;
-                    sttXetNghiem = (xnRange - xnRange % 10 + 1) + " -> " + (xnRange - xnRange % 10 + 10);
-                    canLamSang.push({
-                        maPhongCls: "Xét nghiệm",
-                        tenPhong,
-                        tenKhu,
-                        tenLau,
-                        stt,
-                        sttHienTai:"0",
-                        sttXetNghiem,
-                        thoiGianDuKien,
-                        tinhTrang
-                    });
+                    var clsLength = Object.keys(rows.recordsets[2]).length;
+                    if (clsLength > 0) {
+                        var xnRange = rows.recordsets[2][0].STTCheckedCuoi;
+                        tenPhong = rows.recordsets[2][0].SoPhong;
+                        tenKhu = rows.recordsets[2][0].TenKhuVuc;
+                        tenLau = rows.recordsets[2][0].TenLau;
+                        stt = rows.recordsets[2][0].STTXetNghiem;
+                        timeTemp = new Date(rows.recordsets[2][0].Gio);
+                        thoiGianDuKien = (timeTemp.getHours() - 7).toString() + ":" + timeTemp.getMinutes();
+                        tinhTrang = rows.recordsets[2][0].TinhTrang;
+                        sttXetNghiem = (xnRange - xnRange % 10 + 1) + " -> " + (xnRange - xnRange % 10 + 10);
+                        canLamSang.push({
+                            maPhongCls: "Xét nghiệm",
+                            tenPhong,
+                            tenKhu,
+                            tenLau,
+                            stt,
+                            sttHienTai: "0",
+                            sttXetNghiem,
+                            thoiGianDuKien,
+                            tinhTrang
+                        });
+                    }
                 }
             }
 
@@ -105,7 +109,6 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
             });
             res.end(200);
         }
-
     } catch (err) {
         throw err;
     }
@@ -207,7 +210,6 @@ router.get('/tinhTrangTheoChuyenKhoa/:idChuyenKhoa', (req, res) => {
     try {
         db.tinhTrangHienTaiTheoChuyenKhoa(data).then(rows => {
             let resData = handlingDsPhong(rows.recordsets);
-            console.log(rows.recordset);
             res.status(200).json(resData);
         })
     } catch (err) {
@@ -269,6 +271,23 @@ router.post('/soKeTiepLamSang', (req, res) => {
     db.soKeTiepLS(data).then((rows) => {
         global.io.sockets.emit('next-number', rows.recordset[0]);
         res.status(200).json(rows.recordset[0]).end();
+    })
+})
+
+
+//Check bệnh nhân có khám hay ko (P Khám)
+router.post('/checkBenhNhanDangKham', (req, res) => {
+    let data = req.body;
+    db.checkBenhNhanKhamBenhLS(data).then((rows) => {
+        res.status(200).json(rows.rowsAffected[0]).end();
+    })
+})
+
+//Check bệnh nhân có khám hay ko (P CLS)
+router.post('/checkBenhNhanDangKhamCls', (req, res) => {
+    let data = req.body;
+    db.checkBenhNhanKhamBenhCLS(data).then((rows) => {
+        res.status(200).json(rows.rowsAffected[0]).end();
     })
 })
 
@@ -384,8 +403,7 @@ router.get('/dvClsDaThucHien/:idPhong', (req, res) => {
 router.post('/chiDinhDvClsChoPhong', (req, res) => {
     let data = req.body;
     console.log(data);
-    data.forEach(value => {
-        //insert thoi gian
+    for (const value of data) {
         db.themLichCls1(value).then(rows => {
             console.log(rows);
         });
@@ -398,15 +416,14 @@ router.post('/chiDinhDvClsChoPhong', (req, res) => {
                 console.log(rows);
             })
         })
-    });
-    res.status(200);
+    }
 })
 
 //----------------Dashboardddddddddd----------------------
 //Dashboard Lâm sàng
-router.get('/dashBoardLs',(req,res)=>{
-    db.dashBoardLs().then(rows=>{
-           res.status(200).json(handlingDsPhongDashboard(rows.recordset));
+router.get('/dashBoardLs', (req, res) => {
+    db.dashBoardLs().then(rows => {
+        res.status(200).json(handlingDsPhongDashboard(rows.recordset));
     })
 })
 
@@ -444,7 +461,7 @@ function handlingPhongDashboard(data) {
         });
         ketQua.push({
             phongKham: soPhong,
-            lau:data[0].Lau,
+            lau: data[0].Lau,
             thongTin: data
         });
     });
@@ -452,23 +469,63 @@ function handlingPhongDashboard(data) {
 }
 
 //Dashboard Cận lâm sàng
-router.get('/dashBoardCls',(req,res)=>{
-    db.dashBoardCls().then(rows=>{
-           res.status(200).json(handlingDsPhongDashboard(rows.recordset));
+router.get('/dashBoardCls', (req, res) => {
+    db.dashBoardCls().then(rows => {
+        res.status(200).json(handlingDsPhongDashboard(rows.recordset));
     })
 })
 
 //Dashboard xét nghiệm
-router.get('/dashBoardXn',(req,res)=>{
-    db.dashBoardXn().then(rows=>{
-        let dataRes=rows.recordsets;
+router.get('/dashBoardXn', (req, res) => {
+    db.dashBoardXn().then(rows => {
+        let dataRes = rows.recordsets;
         let tmp = [];
         let len = dataRes.length;
-        for (let i=0;i<len;i++){
-            dataRes[i][0].KhoangSTT = (dataRes[i][0].STTHientai - dataRes[i][0].STTHientai%dataRes[i][0].SoNhay +1 ) + " --> " + (dataRes[i][0].STTHientai - dataRes[i][0].STTHientai%dataRes[i][0].SoNhay +dataRes[i][0].SoNhay);
+        for (let i = 0; i < len; i++) {
+            dataRes[i][0].KhoangSTT = (dataRes[i][0].STTHientai - dataRes[i][0].STTHientai % dataRes[i][0].SoNhay + 1) + " --> " + (dataRes[i][0].STTHientai - dataRes[i][0].STTHientai % dataRes[i][0].SoNhay + dataRes[i][0].SoNhay);
             tmp.push(dataRes[i][0]);
         }
         dataRes = handlingDsPhongDashboard(tmp);
         res.status(200).json(dataRes);
+    })
+})
+
+
+//Đăng nhập bằng thư kí y khoa
+router.get('/thuKi/:idThuKy', (req, res) => {
+    let data = req.params.idThuKy;
+    let dataRes = {};
+    db.loadThongTinThuKy(data).then(rows => {
+        if (rows.recordsets.length != 2) {
+            res.status(404).end();
+        }
+        let data = rows.recordsets;
+        dataRes.tenChuyenKhoa = data[0][0].TenChuyenKhoa;
+        dataRes.tenKhuVuc = data[0][0].TenKhuVuc;
+        dataRes.Lau = data[0][0].Lau.toString();
+        dataRes.IDPhong = data[0][0].IDPhong.toString();
+        dataRes.soPhong = data[0][0].SoPhong;
+        dataRes.caKham = data[0][0].CaKham.toString();
+        dataRes.STTCuoi = data[0][0].STTCuoi.toString();
+        dataRes.STTHienTai = data[0][0].STTHienTai.toString();
+        dataRes.tenThuKi = data[1][0].TenNhanVien;
+        dataRes.danhSachBan = [];
+        if (data[1][0].Loai == 'LS') {
+            dataRes.isCLS = false;
+            for (const value of data[0]) {
+                dataRes.danhSachBan.push({
+                    IDBan: value.IDBan,
+                    soBan: value.SoBan.toString(),
+                    bacSi: value.BacSi,
+                    BenhNhan: value.BenhNhan
+                })
+            }
+        } else {
+            dataRes.isCLS = true;
+            dataRes.danhSachBan.push({
+                vinhLz: ""
+            })
+        }
+        res.status(200).json(dataRes).end();
     })
 })

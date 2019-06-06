@@ -133,6 +133,18 @@ exports.soKeTiepLS = (data) => {
     return db.executeQuery(sql);
 }
 
+//Check bệnh nhân có khám hay ko (P Khám)
+exports.checkBenhNhanKhamBenhLS = (data) => {
+    let sql = `exec CheckBenhNhanPhongKham '${data.idPhongKham}','${data.idBanKham}',${data.CaKham},${data.stt}`
+    return db.executeQuery(sql);
+}
+
+//Check bệnh nhân có khám hay ko (P CLS)
+exports.checkBenhNhanKhamBenhCLS = (data) => {
+    let sql = `exec CheckBenhNhanPhongCLS '${data.idPhongKham}',${data.CaKham},${data.stt}`
+    return db.executeQuery(sql);
+}
+
 //Qua số cận lâm sàng
 exports.soKeTiepCLS = (data) => {
     let d = new Date();
@@ -246,4 +258,12 @@ exports.dashBoardXn=()=>{
     let n = d.getHours();
     let sql = `exec DashBoard_XetNghiem ${n>11?2:1}`;
     return db.executeQuery(sql);
+}
+
+//---------------------------Thư kí ----------
+exports.loadThongTinThuKy = (idThuKy)=>{
+    let d = new Date();
+    let n = d.getHours();
+    console.log(idThuKy);
+    return db.executeProcedure2input('IDNhanVien','CaKham',idThuKy,n>11?2:1,'DangNhapNhanVien');
 }

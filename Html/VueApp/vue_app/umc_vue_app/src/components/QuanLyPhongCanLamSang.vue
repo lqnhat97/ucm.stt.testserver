@@ -40,16 +40,16 @@
               <template v-for="(option,index) in dichVu">
                 <tr>
                   <td class="number" :rowspan="3">
-                    {{option.phong}}</td>
+                    {{option.idPhong}}</td>
                   <td class="text">Ca 1</td>
-                  <td class="number"><input v-model="option.danhSachDichVu.ca1.ThoiGianBatDau"> - <input
-                      v-model="option.danhSachDichVu.ca1.ThoiGianKetThuc">
+                  <td class="number"><input v-model="option.gioBdCa1"> - <input
+                      v-model="option.gioKtCa1">
                   </td>
                 </tr>
                 <tr>
                   <td class="text">Ca 2</td>
-                  <td class="number"><input v-model="option.danhSachDichVu.ca2.ThoiGianBatDau"> - <input
-                      v-model="option.danhSachDichVu.ca2.ThoiGianKetThuc">
+                  <td class="number"><input v-model="option.gioBdCa2"> - <input
+                      v-model="option.gioKtCa2">
                   </td>
                 </tr>
 
@@ -58,8 +58,8 @@
                     <div style="display:flex;justify-content:space-between">
                       <div>
                         <select :size="fetchedDsDichVu.length" multiple class="form-control" :id='"selectCls"+index'>
-                          <option v-for="optionDichVu,rindex in f_dvClsConLai[index]" :value="optionDichVu.IDDichVu"
-                            :key="rindex">
+                          <option v-for="(optionDichVu,key) in f_dvClsConLai[index]" :value="optionDichVu.IDDichVu"
+                            :key="key">
                             {{optionDichVu.TenDichVu}}</option>
                         </select>
                       </div>
@@ -70,7 +70,7 @@
                       <div>
                         <select :size="fetchedDsDichVu.length" multiple class="form-control" :id='"unSelectCls"+index'>
                           <option v-for="(optionDichVuDaLam,key) in  f_dvClsDaLam[index]" :key="key"
-                            :value="optionDichVuDaLam.DichVuCLSThucHien ">
+                            :value="optionDichVuDaLam.IDDichVu ">
                             {{optionDichVuDaLam.TenDichVu}}</option>
                         </select>
                       </div>
@@ -146,14 +146,6 @@
         "bodyContent").style.marginLeft = "0";
     },
     methods: {
-      changeDichVu(ca, phong, event, dvDex) {
-        if (ca == 'ca1') {
-          this.dichVu[phong].danhSachDichVu.ca1.ds[dvDex].IDDichVu = event.target.value
-        } else {
-          this.dichVu[phong].danhSachDichVu.ca2.ds[dvDex].IDDichVu = event.target.value
-        }
-        console.log(this.dichVu);
-      },
       handleChangeChuyenKhoa() {
         this.fetchedDsDichVu = "";
         this.dichVu = [];
@@ -168,24 +160,11 @@
             this.f_dvClsDaLam = new Array(response.data.length);
             response.data.forEach((element, index) => {
               this.dichVu.push({
-                IDPhong: element.IDPhong,
-                phong: element.SoPhong,
-                danhSachDichVu: {
-                  ca1: {
-                    ThoiGianBatDau: "7:30",
-                    ThoiGianKetThuc: "11:30",
-                    ds: [{
-                      IDDichVu: "",
-                    }]
-                  },
-                  ca2: {
-                    ThoiGianBatDau: "7:30",
-                    ThoiGianKetThuc: "11:30",
-                    ds: [{
-                      IDDichVu: "",
-                    }]
-                  }
-                }
+                idPhong: element.IDPhong,
+                gioBdCa1: "7:30",
+                gioKtCa1: "11:30",
+                gioBdCa2: "13:30",
+                gioKtCa2: "17:30",
               });
               axios.get(process.env.SERVER_URI + `clinic/dvClsDaThucHien/` + element.IDPhong).then(
                 response => {
@@ -204,19 +183,19 @@
         var tmp = [...list1];
         list2.forEach(value => {
           tmp = tmp.filter(v => {
-            return v.IDDichVu != value.DichVuCLSThucHien;
+            return v.IDDichVu != value.IDDichVu;
           })
         });
         return tmp;
       },
       selectCls(index) {
         let data = $("#selectCls" + index).val();
-        this.addComplete(data, index, this.f_dvClsDaLam, this.f_dvClsConLai,1);
+        this.addComplete(data, index, this.f_dvClsDaLam, this.f_dvClsConLai, 1);
         this.$mount('#bodyContent');
       },
       unSelectCls(index) {
         let data = $("#unSelectCls" + index).val();
-        this.addComplete(data, index, this.f_dvClsConLai, this.f_dvClsDaLam,2);
+        this.addComplete(data, index, this.f_dvClsConLai, this.f_dvClsDaLam, 2);
         this.$mount('#bodyContent');
       },
       addedItem(data) {
@@ -226,7 +205,7 @@
             return v.IDDichVu == value;
           })[0];
           res.push({
-            DichVuCLSThucHien: tmp.IDDichVu,
+            IDDichVu: tmp.IDDichVu,
             TenDichVu: tmp.TenDichVu
           })
         });
@@ -234,7 +213,7 @@
       },
       deletedItem(data) {
         let res = [];
-        data.forEach((value, index) => {
+        for (const value of data) {
           let tmp = this.fetchedDsDichVu.filter(v => {
             return v.IDDichVu == value;
           })[0];
@@ -243,18 +222,25 @@
             IDDichVu: tmp.IDDichVu,
             TenDichVu: tmp.TenDichVu
           })
-        });
+        }
         return res;
       },
-      addComplete(data, index, data1, data2,type) {
-        let res = type==1?this.addedItem(data):this.deletedItem(data);
+      addComplete(data, index, data1, data2, type) {
+        let res = type == 1 ? this.addedItem(data) : this.deletedItem(data);
         data1[index] = data1[index].concat(res);
         data2[index] = this.delDuplicateID(this.fetchedDsDichVu, data1[index]);
       },
       quyDinhCls(e) {
         e.preventDefault;
-        let data = $('button').data('btn');
-        console.log(data);
+        for (let i = 0; i < this.dichVu.length; i++) {
+          this.dichVu[i].dsDvCls = this.f_dvClsDaLam[i].map(value => {
+            return value.IDDichVu
+          });
+        }
+        console.log(this.dichVu);
+        axios.post(process.env.SERVER_URI+'clinic/chiDinhDvClsChoPhong',this.dichVu).then(response=>{
+          console.log(response);
+        })
       }
     },
   }

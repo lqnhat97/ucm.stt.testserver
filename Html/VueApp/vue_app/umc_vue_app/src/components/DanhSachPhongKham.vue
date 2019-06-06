@@ -128,7 +128,7 @@
                   <td v-if="option.STTHienTai==option.STTCuoi">Không thể thao tác</td>
                   <td v-else><button class="btn btn-primary" @click="nextNumber(option)">+</button></td>
                   <td v-if="option.STTHienTai==option.STTCuoi">Không thể thao tác</td>                  
-                  <td v-else><div class="checkbox form-control-lg"><label><input type="checkbox" value="">Khám  </label></div></td>                  
+                  <td v-else><div class="checkbox form-control-lg"><label><input type="checkbox" :key="index" @change="handleChangeCheckbox(option,index)" :id="'checkboxKb'+index">Khám  </label></div></td>
                 </tr>
               </tbody>
             </table>
@@ -185,6 +185,14 @@
                       })
                   //this.soLuongBan = parent.soPhong[this.index].thongTin;
                 };
+              })
+            },
+            handleChangeCheckbox(data,index) {
+              axios.post(process.env.SERVER_URI + `clinic/checkBenhNhanDangKham`, {
+                idBanKham: data.IDBan,
+                idPhongKham: data.IDPhong,
+                CaKham:data.CaKham,
+                stt:data.STTHienTai
               })
             }
           }

@@ -55,7 +55,8 @@
                   <template v-if="cls.STTHienTai!=cls.STTCuoi">
                     <td class="number"><button @click="nextNumber" class="btn btn-success">+</button></td>
                     <td class="number">
-                      <div class="checkbox form-control-lg"><label><input type="checkbox" value="">Khám </label></div>
+                      <div class="checkbox form-control-lg"><label><input type="checkbox" @change="handleChangeCheckbox"
+                            value="">Khám </label></div>
                     </td>
                   </template>
                   <template v-else>
@@ -124,7 +125,8 @@
           if (this.selectedPhong != "") {
             this.cls = res.data;
             if (!this.cls.hasOwnProperty('STTHienTai')) {
-              this.cls.STTHienTai = (this.cls.STTHientai - this.cls.STTHientai % this.cls.SoNhay + 1) + " -> " + (this.cls
+              this.cls.STTHienTai = (this.cls.STTHientai - this.cls.STTHientai % this.cls.SoNhay + 1) + " -> " + (
+                this.cls
                 .STTHientai - this.cls.STTHientai % this.cls.SoNhay + this.cls.SoNhay);
               this.isXetNghiem = true;
               this.khoangSoXetNghiem = Math.floor(this.cls.STTHientai / this.cls.SoNhay);
@@ -155,6 +157,14 @@
 
             //this.soLuongBan = parent.soPhong[this.index].thongTin;
           };
+        })
+      },
+      handleChangeCheckbox() {
+        axios.post(process.env.SERVER_URI + `clinic/checkBenhNhanDangKham`, {
+          idBanKham: this.cls.IDBan,
+          idPhongKham: this.cls.IDPhong,
+          CaKham: this.cls.CaKham,
+          stt: this.cls.STTHienTai
         })
       }
     }
