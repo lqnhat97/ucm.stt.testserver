@@ -19,63 +19,64 @@
           <Modal :message="this.message" />
           <form action="">
             <p>Thông tin bệnh nhân</p>
-              <div class="row form-group">
-                <label for="" class="col-sm-2 col-form-label" style="text-align:right">Họ và tên</label>
-                <div class="col-sm-4">
-                  <input type="text" value="" class="form-control" :disabled="isFound?true:false" v-model="HoVaTen"
-                    v-text="HoVaTen">
-                </div>
-                <label for="" class="col-sm-2 col-form-label" style="text-align:right">Giới tính</label>
-                <div class="col-sm-4">
-                  <select type="text" class="form-control" :disabled="isFound?true:false" style="margin-right: 10px;"
-                    v-model="GioiTinh">
-                    <option>Nam</option>
-                    <option>Nữ</option>
-                  </select>
-                </div>
+            <div class="row form-group">
+              <label for="" class="col-sm-2 col-form-label" style="text-align:right">Họ và tên</label>
+              <div class="col-sm-4">
+                <input type="text" value="" class="form-control" :disabled="isFound?true:false" v-model="HoVaTen"
+                  v-text="HoVaTen">
               </div>
-
-              <div class="row form-group">
-                <label for="" class="col-sm-2 col-form-label" style="text-align:right">Ngày sinh</label>
-                <div class="col-sm-4">
-                  <date-picker style="width:100%" valueType="format" :lang='lang' :placeholder="NgaySinh" v-model="NgaySinh"
-                    :shortcuts="false" :disabled="isFound?true:false" format="MM/DD/YYYY"></date-picker>
-                </div>
-                <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
-                <div class="col-sm-4">
-                  <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="cmnd"
-                    v-text="cmnd">
-                </div>
+              <label for="" class="col-sm-2 col-form-label" style="text-align:right">Giới tính</label>
+              <div class="col-sm-4">
+                <select type="text" class="form-control" :disabled="isFound?true:false" style="margin-right: 10px;"
+                  v-model="GioiTinh">
+                  <option>Nam</option>
+                  <option>Nữ</option>
+                </select>
               </div>
+            </div>
 
-              <div class="row form-group">
-                <label for="" class="col-sm-2 col-form-label" style="text-align:right">Quê quán</label>
-                <div class="col-sm-4">
-                  <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="QueQuan"
-                    v-text="QueQuan">
-                </div>
-                <label for="" class="col-sm-2 col-form-label" style="text-align:right">Số điện
-                  thoại</label>
-                <div class="col-sm-4">
-                  <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="SoDienThoai"
-                    v-text="SoDienThoai">
-                </div>
+            <div class="row form-group">
+              <label for="" class="col-sm-2 col-form-label" style="text-align:right">Ngày sinh</label>
+              <div class="col-sm-4">
+                <date-picker style="width:100%" valueType="format" :lang='lang' :placeholder="NgaySinh"
+                  v-model="NgaySinh" :shortcuts="false" :disabled="isFound?true:false" format="MM/DD/YYYY">
+                </date-picker>
               </div>
-
-
-              <div class="row form-group">
-                <label for="" class="col-sm-2 col-form-label" style="text-align:right">Nghề nghiệp</label>
-                <div class="col-sm-4">
-                  <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="NgheNghiep"
-                    v-text="NgheNghiep">
-                </div>
-                <label for="" class="col-sm-2 col-form-label" style="text-align:right">Địa chỉ</label>
-                <div class="col-sm-4">
-                  <input type="text" value="" :disabled="isFound?true:false"
-                    placeholder="Số nhà, đường, xã/phường, quận/huyện, tỉnh" class="form-control" v-model="DiaChi"
-                    v-text="DiaChi">
-                </div>
+              <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
+              <div class="col-sm-4">
+                <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="cmnd"
+                  v-text="cmnd">
               </div>
+            </div>
+
+            <div class="row form-group">
+              <label for="" class="col-sm-2 col-form-label" style="text-align:right">Quê quán</label>
+              <div class="col-sm-4">
+                <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="QueQuan"
+                  v-text="QueQuan">
+              </div>
+              <label for="" class="col-sm-2 col-form-label" style="text-align:right">Số điện
+                thoại</label>
+              <div class="col-sm-4">
+                <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="SoDienThoai"
+                  v-text="SoDienThoai">
+              </div>
+            </div>
+
+
+            <div class="row form-group">
+              <label for="" class="col-sm-2 col-form-label" style="text-align:right">Nghề nghiệp</label>
+              <div class="col-sm-4">
+                <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="NgheNghiep"
+                  v-text="NgheNghiep">
+              </div>
+              <label for="" class="col-sm-2 col-form-label" style="text-align:right">Địa chỉ</label>
+              <div class="col-sm-4">
+                <input type="text" value="" :disabled="isFound?true:false"
+                  placeholder="Số nhà, đường, xã/phường, quận/huyện, tỉnh" class="form-control" v-model="DiaChi"
+                  v-text="DiaChi">
+              </div>
+            </div>
           </form>
           <div>
             <div style="text-align:center; width:30%; margin:0 auto">
@@ -142,6 +143,16 @@
         "bodyContent").style.marginLeft = "0";
     },
     methods: {
+      clearTex() {
+        this.cmnd = "";
+        this.HoVaTen = "";
+        this.NgaySinh = "";
+        this.GioiTinh = "";
+        this.QueQuan = "";
+        this.NgheNghiep = "";
+        this.DiaChi ="";
+        this.SoDienThoai = "";
+      },
       checkCMND(e) {
         e.preventDefault();
         axios.get(process.env.SERVER_URI + `patient/checkBenhNhan/` + this.cmnd)
@@ -165,6 +176,7 @@
             } else {
               this.message = res.message;
               this.isFound = false;
+              this.clearTex();
             }
           })
           .catch(e => {
@@ -200,12 +212,11 @@
             this.message = "Tạo thông tin thành công " + response.data.ID;
             this.handleBtn = "Tạo phiếu khám";
             localStorage.idBenhNhan = response.data.ID;
-            console.log(localStorage.idBenhNhan);
             this.idBenhNhan = response.data.ID
             $('#findCmndModal').modal('show');
           })
           .catch(e => {
-            this.message = "Đã tạo thông tin cho bệnh nhân " + this.cmnd;
+            this.message = e;
             $('#findCmndModal').modal('show');
           })
 
