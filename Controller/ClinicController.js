@@ -25,8 +25,26 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tenLau = rows.recordsets[0][i].TenLau;
                         stt = rows.recordsets[0][i].STTPhongKham;
                         timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
-                        thoiGianDuKien = (timeTemp.getHours() - 7).toString() + ":" + timeTemp.getMinutes();
-                        tinhTrang = rows.recordsets[0][i].TinhTrang;
+                        thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+                        switch (rows.recordsets[0][i].TinhTrang) {
+                            case "Đang khám":
+                                if (rows.recordsets[0][i].TinhTrangBenhNhan == "Chưa có") {
+                                    tinhTrang = "Đã tới lượt khám";
+                                } else {
+                                    tinhTrang = "Đang khám";
+                                }
+                                break;
+                            case "Đã qua":
+                                if (rows.recordsets[0][i].TinhTrangBenhNhan == "Chưa có") {
+                                    tinhTrang = "Qua số nhưng chưa khám";
+                                } else {
+                                    tinhTrang = "Đã khám";
+                                }
+                                break;
+                            default:
+                                tinhTrang = "Chưa khám";
+                                break;
+                        }
                         sttHienTai = rows.recordsets[0][i].SoHienTaiCuaPhong;
                         lamSang.push({
                             maPhieuKham,
@@ -49,8 +67,26 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tenPhong = rows.recordsets[1][k].TenCanLamSang;
                         stt = rows.recordsets[1][k].STTPhongCLS;
                         timeTemp = new Date(rows.recordsets[1][k].ThoiGianDuKien);
-                        thoiGianDuKien = (timeTemp.getHours() - 7).toString() + ":" + timeTemp.getMinutes();
-                        tinhTrang = rows.recordsets[1][k].TinhTrang;
+                        thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+                        switch (rows.recordsets[1][k].TinhTrang) {
+                            case "Đang khám":
+                                if (rows.recordsets[1][k].TinhTrangBenhNhan == "Chưa có") {
+                                    tinhTrang = "Đã tới lượt khám";
+                                } else {
+                                    tinhTrang = "Đang khám";
+                                }
+                                break;
+                            case "Đã qua":
+                                if (rows.recordsets[1][k].TinhTrangBenhNhan == "Chưa có") {
+                                    tinhTrang = "Qua số nhưng chưa khám";
+                                } else {
+                                    tinhTrang = "Đã khám";
+                                }
+                                break;
+                            default:
+                                tinhTrang = "Chưa tới lượt khám";
+                                break;
+                        };
                         sttHienTai = rows.recordsets[1][k].SoHienTaiCuaPhong + '';
                         canLamSang.push({
                             maPhongCls,
@@ -73,7 +109,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tenLau = rows.recordsets[2][0].TenLau;
                         stt = rows.recordsets[2][0].STTXetNghiem;
                         timeTemp = new Date(rows.recordsets[2][0].Gio);
-                        thoiGianDuKien = (timeTemp.getHours() - 7).toString() + ":" + timeTemp.getMinutes();
+                        thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
                         tinhTrang = rows.recordsets[2][0].TinhTrang;
                         sttXetNghiem = (xnRange - xnRange % 10 + 1) + " -> " + (xnRange - xnRange % 10 + 10);
                         canLamSang.push({
@@ -130,9 +166,7 @@ router.get('/dsBacSi/:idCK', (req, res) => {
 
 //Tạo phiếu khám
 router.post('/taoPhieuKham', (req, res) => {
-    console.log(req.body);
     db.taoPhieuKham(req.body).then(rows => {
-        console.log(rows.recordset);
         res.status(200).json(rows.recordset[0]);
     })
 
@@ -180,7 +214,6 @@ async function phanLoaiCls(data, dsCLS) {
 router.post('/phatSinhCLS', async (req, res) => {
     let data = req.body;
     var dsCLS = [...data.idDichVuCls];
-    console.log(dsCLS);
     let msg = {
         CLS: [],
         XetNghiem: []
@@ -269,7 +302,7 @@ router.get('/thongTinLsTheoPhong/:idPhong', (req, res) => {
 router.post('/soKeTiepLamSang', (req, res) => {
     let data = req.body;
     db.soKeTiepLS(data).then((rows) => {
-        global.io.sockets.emit('next-number', rows.recordset[0]);
+        //global.io.sockets.emit('next-number', rows.recordset[0]);
         res.status(200).json(rows.recordset[0]).end();
     })
 })
@@ -462,6 +495,7 @@ function handlingPhongDashboard(data) {
         ketQua.push({
             phongKham: soPhong,
             lau: data[0].Lau,
+            chuyenKhoa: data[0].TenChuyenKhoa,
             thongTin: data
         });
     });
@@ -493,39 +527,75 @@ router.get('/dashBoardXn', (req, res) => {
 
 //Đăng nhập bằng thư kí y khoa
 router.get('/thuKi/:idThuKy', (req, res) => {
-    let data = req.params.idThuKy;
+    let dataReq = req.params.idThuKy;
     let dataRes = {};
-    db.loadThongTinThuKy(data).then(rows => {
+    db.loadThongTinThuKy(dataReq).then(rows => {
         if (rows.recordsets.length != 2) {
             res.status(404).end();
         }
-        let data = rows.recordsets;
-        dataRes.tenChuyenKhoa = data[0][0].TenChuyenKhoa;
-        dataRes.tenKhuVuc = data[0][0].TenKhuVuc;
-        dataRes.Lau = data[0][0].Lau.toString();
-        dataRes.IDPhong = data[0][0].IDPhong.toString();
-        dataRes.soPhong = data[0][0].SoPhong;
-        dataRes.caKham = data[0][0].CaKham.toString();
-        dataRes.STTCuoi = data[0][0].STTCuoi.toString();
-        dataRes.STTHienTai = data[0][0].STTHienTai.toString();
-        dataRes.tenThuKi = data[1][0].TenNhanVien;
-        dataRes.danhSachBan = [];
-        if (data[1][0].Loai == 'LS') {
-            dataRes.isCLS = false;
-            for (const value of data[0]) {
+        try {
+            let data = rows.recordsets;
+            dataRes.tenChuyenKhoa = data[0][0].TenChuyenKhoa == undefined ? 'Xét nghiệm' : data[0][0].TenChuyenKhoa;
+            dataRes.tenKhuVuc = data[0][0].TenKhuVuc;
+            dataRes.Lau = data[0][0].Lau.toString();
+            dataRes.IDPhong = data[0][0].IDPhong.toString();
+            dataRes.soPhong = data[0][0].SoPhong;
+            dataRes.caKham = data[0][0].CaKham.toString();
+            dataRes.tenThuKi = data[1][0].TenNhanVien;
+            dataRes.danhSachBan = [];
+            if (data[1][0].Loai == 'LS') {
+                dataRes.isCLS = false;
+                for (const value of data[0]) {
+                    dataRes.danhSachBan.push({
+                        IDBan: value.IDBan,
+                        soBan: value.SoBan.toString(),
+                        bacSi: value.BacSi,
+                        BenhNhan: value.BenhNhan,
+                        STTHienTai: value.hasOwnProperty('STTHientai') ? ((value.STTHientai - value.STTHientai % value.SoNhay + 1) + " -> " + (value.STTHientai - value.STTHientai % value.SoNhay + value.SoNhay)) : value.STTHienTai.toString(),
+                        STTCuoi: value.STTCuoi.toString()
+                    })
+                }
+            } else {
+                dataRes.isCLS = true;
                 dataRes.danhSachBan.push({
-                    IDBan: value.IDBan,
-                    soBan: value.SoBan.toString(),
-                    bacSi: value.BacSi,
-                    BenhNhan: value.BenhNhan
+                    IDBan: "null",
+                    soBan: "null",
+                    bacSi: "null",
+                    BenhNhan: data[0][0].hasOwnProperty('STTHientai') ? ("Bệnh nhân có STT " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + 1) + " -> " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + data[0][0].SoNhay)) : data[0][0].BenhNhan,
+                    STTHienTai: data[0][0].hasOwnProperty('STTHientai') ? ((data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + 1) + " -> " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + data[0][0].SoNhay)) : data[0][0].STTHienTai.toString(),
+                    STTCuoi: data[0][0].STTCuoi.toString()
                 })
             }
-        } else {
-            dataRes.isCLS = true;
-            dataRes.danhSachBan.push({
-                vinhLz: ""
-            })
+            res.status(200).json(dataRes).end();
+        } catch (error) {
+            throw error;
         }
-        res.status(200).json(dataRes).end();
+    })
+
+})
+
+//Check bệnh nhân theo phiếu khám
+router.post('/checkBenhNhanPhieuKham?',(req,res)=>{
+    let data = req.body;
+    db.checkBenhNhanTheoPhieuKham(data).then(rows=>{
+        try {
+            if(rows.recordset[0].hasOwnProperty('KetQua')){
+                res.status(204).end();
+            }
+            dataRes={};
+            dataRes.idPhongKham = rows.recordset[0].IDPhong;
+            dataRes.idBanKham = rows.recordset[0].hasOwnProperty('IDBan')?rows.recordset[0].IDBan:null;
+            dataRes.CaKham = rows.recordset[0].CaKham;
+            dataRes.stt = rows.recordset[0].STTPhongKham;
+            if(data.isCls == 'false'){
+                db.checkBenhNhanKhamBenhLS(dataRes);
+            }
+            else{
+                db.checkBenhNhanKhamBenhCLS(dataRes);
+            }
+            res.status(200).json(rows.recordset[0]).end();
+        } catch (error) {
+            res.json(error);
+        }
     })
 })

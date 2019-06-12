@@ -9,6 +9,7 @@ import ChiTietCanLamSang from '@/components/ChiTietCanLamSang'
 import QuanLyPhongCanLamSang from '@/components/QuanLyPhongCanLamSang'
 import QuanLyBacSi from '@/components/QuanLyBacSi'
 import Dashboard from '@/components/Dashboard'
+import DashboardLs from '@/components/DashboardPhongLs'
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -61,6 +62,11 @@ export default new Router({
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard
+    },
+    {
+      path: '/dashboard/:idPhong',
+      name: 'DashboardLs',
+      component: DashboardLs
     }
   ]
 })

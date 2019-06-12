@@ -43,11 +43,17 @@
                         <h3 style="display:inline-block; color:rgb(9, 173, 214)">{{thongTin.phongKham}}</h3>
                       </div>
                       <div>
-                        <h3 style="display:inline-block; color:#ffffff">-</h3>
+                        <h3 style="display:inline-block; color:#67cf9c">---</h3>
                       </div>
                       <div>
                         <h3 style="display:inline-block; color:#67cf9c">Lầu {{thongTin.lau}}
                         </h3>
+                      </div>
+                      <div>
+                        <h3 style="display:inline-block; color:#67cf9c">---</h3>
+                      </div>
+                      <div>
+                        <h3 style="display:inline-block; color:rgb(9, 173, 214)">{{thongTin.chuyenKhoa}}</h3>
                       </div>
                     </div>
                     <div style="display:flex;justify-content:space-between">
@@ -100,6 +106,10 @@
                       <table class="table table-bordered">
                         <thead>
                           <tr>
+                            <th>Dịch vụ </th>
+                            <th>{{thongTin.chuyenKhoa}}</th>
+                          </tr>
+                          <tr>
                             <th>Số hiện tại </th>
                             <th>Số mới nhất</th>
                           </tr>
@@ -140,7 +150,7 @@
                     </div>
                     <div style="display:flex;justify-content:space-between">
                       <table class="table table-bordered">
-                        <thead>
+                        <thead>                        
                           <tr>
                             <th>Số hiện tại </th>
                             <th>Số mới nhất</th>
@@ -169,9 +179,6 @@
 
 <script>
   import axios from 'axios'
-  import {
-    setInterval
-  } from 'timers';
   export default {
     name: 'Dashboard',
     data() {
@@ -189,11 +196,7 @@
         default: false
       }
     },
-    created() {
-      axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoa`).then(response => {
-        this.danhSachPhongKham = response.data;
-      })
-    },
+    
     methods: {
       handleChangeDashboard() {
         setInterval(() => {
@@ -220,9 +223,12 @@
               break;
           }
           console.log(i++);
-        }, 500);
+        }, 1000);
         this.$mount('#roomType');
       }
+    },
+    beforeMount(){
+       this.$destroy('#roomType');
     },
     mounted() {
       this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
