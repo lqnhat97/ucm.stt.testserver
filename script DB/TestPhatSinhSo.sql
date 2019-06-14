@@ -134,7 +134,7 @@ exec PhatSinhSTTXetNghiemCa2'PKPH10024';
 ------------
 exec CapNhatSTTPhongXetNghiem 'XN1',2;
 exec CapNhatSTTPhongXetNghiem 'XN3',1;
-exec CapNhatSTTPhongXetNghiem 'XN2',1;
+exec CapNhatSTTPhongXetNghiem 'XN2',2;
 
 
 
