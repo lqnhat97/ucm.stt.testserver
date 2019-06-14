@@ -436,20 +436,30 @@ router.get('/dvClsDaThucHien/:idPhong', (req, res) => {
 router.post('/chiDinhDvClsChoPhong', (req, res) => {
     let data = req.body;
     console.log(data);
-    for (const value of data) {
-        db.themLichCls1(value).then(rows => {
-            console.log(rows);
-        });
-        db.themLichCls2(value).then(rows => {
-            console.log(rows);
-        });
-        let dv = value.dsDvCls;
-        dv.forEach(dv => {
-            db.chiDinhDvClsChoPhong(value.idPhong, dv).then(rows => {
-                console.log(rows);
-            })
+    for (const value of data) {     
+        let lichClsCa1 = db.themLichCls1(value);
+        let lichClsCa2 = db.themLichCls2(value);
+        Promise.all([lichClsCa1,lichClsCa2]).then(()=>{
+            let dv = value.dsDvCls;
+            dv.forEach(dv => {
+                db.chiDinhDvClsChoPhong(value.idPhong, dv).then(rows => {
+                })
+            })   
+            res.status(200).end();
         })
     }
+})
+
+//Chỉ định giờ cận lâm sàng
+router.post('/chiDinhThoiGianChoDv',(req,res)=>{
+    let data = req.body;
+    console.log(data);
+    db.chiDinhThoiGianDvCls(data).then(rows=>{
+        res.status(200).end();
+    }).catch(err=>{
+        throw err;
+        res.status(500).end();
+    })
 })
 
 //----------------Dashboardddddddddd----------------------

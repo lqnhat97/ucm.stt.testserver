@@ -237,6 +237,11 @@ exports.chiDinhDvClsChoPhong = (idPhong, idDvCls) => {
     return db.executeProcedure2input('IDPhong', 'IDDichVuCLS', idPhong, idDvCls, 'ThemDichVuPhongCanLamSang');
 }
 
+//chỉ định thời gian thực hiện 1 dịch vụ cho một phòng cận lâm sàng
+exports.chiDinhThoiGianDvCls = (data) => {
+    return db.executeProcedure2input('IDDichVuCLS', 'ThoiGianThucHien', data.idDichVu, data.thoiGian, 'UpdateThoiGianThucHienDichVu');
+}
+
 //hiển thi dashboard lâm sàng
 exports.dashBoardLs = () => {
     let d = new Date();

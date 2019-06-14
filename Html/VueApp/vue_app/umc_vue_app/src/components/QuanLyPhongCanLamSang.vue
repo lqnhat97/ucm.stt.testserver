@@ -15,8 +15,6 @@
                   {{option.TenChuyenKhoa}}</option>
               </select>
             </div>
-
-
           </div>
         </form>
         <form style="padding-bottom:8pt;padding-left:5pt">
@@ -26,11 +24,27 @@
             </div>
           </div>
         </form>
+        <div class="row" style="display:flex; align-items: baseline;">
+          <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="chuyenkhoa"
+              id="search-name">Quy định giờ</label>
+          </div>
+
+          <div class="col-sm-4">
+            <select class="form-control" v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" v-model="selecteDvQuiDinh">
+              <option :selected="true" value="" disabled>Chọn dịch vụ</option>
+              <option v-for="option in fetchedDsDichVu" :value="option.IDDichVu" :key="option.IDDichVu">
+                {{option.TenDichVu}}</option>
+            </select>
+          </div>
+          <div><input class="form-control" type="time" v-model="thoiGianDichVu"></div>
+          <div class="col-sm-4">
+            <input class="form-control btn btn-success" @click="quyDinhThoiGianDichVu" type="submit" value="Quy định">
+          </div>
+        </div>
         <div class="row" style="padding-left:5pt;display:flex;justify-content:space-between">
           <table class="table table-bordered">
             <thead>
               <tr>
-
                 <th>Phòng</th>
                 <th>Ca</th>
                 <th>Thời gian khám</th>
@@ -42,14 +56,14 @@
                   <td class="number" :rowspan="3">
                     {{option.idPhong}}</td>
                   <td class="text">Ca 1</td>
-                  <td class="number"><input v-model="option.gioBdCa1"> - <input
-                      v-model="option.gioKtCa1">
+                  <td class="number"><input v-model="option.gioBdCa1" class="form-control" type="time"> - <input
+                      v-model="option.gioKtCa1" type="time" class="form-control">
                   </td>
                 </tr>
                 <tr>
                   <td class="text">Ca 2</td>
-                  <td class="number"><input v-model="option.gioBdCa2"> - <input
-                      v-model="option.gioKtCa2">
+                  <td class="number"><input v-model="option.gioBdCa2" type="time" class="form-control"> - <input
+                      v-model="option.gioKtCa2" type="time" class="form-control">
                   </td>
                 </tr>
 
@@ -89,6 +103,7 @@
               <input class="form-group" id="buttom" @click="quyDinhCls" type="submit" value="Quy định">
             </div>
           </div>
+          <modal :message="this.message" />
         </form>
       </div>
     </div>
@@ -102,12 +117,16 @@
   export default {
     name: 'QuanLyCanLamSang',
     components: {
-      DatePicker
+      DatePicker,
+      modal
     },
     data() {
       return {
+        message: "",
+        thoiGianDichVu: "00:02",
         datetimepicker1: "",
         chuyenKhoa: "",
+        selecteDvQuiDinh: '',
         selectedChuyenKhoa: "",
         dichVu: [],
         fetchedDsDichVu: "",
@@ -161,7 +180,7 @@
             response.data.forEach((element, index) => {
               this.dichVu.push({
                 idPhong: element.IDPhong,
-                gioBdCa1: "7:30",
+                gioBdCa1: "07:30",
                 gioKtCa1: "11:30",
                 gioBdCa2: "13:30",
                 gioKtCa2: "17:30",
@@ -237,9 +256,24 @@
             return value.IDDichVu
           });
         }
-        console.log(this.dichVu);
-        axios.post(process.env.SERVER_URI+'clinic/chiDinhDvClsChoPhong',this.dichVu).then(response=>{
-          console.log(response);
+        axios.post(process.env.SERVER_URI + 'clinic/chiDinhDvClsChoPhong', this.dichVu).then(response => {
+          this.message = "Chỉ định thành công";
+          $('#findCmndModal').modal('show');
+        }).catch(e => {
+          this.message = "Chỉ định không thành công";
+          $('#findCmndModal').modal('show');
+        })
+      },
+      quyDinhThoiGianDichVu() {
+        axios.post(process.env.SERVER_URI + 'clinic/chiDinhThoiGianChoDv',{
+          idDichVu:this.selecteDvQuiDinh,
+          thoiGian:this.thoiGianDichVu
+        }).then(response => {
+          this.message = "Chỉ định thành công";
+          $('#findCmndModal').modal('show');
+        }).catch(e => {
+          this.message = "Chỉ định không thành công";
+          $('#findCmndModal').modal('show');
         })
       }
     },
