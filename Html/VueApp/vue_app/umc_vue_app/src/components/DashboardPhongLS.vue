@@ -27,7 +27,7 @@
         <form style="padding-bottom:8pt;padding-left:5pt">
           <div class="row">
             <div class="col-sm-4">
-              <h3>Danh sách phòng khám</h3>
+              <h3>Màn hình hiển thị trước phòng khám lâm sàng</h3>
             </div>
           </div>
         </form>
