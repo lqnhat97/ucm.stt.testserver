@@ -58,7 +58,7 @@
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">Số điện
                 thoại</label>
               <div class="col-sm-4">
-                <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="SoDienThoai"
+                <input type="number" value="" :disabled="isFound?true:false" class="form-control" v-model="SoDienThoai"
                   v-text="SoDienThoai">
               </div>
             </div>
@@ -80,7 +80,7 @@
           </form>
           <div>
             <div style="text-align:center; width:30%; margin:0 auto">
-              <router-link to="#" v-if="idBenhNhan == ''"><input class="form-group" id="buttom" type="submit"
+              <router-link to="#" v-if="isFound == false"><input class="form-group" id="buttom" type="submit"
                   value="Tạo hồ sơ" @click="taoHoSo"></router-link>
               <router-link to="/taoPhieuKham" v-else><input class="form-group" id="buttom" type="submit"
                   value="Tạo phiếu khám" v-text="handleBtn"></router-link>
@@ -209,7 +209,7 @@
             body: posbody
           }).then(async response => {
             console.log(response);
-            this.message = "Tạo thông tin thành công " + response.data.ID;
+            this.message = 'Tạo thông tin thành công, mã bệnh nhân: <strong>' + response.data.ID + '</strong>. Xem barcode <a  href="localhost:8088/home?idBenhNhan='+this.idBenhNhan+'">Tại đây</a>';
             this.handleBtn = "Tạo phiếu khám";
             localStorage.idBenhNhan = response.data.ID;
             this.idBenhNhan = response.data.ID

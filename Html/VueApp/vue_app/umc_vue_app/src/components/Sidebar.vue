@@ -41,9 +41,12 @@
                   <router-link id="changepanel" to="/quanLyBacSi">Phân công lịch khám</router-link>
                 </li>
                 <li class="list-group-item" id="changecolortext" @click="handleClicked">
-                  <router-link id="changepanel" to="/danhSachPhongKham">Danh sách phòng khám
+                  <router-link id="changepanel" to="/danhSachPhongKham">Chi tiết phòng khám
                   </router-link>
                 </li>
+                <li class="list-group-item" id="changecolortext" @click="handleClicked">
+                <router-link id="changepanel" to="/dashboardCls" >Dashboard theo phòng lâm sàng</router-link>
+              </li>
                 <!-- <li class="list-group-item" id="changecolortext">
                   <router-link  id="changepanel" to="/quanLySoPhongKham">Quản
                     lý số</router-link>
@@ -69,6 +72,9 @@
               <li class="list-group-item" id="changecolortext" @click="handleClicked">
                 <router-link id="changepanel" to="/chiTietCanLamSang" >Chi tiếp
                   phòng cận lâm sàng</router-link>
+              </li>
+              <li class="list-group-item" id="changecolortext" @click="handleClicked">
+                <router-link id="changepanel" to="/dashboardCls" >Dashboard theo phòng cận lâm sàng</router-link>
               </li>
               <!-- <li class="list-group-item" id="changecolortext">
                 <router-link id="changepanel" to="/quanLySoCanLamSang">Quản lý
