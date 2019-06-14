@@ -45,7 +45,7 @@
                   </router-link>
                 </li>
                 <li class="list-group-item" id="changecolortext" @click="handleClicked">
-                <router-link id="changepanel" to="/dashboardCls" >Dashboard theo phòng lâm sàng</router-link>
+                <router-link id="changepanel" to="/dashboardLs" >Dashboard theo phòng lâm sàng</router-link>
               </li>
                 <!-- <li class="list-group-item" id="changecolortext">
                   <router-link  id="changepanel" to="/quanLySoPhongKham">Quản

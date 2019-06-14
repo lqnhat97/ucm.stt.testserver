@@ -212,7 +212,8 @@
             this.message = 'Tạo thông tin thành công, mã bệnh nhân: <strong>' + response.data.ID + '</strong>. Xem barcode <a  href="localhost:8088/home?idBenhNhan='+this.idBenhNhan+'">Tại đây</a>';
             this.handleBtn = "Tạo phiếu khám";
             localStorage.idBenhNhan = response.data.ID;
-            this.idBenhNhan = response.data.ID
+            this.idBenhNhan = response.data.ID;
+            this.isFound = true;
             $('#findCmndModal').modal('show');
           })
           .catch(e => {

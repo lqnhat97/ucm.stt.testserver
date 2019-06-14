@@ -116,7 +116,7 @@
           loadedDoctor: "",
           fetchedDoctor: "",
           idBacSi: "",
-          caKham: new Date().getHours() > 12 ? "2" : "1"
+          caKham: new Date().getHours() > 11 ? "2" : "1"
         }],
       }
     },

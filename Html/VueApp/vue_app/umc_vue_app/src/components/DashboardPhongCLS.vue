@@ -30,7 +30,7 @@
 
         <div class="row" id="dashBoardCls">
           <div class="col-sm-5">
-            <h3>Chi tiết dịch vụ cận lâm sàng</h3>
+            <h3>Màn hình hiển thị phòng cận lâm sàng</h3>
           </div>
         </div>
         <div class="row " style="padding-left:5pt;display:flex;justify-content:space-between">
