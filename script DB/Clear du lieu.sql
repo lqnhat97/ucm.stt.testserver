@@ -38,10 +38,11 @@ delete SoHienThiPhongXetNghiem where STT !=0;
 delete SoThuTuPhongKham where STT !=0;
 delete SoThuTuPhongCLS where STT !=0;
 delete SoThuTuPhongXetNghiem where STT !=0;
+truncate table BenhNhanXetNghiem;
 
 delete PhieuKham where IDPhieuKham !='TEMP1' and IDPhieuKham!='TEMP2';
 
-truncate table BenhNhanXetNghiem;
+
 
 
 

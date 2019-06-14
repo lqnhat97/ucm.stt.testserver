@@ -39,29 +39,29 @@ exec PhatSinhSTTPhongKhamCa2 'PKPH10008','PH';
 exec PhatSinhSTTPhongKhamCa2 'PKPH10009','PH';
 exec PhatSinhSTTPhongKhamCa2 'PKPH10010','PH';
 exec PhatSinhSTTPhongKhamCa2 'PKPH10011','PH';
-exec PhatSinhSTTPhongKham_BacSiCa2 'PKPH10012','PH','BS819';
-exec PhatSinhSTTPhongKham_BacSiCa2 'PKPH10013','PH','BS819'; -- ban1 phong 1;
-exec PhatSinhSTTPhongKham_BacSiCa2 'PKPH10014','PH','BS298'; 
-exec PhatSinhSTTPhongKhamCa2 'PKPH10015','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10016','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10017','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10018','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10019','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10020','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10021','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10022','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10023','PH';
-exec PhatSinhSTTPhongKhamCa2 'PKPH10024','PH';
+exec PhatSinhSTTPhongKham_BacSiCa1 'PKPH10012','PH','BS819';
+exec PhatSinhSTTPhongKham_BacSiCa1 'PKPH10013','PH','BS819'; -- ban1 phong 1;
+exec PhatSinhSTTPhongKham_BacSiCa1 'PKPH10014','PH','BS298'; 
+exec PhatSinhSTTPhongKhamCa1 'PKPH10015','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10016','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10017','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10018','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10019','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10020','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10021','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10022','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10023','PH';
+exec PhatSinhSTTPhongKhamCa1 'PKPH10024','PH';
 ---------QUA SO
 exec BamSoHienThiPhongKham 'Bk1','1',1;
 exec BamSoHienThiPhongKham 'Bk2','1',1;
 
 -------------------------- STT CAN LAM SANG
 
-exec PhatSinhSTTCLSCa1 'PKPH10001','TZ02';
-exec PhatSinhSTTCLSCa1 'PKPH10002','TZ02';
-exec PhatSinhSTTCLSCa1 'PKPH10003','TZ02';
-exec PhatSinhSTTCLSCa1 'PKPH10004','TZ02';
+exec PhatSinhSTTCLSCa2 'PKPH10001','TZ02';
+exec PhatSinhSTTCLSCa2 'PKPH10002','TZ02';
+exec PhatSinhSTTCLSCa2 'PKPH10003','TZ02';
+exec PhatSinhSTTCLSCa2 'PKPH10004','TZ02';
 exec PhatSinhSTTCLSCa1 'PKPH10005','TZ01';
 exec PhatSinhSTTCLSCa1 'PKPH10006','TZ02';
 exec PhatSinhSTTCLSCa1 'PKPH10007','TZ01';
@@ -69,8 +69,8 @@ exec PhatSinhSTTCLSCa1 'PKPH10008','TZ02';
 exec PhatSinhSTTCLSCa1 'PKPH10009','TZ01';
 exec PhatSinhSTTCLSCa1 'PKPH10024','TZ01';
 ------QUA SO
-exec BamSoHienThiPhongCLS 'TMH2',1;
-exec BamSoHienThiPhongCLS 'TMH1',1;
+exec BamSoHienThiPhongCLS 'TMH2',2;
+exec BamSoHienThiPhongCLS 'TMH1',2;
 
 -----------STT XET NGHIEM
 exec CheckCanLamSang 'GGJ5','PKPH10001';
@@ -107,32 +107,32 @@ exec CheckCanLamSang 'TN05','PKPH10001';
 exec CheckCanLamSang 'MF58','PKPH10001';
 
 ---------------
-exec PhatSinhSTTXetNghiemCa1'PKPH10001';
-exec PhatSinhSTTXetNghiemCa1'PKPH10002';
-exec PhatSinhSTTXetNghiemCa1'PKPH10003';
-exec PhatSinhSTTXetNghiemCa1'PKPH10004';
-exec PhatSinhSTTXetNghiemCa1'PKPH10005';
-exec PhatSinhSTTXetNghiemCa1'PKPH10006';
-exec PhatSinhSTTXetNghiemCa1'PKPH10007';
-exec PhatSinhSTTXetNghiemCa1'PKPH10008';
-exec PhatSinhSTTXetNghiemCa1'PKPH10009';
-exec PhatSinhSTTXetNghiemCa1'PKPH10010';
-exec PhatSinhSTTXetNghiemCa1'PKPH10011';
-exec PhatSinhSTTXetNghiemCa1'PKPH10012';
-exec PhatSinhSTTXetNghiemCa1'PKPH10013';
-exec PhatSinhSTTXetNghiemCa1'PKPH10014';
-exec PhatSinhSTTXetNghiemCa1'PKPH10015';
-exec PhatSinhSTTXetNghiemCa1'PKPH10016';
-exec PhatSinhSTTXetNghiemCa1'PKPH10017';
-exec PhatSinhSTTXetNghiemCa1'PKPH10018';
-exec PhatSinhSTTXetNghiemCa1'PKPH10019';
-exec PhatSinhSTTXetNghiemCa1'PKPH10020';
-exec PhatSinhSTTXetNghiemCa1'PKPH10021';
-exec PhatSinhSTTXetNghiemCa1'PKPH10022';
-exec PhatSinhSTTXetNghiemCa1'PKPH10023';
-exec PhatSinhSTTXetNghiemCa1'PKPH10024';
+exec PhatSinhSTTXetNghiemCa2'PKPH10001';
+exec PhatSinhSTTXetNghiemCa2'PKPH10002';
+exec PhatSinhSTTXetNghiemCa2'PKPH10003';
+exec PhatSinhSTTXetNghiemCa2'PKPH10004';
+exec PhatSinhSTTXetNghiemCa2'PKPH10005';
+exec PhatSinhSTTXetNghiemCa2'PKPH10006';
+exec PhatSinhSTTXetNghiemCa2'PKPH10007';
+exec PhatSinhSTTXetNghiemCa2'PKPH10008';
+exec PhatSinhSTTXetNghiemCa2'PKPH10009';
+exec PhatSinhSTTXetNghiemCa2'PKPH10010';
+exec PhatSinhSTTXetNghiemCa2'PKPH10011';
+exec PhatSinhSTTXetNghiemCa2'PKPH10012';
+exec PhatSinhSTTXetNghiemCa2'PKPH10013';
+exec PhatSinhSTTXetNghiemCa2'PKPH10014';
+exec PhatSinhSTTXetNghiemCa2'PKPH10015';
+exec PhatSinhSTTXetNghiemCa2'PKPH10016';
+exec PhatSinhSTTXetNghiemCa2'PKPH10017';
+exec PhatSinhSTTXetNghiemCa2'PKPH10018';
+exec PhatSinhSTTXetNghiemCa2'PKPH10019';
+exec PhatSinhSTTXetNghiemCa2'PKPH10020';
+exec PhatSinhSTTXetNghiemCa2'PKPH10021';
+exec PhatSinhSTTXetNghiemCa2'PKPH10022';
+exec PhatSinhSTTXetNghiemCa2'PKPH10023';
+exec PhatSinhSTTXetNghiemCa2'PKPH10024';
 ------------
-exec CapNhatSTTPhongXetNghiem 'XN1',1;
+exec CapNhatSTTPhongXetNghiem 'XN1',2;
 exec CapNhatSTTPhongXetNghiem 'XN3',1;
 exec CapNhatSTTPhongXetNghiem 'XN2',1;
 
