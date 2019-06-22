@@ -17,9 +17,10 @@
     "axios": "^0.18.0",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
+    "moment": "^2.24.0",
+    "socket.io": "^2.2.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
-    "socket.io": "^2.2.0",
     "vue2-datepicker": "^2.11.2"
   },
   "devDependencies": {

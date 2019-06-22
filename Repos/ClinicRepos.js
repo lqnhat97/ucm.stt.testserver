@@ -150,6 +150,7 @@ exports.checkBenhNhanKhamBenhCLS = (data) => {
 exports.soKeTiepCLS = (data) => {
     let d = new Date();
     let n = d.getHours();
+    console.log(data);
     if (!data.isXetNghiem)
         return db.executeProcedure2input('IDPhong', 'Cakham', data.idPhong, n > 11 ? 2 : 1, "BamSoHienThiPhongCLS");
     else
@@ -233,13 +234,18 @@ exports.themLichCls2 = (data) => {
 }
 
 //chỉ định dịch vụ cho một phòng cận lâm sàng
+exports.xoaDvPhongCls = (idPhong) => {
+    return db.executeProcedure('IDPhong', idPhong, 'XoaDichVuPhongCanLamSang');
+}
+
+//chỉ định dịch vụ cho một phòng cận lâm sàng
 exports.chiDinhDvClsChoPhong = (idPhong, idDvCls) => {
     return db.executeProcedure2input('IDPhong', 'IDDichVuCLS', idPhong, idDvCls, 'ThemDichVuPhongCanLamSang');
 }
 
 //chỉ định thời gian thực hiện 1 dịch vụ cho một phòng cận lâm sàng
-exports.chiDinhThoiGianDvCls = (data) => {
-    return db.executeProcedure2input('IDDichVuCLS', 'ThoiGianThucHien', data.idDichVu, data.thoiGian, 'UpdateThoiGianThucHienDichVu');
+exports.chiDinhThoiGianDvCls = (idDichVu,thoiGian) => {
+    return db.executeProcedure2input('IDDichVuCLS', 'ThoiGianThucHien', idDichVu, thoiGian, 'UpdateThoiGianThucHienDichVu');
 }
 
 //hiển thi dashboard lâm sàng

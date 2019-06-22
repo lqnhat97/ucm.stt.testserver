@@ -4,9 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import cors from 'cors'
-import dotenv from 'dotenv'
+import moment from 'moment'
 Vue.config.productionTip = false
-dotenv.config()
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('hh:mm')
+  }
+});
 
 Vue.use(cors)
 var socket = null;

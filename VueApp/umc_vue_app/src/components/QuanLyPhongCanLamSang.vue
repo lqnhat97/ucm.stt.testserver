@@ -24,23 +24,6 @@
             </div>
           </div>
         </form>
-        <div class="row" style="display:flex; align-items: baseline;">
-          <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="chuyenkhoa"
-              id="search-name">Quy định giờ</label>
-          </div>
-
-          <div class="col-sm-4">
-            <select class="form-control" v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" v-model="selecteDvQuiDinh">
-              <option :selected="true" value="" disabled>Chọn dịch vụ</option>
-              <option v-for="option in fetchedDsDichVu" :value="option.IDDichVu" :key="option.IDDichVu">
-                {{option.TenDichVu}}</option>
-            </select>
-          </div>
-          <div><input class="form-control" type="time" v-model="thoiGianDichVu"></div>
-          <div class="col-sm-4">
-            <input class="form-control btn btn-success" @click="quyDinhThoiGianDichVu" type="submit" value="Quy định">
-          </div>
-        </div>
         <div class="row" style="padding-left:5pt;display:flex;justify-content:space-between">
           <table class="table table-bordered">
             <thead>
@@ -54,16 +37,42 @@
               <template v-for="(option,index) in dichVu">
                 <tr>
                   <td class="number" :rowspan="3">
-                    {{option.idPhong}}</td>
+                    {{option.soPhong}}</td>
                   <td class="text">Ca 1</td>
-                  <td class="number"><input v-model="option.gioBdCa1" class="form-control" type="time"> - <input
-                      v-model="option.gioKtCa1" type="time" class="form-control">
+                  <td class="number">
+                    <div class="form-group">
+                      <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Thời gian bắt đầu</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" v-model="option.gioBdCa1">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Thời gian kết thúc</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" v-model="option.gioKtCa1">
+                        </div>
+                      </div>
+                    </div>
                   </td>
                 </tr>
                 <tr>
                   <td class="text">Ca 2</td>
-                  <td class="number"><input v-model="option.gioBdCa2" type="time" class="form-control"> - <input
-                      v-model="option.gioKtCa2" type="time" class="form-control">
+                  <td class="number">
+                    <div class="form-group">
+                      <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Thời gian bắt đầu</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-C3]):[0-5][0-9]" v-model="option.gioBdCa2">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Thời gian kết thúc</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-C3]):[0-5][0-9]" v-model="option.gioKtCa2">
+                        </div>
+                      </div>
+                    </div>
                   </td>
                 </tr>
 
@@ -114,6 +123,7 @@
   import DatePicker from 'vue2-datepicker'
   import axios from 'axios'
   import modal from './modal.vue'
+  import moment from 'moment'
   export default {
     name: 'QuanLyCanLamSang',
     components: {
@@ -171,19 +181,38 @@
         this.f_dvClsConLai = [];
         axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
           response => {
+            let ca1 = response.data.filter(value => {
+              return value.CaKham == 1;
+            });
+            console.log(ca1)
+            let ca2 = response.data.filter(value => {
+              return value.CaKham == 2;
+            });
             if (this.fetchedDsDichVu == "") {
               axios.get(process.env.SERVER_URI + `clinic/dsCls/` + this.selectedChuyenKhoa).then(response => {
                 this.fetchedDsDichVu = response.data;
               })
             };
             this.f_dvClsDaLam = new Array(response.data.length);
-            response.data.forEach((element, index) => {
+            for (const [index,element] of ca1.entries()) {
+              element.GioBatDau = new Date(element.GioBatDau);
+              ca2[index].GioBatDau = new Date(ca2[index].GioBatDau);
+              element.GioKetThuc = new Date(element.GioKetThuc);
+              ca2[index].GioKetThuc = new Date(ca2[index].GioKetThuc);
+              element.GioBatDau.setHours(element.GioBatDau.getHours() - 7);
+              element.GioKetThuc.setHours(element.GioKetThuc.getHours() - 7);
+              ca2[index].GioBatDau.setHours(ca2[index].GioBatDau.getHours() - 7);
+              ca2[index].GioKetThuc.setHours(ca2[index].GioKetThuc.getHours() - 7);
+              
+              console.log(moment(ca2[index].GioBatDau).format('hh:mm'))
+
               this.dichVu.push({
+                soPhong: element.SoPhong,
                 idPhong: element.IDPhong,
-                gioBdCa1: "07:30",
-                gioKtCa1: "11:30",
-                gioBdCa2: "13:30",
-                gioKtCa2: "17:30",
+                gioBdCa1: element.GioBatDau != '' ? moment(element.GioBatDau).format('HH:mm') : "07:30",
+                gioKtCa1: element.GioKetThuc != '' ? moment(element.GioKetThuc).format('HH:mm') : "11:30",
+                gioBdCa2: element.GioBatDau != '' ? moment(ca2[index].GioBatDau).format('HH:mm') : "13:30",
+                gioKtCa2: element.GioKetThuc != '' ? moment(ca2[index].GioKetThuc).format('HH:mm') : "17:30",
               });
               axios.get(process.env.SERVER_URI + `clinic/dvClsDaThucHien/` + element.IDPhong).then(
                 response => {
@@ -191,10 +220,8 @@
                   //this.delDuplicateID(this.fetchedDsDichVu, this.f_dvClsDaLam[index]);
                   this.f_dvClsConLai.push(this.delDuplicateID(this.fetchedDsDichVu, this.f_dvClsDaLam[index]));
                   this.$mount('#bodyContent');
-
                 });
-            });
-
+            }
           });
       },
       delDuplicateID(list1, list2) {
@@ -264,18 +291,6 @@
           $('#findCmndModal').modal('show');
         })
       },
-      quyDinhThoiGianDichVu() {
-        axios.post(process.env.SERVER_URI + 'clinic/chiDinhThoiGianChoDv',{
-          idDichVu:this.selecteDvQuiDinh,
-          thoiGian:this.thoiGianDichVu
-        }).then(response => {
-          this.message = "Chỉ định thành công";
-          $('#findCmndModal').modal('show');
-        }).catch(e => {
-          this.message = "Chỉ định không thành công";
-          $('#findCmndModal').modal('show');
-        })
-      }
     },
   }
 

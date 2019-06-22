@@ -114,7 +114,9 @@
     methods: {
       handleChangeChuyenKhoa() {
         axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(res => {
-          this.dsPhong = res.data;
+          this.dsPhong = res.data.filter(value=>{
+            return value.CaKham ===1;
+          });
           this.isXetNghiem = false;
           this.selectedPhong = "";
           this.cls = "";
@@ -160,8 +162,7 @@
         })
       },
       handleChangeCheckbox() {
-        axios.post(process.env.SERVER_URI + `clinic/checkBenhNhanDangKham`, {
-          idBanKham: this.cls.IDBan,
+        axios.post(process.env.SERVER_URI + `clinic/checkBenhNhanDangKhamCls`, {
           idPhongKham: this.cls.IDPhong,
           CaKham: this.cls.CaKham,
           stt: this.cls.STTHienTai

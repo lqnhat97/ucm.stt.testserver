@@ -15,7 +15,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
             if (rows.recordsets.length == 0) {
                 res.status(404).end();
             } else {
-                var maPhong, maPhieuKham, tenKhu, tenLau, tenPhong, tenChuyenKhoa, maPhongCls, stt, sttHienTai, sttXetNghiem, thoiGianDuKien, tinhTrang;
+                var maPhong, maPhieuKham, tenKhu, tenLau, tenPhong, ban, tenChuyenKhoa, maPhongCls, stt, sttHienTai, sttXetNghiem, thoiGianDuKien, tinhTrang;
                 if (Object.keys(rows.recordsets).length > 0) {
                     for (let i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
                         maPhieuKham = rows.recordsets[0][i].IDPhieuKham;
@@ -23,6 +23,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         maPhong = rows.recordsets[0][i].SoPhong;
                         tenKhu = rows.recordsets[0][i].TenKhuVuc;
                         tenLau = rows.recordsets[0][i].TenLau;
+                        ban = rows.recordsets[0][i].SoBan.toString();
                         stt = rows.recordsets[0][i].STTPhongKham;
                         timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
                         thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
@@ -51,6 +52,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                             maPhong,
                             tenKhu,
                             tenLau,
+                            ban,
                             tenChuyenKhoa,
                             stt,
                             sttHienTai,
@@ -319,6 +321,7 @@ router.post('/checkBenhNhanDangKham', (req, res) => {
 //Check bệnh nhân có khám hay ko (P CLS)
 router.post('/checkBenhNhanDangKhamCls', (req, res) => {
     let data = req.body;
+    console.log(data);
     db.checkBenhNhanKhamBenhCLS(data).then((rows) => {
         res.status(200).json(rows.rowsAffected[0]).end();
     })
@@ -435,30 +438,39 @@ router.get('/dvClsDaThucHien/:idPhong', (req, res) => {
 
 router.post('/chiDinhDvClsChoPhong', (req, res) => {
     let data = req.body;
+    let promise = [];
     console.log(data);
-    for (const value of data) {     
-        let lichClsCa1 = db.themLichCls1(value);
-        let lichClsCa2 = db.themLichCls2(value);
-        Promise.all([lichClsCa1,lichClsCa2]).then(()=>{
+    for (const value of data) {
+        promise.push(db.themLichCls1(value));
+        promise.push(db.themLichCls2(value));
+        promise.push(db.xoaDvPhongCls(value.idPhong));
+        Promise.all(promise).then(() => {
             let dv = value.dsDvCls;
-            dv.forEach(dv => {
-                db.chiDinhDvClsChoPhong(value.idPhong, dv).then(rows => {
-                })
-            })   
-            res.status(200).end();
+            promiseChiDinh = [];
+            for (const dv of dv) {
+                promiseChiDinh.push(db.chiDinhDvClsChoPhong(value.idPhong, dv))
+            };
+            Promise.all(promiseChiDinh).then(()=>{
+                res.status(200).end();
+            }).catch(err=>{throw err;})
         })
     }
 })
 
 //Chỉ định giờ cận lâm sàng
-router.post('/chiDinhThoiGianChoDv',(req,res)=>{
+router.post('/chiDinhThoiGianChoDv', async (req, res) => {
     let data = req.body;
     console.log(data);
-    db.chiDinhThoiGianDvCls(data).then(rows=>{
+    let promise = [];
+    for (const [index, value] of data.thoiGian.entries()) {
+        if (data.idDichVu[index] != '')
+            promise.push(db.chiDinhThoiGianDvCls(data.idDichVu[index], value))
+        continue;
+    }
+    Promise.all(promise).then(() => {
         res.status(200).end();
-    }).catch(err=>{
+    }).catch(err => {
         throw err;
-        res.status(500).end();
     })
 })
 
@@ -555,6 +567,7 @@ router.get('/thuKi/:idThuKy', (req, res) => {
             dataRes.danhSachBan = [];
             if (data[1][0].Loai == 'LS') {
                 dataRes.isCLS = false;
+                dataRes.isXetNghiem = false;
                 for (const value of data[0]) {
                     dataRes.danhSachBan.push({
                         IDBan: value.IDBan,
@@ -567,6 +580,7 @@ router.get('/thuKi/:idThuKy', (req, res) => {
                 }
             } else {
                 dataRes.isCLS = true;
+                data[0][0].hasOwnProperty('STTHientai') ? dataRes.isXetNghiem = true : dataRes.isXetNghiem = false;
                 dataRes.danhSachBan.push({
                     IDBan: "null",
                     soBan: "null",
@@ -585,22 +599,21 @@ router.get('/thuKi/:idThuKy', (req, res) => {
 })
 
 //Check bệnh nhân theo phiếu khám
-router.post('/checkBenhNhanPhieuKham?',(req,res)=>{
+router.post('/checkBenhNhanPhieuKham?', (req, res) => {
     let data = req.body;
-    db.checkBenhNhanTheoPhieuKham(data).then(rows=>{
+    db.checkBenhNhanTheoPhieuKham(data).then(rows => {
         try {
-            if(rows.recordset[0].hasOwnProperty('KetQua')){
+            if (rows.recordset[0].hasOwnProperty('KetQua')) {
                 res.status(204).end();
             }
-            dataRes={};
+            dataRes = {};
             dataRes.idPhongKham = rows.recordset[0].IDPhong;
-            dataRes.idBanKham = rows.recordset[0].hasOwnProperty('IDBan')?rows.recordset[0].IDBan:null;
+            dataRes.idBanKham = rows.recordset[0].hasOwnProperty('IDBan') ? rows.recordset[0].IDBan : null;
             dataRes.CaKham = rows.recordset[0].CaKham;
             dataRes.stt = rows.recordset[0].STTPhongKham;
-            if(data.isCls == 'false'){
+            if (data.isCls == 'false') {
                 db.checkBenhNhanKhamBenhLS(dataRes);
-            }
-            else{
+            } else {
                 db.checkBenhNhanKhamBenhCLS(dataRes);
             }
             res.status(200).json(rows.recordset[0]).end();

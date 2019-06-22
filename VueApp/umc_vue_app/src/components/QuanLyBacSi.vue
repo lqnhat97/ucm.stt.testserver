@@ -105,18 +105,6 @@
           </table>
 
         </div>
-        <form action="">
-          <div class="form-group">
-            <label for="excelInput">Chọn file excel</label>
-            <input type="file" class="form-control-file" id="exampleFormControlFile1">
-          </div>
-          <div class="row" style="display:flex ; justify-content: space-around">
-
-            <div class="col-sm-4">
-              <input class="form-group" id="buttom" type="submit" :click="quyDinh" value="Quy định">
-            </div>
-          </div>
-        </form>
       </div>
     </div>
   </div>

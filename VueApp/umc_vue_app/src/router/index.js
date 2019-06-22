@@ -11,6 +11,9 @@ import QuanLyBacSi from '@/components/QuanLyBacSi'
 import Dashboard from '@/components/Dashboard'
 import DashboardLs from '@/components/DashboardPhongLs'
 import DashboardCls from '@/components/DashboardPhongCLs'
+import ChinhDinhThoiGianChoDichVu from '@/components/ChiDinhThoiGianChoDichVu'
+import ThemThanhVien from '@/components/ThemThanhVien'
+import LichTrucNhanVien from '@/components/LichTrucNhanVien'
 Vue.use(Router)
 export default new Router({
   routes: [
@@ -73,6 +76,21 @@ export default new Router({
       path: '/dashboardCls/',
       name: 'DashboardCls',
       component: DashboardCls
+    },
+    {
+      path: '/thoiGianChoDvCls/',
+      name: 'ChinhDinhThoiGianChoDichVu',
+      component: ChinhDinhThoiGianChoDichVu
+    },
+    {
+      path: '/themThanhVien/',
+      name: 'ThemThanhVien',
+      component: ThemThanhVien
+    },
+    {
+      path: '/lichTrucNhanVien/',
+      name: 'lichTruc',
+      component: LichTrucNhanVien
     }
   ]
 })

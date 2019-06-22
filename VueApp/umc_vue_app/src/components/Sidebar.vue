@@ -70,6 +70,9 @@
                 </router-link>
               </li>
               <li class="list-group-item" id="changecolortext" @click="handleClicked">
+                <router-link id="changepanel" to="/thoiGianChoDvCls" >Chỉ định thời gian thực hiện dịch vụ</router-link>
+              </li>
+              <li class="list-group-item" id="changecolortext" @click="handleClicked">
                 <router-link id="changepanel" to="/chiTietCanLamSang" >Chi tiếp
                   phòng cận lâm sàng</router-link>
               </li>
