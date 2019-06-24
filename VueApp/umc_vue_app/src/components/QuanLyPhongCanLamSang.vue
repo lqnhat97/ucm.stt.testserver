@@ -8,7 +8,7 @@
                 id="search-name">Chuyên khoa</label>
             </div>
             <div class="col-sm-4">
-              <select class="form-control" v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa"
+              <select class="form-control" v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" 
                 v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
                 <option :selected="true" disabled>Chọn chuyên khoa</option>
                 <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">

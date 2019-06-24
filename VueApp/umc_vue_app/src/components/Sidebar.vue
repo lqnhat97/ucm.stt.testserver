@@ -45,7 +45,10 @@
                   </router-link>
                 </li>
                 <li class="list-group-item" id="changecolortext" @click="handleClicked">
-                <router-link id="changepanel" to="/dashboardLs" >Dashboard theo phòng lâm sàng</router-link>
+                <router-link id="changepanel" to="/themThanhVien" >Thêm nhân viên</router-link>
+              </li>
+              <li class="list-group-item" id="changecolortext" @click="handleClicked">
+                <router-link id="changepanel" to="/dashboardLs" >Màn hình hiển thị STT trước phòng</router-link>
               </li>
                 <!-- <li class="list-group-item" id="changecolortext">
                   <router-link  id="changepanel" to="/quanLySoPhongKham">Quản
@@ -73,11 +76,10 @@
                 <router-link id="changepanel" to="/thoiGianChoDvCls" >Chỉ định thời gian thực hiện dịch vụ</router-link>
               </li>
               <li class="list-group-item" id="changecolortext" @click="handleClicked">
-                <router-link id="changepanel" to="/chiTietCanLamSang" >Chi tiếp
-                  phòng cận lâm sàng</router-link>
+                <router-link id="changepanel" to="/chiTietCanLamSang" >Chi tiếp phòng cận lâm sàng</router-link>
               </li>
               <li class="list-group-item" id="changecolortext" @click="handleClicked">
-                <router-link id="changepanel" to="/dashboardCls" >Dashboard theo phòng cận lâm sàng</router-link>
+                <router-link id="changepanel" to="/dashboardCls" >Màn hình hiển thị STT trước phòng</router-link>
               </li>
               <!-- <li class="list-group-item" id="changecolortext">
                 <router-link id="changepanel" to="/quanLySoCanLamSang">Quản lý
@@ -136,6 +138,22 @@
           }
           case "#/dashboard": {
             this.currentTab = 5;
+            break;
+          };
+          case "#/themThanhVien": {
+            this.currentTab = 3;
+            break;
+          };
+          case "#/dashboardLs": {
+            this.currentTab = 3;
+            break;
+          };
+          case "#/thoiGianChoDvCls": {
+            this.currentTab = 4;
+            break;
+          };
+          case "#/dashboardLs": {
+            this.currentTab = 4;
             break;
           }
         }

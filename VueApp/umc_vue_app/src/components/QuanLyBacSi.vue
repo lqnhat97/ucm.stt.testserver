@@ -30,83 +30,83 @@
 
 
         </form>
-        <form style="padding-bottom:8pt;padding-left:5pt">
-          <div class="row">
-            <div class="col-sm-5">
-              <h3>Quản lý bác sĩ</h3>
-            </div>
+        <div class="row">
+          <div class="col-sm-5">
+            <h3>Quản lý bác sĩ</h3>
+          </div>
+        </div>
+        <form @submit="quyDinh">
+          <div class="row" style="padding:5pt;display:flex;justify-content:space-between">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+
+                  <th>Phòng</th>
+                  <th>Ca</th>
+                  <th>Bàn</th>
+                  <th>Bác sĩ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-for="(option,index) in soLuongPhong">
+                  <tr :key="index+'ca1'+option.thongTin[0].SoBan">
+                    <td class="number" :rowspan="option.thongTin.length*2">{{option.phongKham}}</td>
+                    <td class="text" id="Ca" :rowspan="option.thongTin.length">Ca 1</td>
+                    <td class="number">{{option.thongTin[0].SoBan}}</td>
+                    <td class="text" id="BacSi"><select class="form-control"
+                        @change="handleChangeBacSi(1,$event,option.thongTin[0].IDBan,option.phongKham)">
+                        <option value="">Chọn bác sĩ</option>
+                        <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
+                          :key="singleBacSi.IDBacSi+'ca1'+option.thongTin[0].SoBan">
+                          {{singleBacSi.HovaTen}}</option>
+                      </select></td>
+                  </tr>
+                  <tr v-for="singleBan in soLuongBan[index]" :key="index+'ca1'+singleBan.SoBan">
+                    <td class="number">{{singleBan.SoBan}} </td>
+                    <td class="text" id="BacSi"><select class="form-control"
+                        @change="handleChangeBacSi(1,$event,singleBan.IDBan,option.phongKham)">
+                        <option value="">Chọn bác sĩ</option>
+                        <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
+                          :key="singleBacSi.IDBacSi+'ca1'+singleBan.SoBan">
+                          {{singleBacSi.HovaTen}}</option>
+                      </select></td>
+                  </tr>
+                  <tr :key="index+'ca2'+option.thongTin[0].SoBan">
+                    <td class="text" id="Ca" :rowspan="option.thongTin.length">Ca 2</td>
+                    <td class="number">{{option.thongTin[0].SoBan}}</td>
+                    <td class="text"><select class="form-control"
+                        @change="handleChangeBacSi(2,$event,option.thongTin[0].IDBan,option.phongKham)">
+                        <option value="">Chọn bác sĩ</option>
+                        <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
+                          :key="singleBacSi.IDBacSi+'ca2'+option.thongTin[0].SoBan">
+                          {{singleBacSi.HovaTen}}</option>
+
+                      </select></td>
+                  </tr>
+
+                  <tr v-for="singleBan in soLuongBan[index]" :key="index+'ca2'+singleBan.SoBan">
+                    <td class="number">{{singleBan.SoBan}}</td>
+                    <td class="text" id="BacSi"><select class="form-control"
+                        @change="handleChangeBacSi(2,$event,singleBan.IDBan,option.phongKham)">
+                        <option value="">Chọn bác sĩ</option>
+                        <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
+                          :key="singleBacSi.IDBacSi+'ca2'+singleBan.SoBan">
+                          {{singleBacSi.HovaTen}}</option>
+                      </select></td>
+                  </tr>
+
+                </template>
+              </tbody>
+            </table>
+          </div>
+          <div style="display:flex;justify-content:center;border-top: 2px solid #bbbbbb">
+            <input class="form-group btn btn-success" type="submit" value="Quy định"
+              style="margin:15px 0px 15px;width:30%">
           </div>
         </form>
-        <div class="row" style="padding:5pt;display:flex;justify-content:space-between">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-
-                <th>Phòng</th>
-                <th>Ca</th>
-                <th>Bàn</th>
-                <th>Bác sĩ</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-for="(option,index) in soLuongPhong">
-                <tr :key="index+'ca1'+option.thongTin[0].SoBan">
-                  <td class="number" :rowspan="option.thongTin.length*2">{{option.phongKham}} <button
-                      style="margin:10%;" class="btn-danger" :click="huyLichTheoPhong(index)">X</button></td>
-                  <td class="text" id="Ca" :rowspan="option.thongTin.length">Ca 1 <button style="margin:10%;"
-                      class="btn-danger" :click="huyLichTheoCa('ca1',index)">X</button></td>
-                  <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;" class="btn-danger"
-                      :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
-                  <td class="text" id="BacSi"><select @change="handleChangeBacSi(1,$event,option.thongTin[0].IDBan,option.phongKham)">
-                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
-                        :key="singleBacSi.IDBacSi+'ca1'+option.thongTin[0].SoBan" >
-                        {{singleBacSi.HovaTen}}</option>
-                    </select></td>
-
-                </tr>
-                <tr v-for="singleBan in soLuongBan[index]" :key="index+'ca1'+singleBan.SoBan">
-                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger"
-                      :click="huyLichTheoBan('ca1',singleBan.IDBan,index)">X</button>
-                  </td>
-                  <td class="text" id="BacSi"><select @change="handleChangeBacSi(1,$event,singleBan.IDBan,option.phongKham)">
-                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
-                        :key="singleBacSi.IDBacSi+'ca1'+singleBan.SoBan" >
-                        {{singleBacSi.HovaTen}}</option>
-                    </select></td>
-                </tr>
-                <tr :key="index+'ca2'+option.thongTin[0].SoBan">
-                  <td class="text" id="Ca" :rowspan="option.thongTin.length">Ca 2 <button style="margin:10%;"
-                      class="btn-danger" :click="huyLichTheoCa('ca2',index)">X</button></td>
-                  <td class="number">{{option.thongTin[0].SoBan}} <button style="margin:10%;" class="btn-danger"
-                      :click="huyLichTheoBan('ca2',option.thongTin[0].IDBan,index)">X</button></td>
-
-                  <td class="text"><select @change="handleChangeBacSi(2,$event,option.thongTin[0].IDBan,option.phongKham)">
-                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
-                        :key="singleBacSi.IDBacSi+'ca2'+option.thongTin[0].SoBan" >
-                        {{singleBacSi.HovaTen}}</option>
-
-                    </select></td>
-                </tr>
-
-                <tr v-for="singleBan in soLuongBan[index]" :key="index+'ca2'+singleBan.SoBan">
-                  <td class="number">{{singleBan.SoBan}} <button style="margin:10%;" class="btn-danger"
-                      :click="huyLichTheoBan('ca2',singleBan.IDBan,index)">X</button>
-                  </td>
-                  <td class="text" id="BacSi"><select @change="handleChangeBacSi(2,$event,singleBan.IDBan,option.phongKham)">
-                      <option v-for="singleBacSi in soLuongBacSi" :value="singleBacSi.IDBacSi"
-                        :key="singleBacSi.IDBacSi+'ca2'+singleBan.SoBan"  >
-                        {{singleBacSi.HovaTen}}</option>
-
-                    </select></td>
-                </tr>
-
-              </template>
-            </tbody>
-          </table>
-
-        </div>
       </div>
     </div>
+    <modal :message="this.message" />
   </div>
 </template>
 
@@ -117,7 +117,8 @@
   export default {
     name: 'QuanLyBacSi',
     components: {
-      DatePicker
+      DatePicker,
+      modal
     },
     props: {
       isOpen: {
@@ -145,6 +146,7 @@
             dateRange: 'Chọn khoảng ngày'
           }
         },
+        message:"",
       }
     },
     created(e) {
@@ -159,17 +161,17 @@
         "bodyContent").style.marginLeft = "0";
     },
     methods: {
-      handleChangeBacSi(ca,event,ban,phong){
-        this.bodyRequest.forEach(element=>{
-          if(element.Ca == ca){
-            if(element.Phong == phong){
-              if(element.Ban==ban){
+      handleChangeBacSi(ca, event, ban, phong) {
+        this.bodyRequest.forEach(element => {
+          if (element.Ca == ca) {
+            if (element.Phong == phong) {
+              if (element.Ban == ban) {
                 element.BacSi = event.target.value;
               }
             }
           }
         })
-       
+
       },
       handleChangeNgay() {
         if (this.bodyRequest != []) {
@@ -187,7 +189,7 @@
             element.thongTin.forEach(item => {
               this.bodyRequest.push({
                 Ngay: this.datetimepicker1,
-                Phong: element.phongKham,
+                Phong: item.IDPhong,
                 Ca: 1,
                 Ban: item.IDBan,
                 BacSi: "",
@@ -213,24 +215,23 @@
         })
         axios.get(process.env.SERVER_URI + `clinic/dsBsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(response => {
           this.soLuongBacSi = response.data;
-          this.bodyRequest.forEach(element =>{
+          this.bodyRequest.forEach(element => {
             element.BacSi = this.soLuongBacSi[0].IDBacSi;
           })
         })
+      },
+      quyDinh(e) {
+        e.preventDefault();
         console.log(this.bodyRequest);
+        axios.post(process.env.SERVER_URI + `clinic/themLichBacSi`,this.bodyRequest).then(response => {
+          this.message ="Quy định bác sĩ thành công"
+          $('#findCmndModal').modal('show');
+        }).catch(err=>{
+          this.message = err;
+          $('#findCmndModal').modal('show');
+        })
       },
-      quyDinh() {
-
-      },
-      huyLichTheoBan(ca, ban, phong) {
-
-      },
-      huyLichTheoCa(ca, phong) {
-
-      },
-      huyLichTheoPhong(phong) {
-
-      }
     }
   }
+
 </script>

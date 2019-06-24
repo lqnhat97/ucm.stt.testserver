@@ -23,7 +23,7 @@
           </div>
         </div>
         <template v-if="fetchedDsDichVu!=''">
-          <form @submit="quyDinhThoiGian">
+          <form @submit="themBacSi">
             <div class="row" style="display:flex; justify-content:center; align-items: baseline;"
               v-for="(dv, index) in this.fetchedDsDichVu" :key="index">
               <label class="col-sm-2 control-label" style="text-align:right">Tên dịch vụ</label>

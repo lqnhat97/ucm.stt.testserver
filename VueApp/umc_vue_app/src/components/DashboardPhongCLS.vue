@@ -101,7 +101,9 @@
     methods: {
       handleChangeChuyenKhoa() {
         axios.get(process.env.SERVER_URI + `clinic/dsPhongClsTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(res => {
-          this.dsPhong = res.data;
+          this.dsPhong = res.data.filter(value=>{
+            return value.CaKham == 1;
+          });
           this.isXetNghiem = false;
           this.selectedPhong = "";
           this.cls = "";

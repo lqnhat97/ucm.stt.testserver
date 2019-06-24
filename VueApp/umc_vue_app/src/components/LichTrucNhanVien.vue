@@ -33,7 +33,7 @@
         <form style="padding-bottom:8pt;padding-left:5pt">
           <div class="row">
             <div class="col-sm-5">
-              <h3>Lịch trực chuyên khoa</h3>
+              <h3>Lịch trực nhân viên</h3>
             </div>
           </div>
         </form>
@@ -43,7 +43,7 @@
               <tr>
                 <th>Phòng</th>
                 <th>Ca</th>
-                <th>Quản lí</th>
+                <th>Chuyên viên / Thư ký</th>
               </tr>
             </thead>
             <tbody>
