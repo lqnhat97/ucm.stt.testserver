@@ -1,5 +1,9 @@
 var db = require('../Database/db');
 
+exports.loadAllPhieuKham = () => {
+    return db.executeQuery('select * from PhieuKham');
+}
+
 exports.loadPhongKhamHienTai = (idPk) => {
     return db.executeProcedure('IDPhong', idPk, 'LaySoPhongKhamHienTai');
 }
@@ -154,13 +158,18 @@ exports.soKeTiepCLS = (data) => {
     if (!data.isXetNghiem)
         return db.executeProcedure2input('IDPhong', 'Cakham', data.idPhong, n > 11 ? 2 : 1, "BamSoHienThiPhongCLS");
     else
-        return db.executeProcedure2input('IDPhong', 'Cakham', data.idPhong, n > 11 ? 2 : 1, "CapNhatSTTPhongXetNghiem");
+        return db.executeProcedure2input('IDPhong', 'Cakham', data.idPhongKham, n > 11 ? 2 : 1, "CapNhatSTTPhongXetNghiem");
 }
 
 //Ds chuyên khoa cls
 exports.dsChuyenKhoaCls = () => {
     let sql = 'exec DanhSachChuyenKhoaCLS';
     return db.executeQuery(sql);
+}
+
+//Show phân hệ cls
+exports.showPhanHe = ()=>{
+    return db.executeQuery(`exec ShowPhanHe`);
 }
 
 //Ds chuyên khoa cls có lịch khám
@@ -285,4 +294,30 @@ exports.checkBenhNhanTheoPhieuKham = (data) => {
         return db.executeProcedure2input('IDPhieuKham', 'IDPhongCLS', data.idPhieuKham, data.idPhong, 'LaySTTCanLamSangDeCheck')
     }
     return db.executeProcedure2input('IDPhieuKham', 'IDPhongKham', data.idPhieuKham, data.idPhong, 'LaySTTLamSangDeCheck')
+}
+
+//Thêm bác sĩ
+exports.themBacSi = (data)=>{
+    let sql = `exec ThemBacSi N'${data.HovaTen}',N'${data.GioiTinh}','${data.NamSinh}',N'${data.QueQuan}','${data.ChuyenKhoa}','${data.ThoiGianTBmin}'`;
+    return db.executeQuery(sql);
+}
+
+//Thêm nhân viên
+exports.themNhanVien = (data)=>{
+    let sql = `exec ThemNhanVien N'${data.HovaTen}','${data.CMND_CCCD}','${data.PhanHe}'`;
+    return db.executeQuery(sql);
+}
+
+//Thêm lịch khám của bác sĩ
+exports.themLichKhamBacSi = (data)=>{
+    let sql = `exec ThemLichBacSi '${data.BacSi}','${data.Ngay}','${data.Ca}','${data.Ban}','${data.Phong}'`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Thêm lịch trực nhân viên
+exports.themLichTrucNhanVien = (data)=>{
+    let sql = `exec ThemLichBacSi '${data.BacSi}','${data.Ngay}','${data.Ca}','${data.Ban}','${data.Phong}'`;
+    console.log(sql);
+    return db.executeQuery(sql);
 }

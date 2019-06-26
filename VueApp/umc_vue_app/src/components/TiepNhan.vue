@@ -3,19 +3,25 @@
     <div>
       <div class="container">
         <div id="cliente">
-          <form style=" border-bottom: 2px solid #bbbbbb">
+          <div style=" border-bottom: 2px solid #bbbbbb">
             <div class="row form-group" style="padding:5pt">
-              <div class="col-sm-3"> <label class="control-label" for="chuyenkhoa"
-                  style="color:#969696;padding:8pt;margin-left: 3pt; ">Số CMND/CCCD</label>
+              <div class="col-sm-2"> <label class="control-label"
+                  style="color:#969696;padding:5pt;text-align:right">Số CMND/CCCD</label>
               </div>
-              <div class="search-box col-sm-3" style="height:30pt; margin-bottom: 10px">
-                <input type="text" id="cmnd" value="" class="form-control" v-model="cmnd">
-                <button class="btn btn-link search-btn" @click="checkCMND" data-toggle="modal"
-                  data-target="#findCmndModal"> <i class="glyphicon glyphicon-search"></i>
-                </button>
+              <div class="col-sm-5">
+                <autocomplete ref="autocomplete" placeholder="CMND"
+                  :source="allBenhNhan" input-class="form-control" v-model="cmnd" resultsDisplay="CMND_CCCD" resultsValue="CMND_CCCD" @selected="autocompleteSelected" @clear="clearSearch">
+                </autocomplete>
+              </div>
+              <div class="col-sm-2"> <label class="control-label"
+                  style="color:#969696;padding:5pt;text-align:right">Mã bệnh nhân</label>
+              </div>
+              <div>
+                <input type="text" value="" class="form-control" disabled v-model="maBn"
+                  v-text="HoVaTen">
               </div>
             </div>
-          </form>
+          </div>
           <Modal :message="this.message" />
           <form action="">
             <p>Thông tin bệnh nhân</p>
@@ -90,13 +96,12 @@
       </div>
     </div>
   </div>
-
 </template>
-
 <script>
   import axios from 'axios'
   import Modal from './modal.vue'
   import DatePicker from 'vue2-datepicker'
+  import Autocomplete from 'vuejs-auto-complete'
   export default {
     name: 'TiepNhan',
     props: {
@@ -107,10 +112,12 @@
     },
     components: {
       Modal,
+      Autocomplete,
       DatePicker
     },
     data() {
       return {
+        allBenhNhan:"",
         cmnd: "",
         HoVaTen: "",
         GioiTinh: "",
@@ -125,6 +132,7 @@
         handleBtn: "",
         idBenhNhan: "",
         isFound: false,
+        maBn:"",
         lang: {
           days: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
           months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9',
@@ -142,7 +150,21 @@
       this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
         "bodyContent").style.marginLeft = "0";
     },
+    created(){
+      axios.get(process.env.SERVER_URI +`patient/loadAll`).then((res)=>{
+        this.allBenhNhan = res.data;
+      })
+    },
     methods: {
+      autocompleteSelected(group){
+        this.group = group;
+        this.cmnd = group.selectedObject.CMND_CCCD;
+        this.checkCMND();
+      },
+      clearSearch(){
+        this.clearTex();
+        this.isFound=false;
+      },
       clearTex() {
         this.cmnd = "";
         this.HoVaTen = "";
@@ -150,11 +172,11 @@
         this.GioiTinh = "";
         this.QueQuan = "";
         this.NgheNghiep = "";
-        this.DiaChi ="";
+        this.DiaChi = "";
         this.SoDienThoai = "";
+        this.maBn = "";
       },
-      checkCMND(e) {
-        e.preventDefault();
+      checkCMND() {
         axios.get(process.env.SERVER_URI + `patient/checkBenhNhan/` + this.cmnd)
           .then(response => {
             let res = response.data;
@@ -171,6 +193,7 @@
               console.log(localStorage.idBenhNhan);
 
               this.idBenhNhan = res.Id;
+              this.maBn = res.ID;
               this.message = "Có kết qủa tìm kiếm"
               this.isFound = true;
             } else {
@@ -209,10 +232,13 @@
             body: posbody
           }).then(async response => {
             console.log(response);
-            this.message = 'Tạo thông tin thành công, mã bệnh nhân: <strong>' + response.data.ID + '</strong>. Xem barcode <a  href="localhost:8088/home?idBenhNhan='+this.idBenhNhan+'">Tại đây</a>';
+            this.message = 'Tạo thông tin thành công, mã bệnh nhân: <strong>' + response.data.ID +
+              '</strong>. Xem barcode <a  href="localhost:8088/home?idBenhNhan=' + this.idBenhNhan +
+              '">Tại đây</a>';
             this.handleBtn = "Tạo phiếu khám";
             localStorage.idBenhNhan = response.data.ID;
             this.idBenhNhan = response.data.ID;
+            this.maBn = response.data.ID
             this.isFound = true;
             $('#findCmndModal').modal('show');
           })
@@ -220,7 +246,6 @@
             this.message = e;
             $('#findCmndModal').modal('show');
           })
-
       }
     }
   }

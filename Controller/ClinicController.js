@@ -26,7 +26,10 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         ban = rows.recordsets[0][i].SoBan.toString();
                         stt = rows.recordsets[0][i].STTPhongKham;
                         timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
-                        thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+                        if ((timeTemp.getHours() < 7)) {
+                            thoiGianDuKien = (17 + timeTemp.getHours()) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+                        } else
+                            thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
                         switch (rows.recordsets[0][i].TinhTrang) {
                             case "Đang khám":
                                 if (rows.recordsets[0][i].TinhTrangBenhNhan == "Chưa có") {
@@ -69,7 +72,10 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tenPhong = rows.recordsets[1][k].TenCanLamSang;
                         stt = rows.recordsets[1][k].STTPhongCLS;
                         timeTemp = new Date(rows.recordsets[1][k].ThoiGianDuKien);
-                        thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+                        if ((timeTemp.getHours() < 7)) {
+                            thoiGianDuKien = (17 + timeTemp.getHours()) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+                        } else
+                            thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
                         switch (rows.recordsets[1][k].TinhTrang) {
                             case "Đang khám":
                                 if (rows.recordsets[1][k].TinhTrangBenhNhan == "Chưa có") {
@@ -105,15 +111,19 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
 
                     var clsLength = Object.keys(rows.recordsets[2]).length;
                     if (clsLength > 0) {
+                        var soNhay = rows.recordsets[2][0].SoNhay;
                         var xnRange = rows.recordsets[2][0].STTCheckedCuoi;
                         tenPhong = rows.recordsets[2][0].SoPhong;
                         tenKhu = rows.recordsets[2][0].TenKhuVuc;
                         tenLau = rows.recordsets[2][0].TenLau;
                         stt = rows.recordsets[2][0].STTXetNghiem;
                         timeTemp = new Date(rows.recordsets[2][0].Gio);
-                        thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+                        if ((timeTemp.getHours() < 7)) {
+                            thoiGianDuKien = (17 + timeTemp.getHours()) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+                        } else
+                            thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
                         tinhTrang = rows.recordsets[2][0].TinhTrang;
-                        sttXetNghiem = (xnRange - xnRange % 10 + 1) + " -> " + (xnRange - xnRange % 10 + 10);
+                        sttXetNghiem = (xnRange - xnRange % soNhay + 1) + " -> " + (xnRange - xnRange % soNhay + soNhay);
                         canLamSang.push({
                             maPhongCls: "Xét nghiệm",
                             tenPhong,
@@ -150,6 +160,13 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
     } catch (err) {
         throw err;
     }
+})
+
+//lấy toàn bộ phiếu khám
+router.get('/loadAllPhieuKham',(req,res)=>{
+    db.loadAllPhieuKham().then(rows => {
+        res.status(200).json(rows.recordset);
+    })
 })
 
 //Lấy danh sách chuyên khoa
@@ -343,6 +360,13 @@ router.get('/dsChuyenKhoaCls', (req, res) => {
     })
 })
 
+//Show phân hệ CLS
+router.get('/showPhanHeCls', (req, res) => {
+    db.showPhanHe().then(rows => {
+        res.status(200).json(rows.recordset);
+    })
+})
+
 //Xuất danh sách chuyên khoa cận lâm sàng có lịch
 router.get('/dsChuyenKhoaClsCoLich', (req, res) => {
     db.dsChuyenKhoaClsCoLich().then(rows => {
@@ -450,9 +474,11 @@ router.post('/chiDinhDvClsChoPhong', (req, res) => {
             for (const dv of dv) {
                 promiseChiDinh.push(db.chiDinhDvClsChoPhong(value.idPhong, dv))
             };
-            Promise.all(promiseChiDinh).then(()=>{
+            Promise.all(promiseChiDinh).then(() => {
                 res.status(200).end();
-            }).catch(err=>{throw err;})
+            }).catch(err => {
+                throw err;
+            })
         })
     }
 })
@@ -622,3 +648,52 @@ router.post('/checkBenhNhanPhieuKham?', (req, res) => {
         }
     })
 })
+//-------------------------Dinh Nghia
+//Thêm bác sĩ
+router.post('/themBacSi', (req, res) => {
+    console.log(req.body);
+    let data = req.body;
+    db.themBacSi(data).then(() => {
+        res.status(200).end();
+    }).catch(err => {
+        res.json(err).end();
+    })
+});
+//Thêm chuyên viên / thư ký
+router.post('/themNhanVien', (req, res) => {
+    console.log(req.body);
+    let data = req.body;
+    db.themNhanVien(data).then(() => {
+        res.status(200).end();
+    }).catch(err => {
+        res.json(err).end();
+    })
+});
+
+//Thêm lịch bác sĩ
+router.post('/themLichBacSi',(req,res)=>{
+    let promise = [];
+    console.log(req.body);
+    for (const data of req.body) {
+        promise.push(db.themLichKhamBacSi(data))
+    }
+    Promise.all(promise).then(rows=>{
+        res.status(200).end();
+    }).catch(err => {
+        res.json(err).end();
+    })
+});
+
+// //Thêm chuyên viên
+// router.post('/themLichChuyenVien',(req,res)=>{
+//     let promise = [];
+//     console.log(req.body);
+//     for (const data of req.body) {
+//         promise.push(db.themLichKhamBacSi(data))
+//     }
+//     Promise.all(promise).then(rows=>{
+//         res.status(200).end();
+//     }).catch(err => {
+//         res.json(err).end();
+//     })
+// })

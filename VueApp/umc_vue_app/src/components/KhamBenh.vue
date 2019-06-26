@@ -78,18 +78,10 @@
                 <div class="row form-group">
                   <label for="" class="col-sm-3 col-form-label" style="text-align:right">Mã phiếu khám</label>
                   <div class="col-sm-4">
-                    <input type="text" value="" class="form-control" v-model="MaPhieuKham" v-text="MaPhieuKham"
-                      @change="checkMaPhieuKham">
-                    <small v-if="correct" id="passwordHelpBlock" class="form-text text-muted">
-                      <div class="small">
-                        <span>Có bệnh nhân</span>
-                      </div>
-                    </small>
-                    <small v-if="!correct" id="passwordHelpBlock" class="form-text text-muted">
-                      <div class="small">
-                        <span>Không có phiếu khám này</span>
-                      </div>
-                    </small>
+                    <autocomplete ref="autocomplete" placeholder="CMND" :source="phieuKham" input-class="form-control"
+                      resultsDisplay="IDPhieuKham" resultsValue="IDPhieuKham" @selected="autocompleteSelected"
+                      @clear="clearSearch">
+                    </autocomplete>
                   </div>
                   <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày
                     khám</label>
@@ -142,9 +134,11 @@
 <script>
   import axios from 'axios'
   import modal from './modal'
+  import Autocomplete from 'vuejs-auto-complete'
   export default {
     name: 'KhamBenh',
     components: {
+      Autocomplete,
       modal
     },
     props: {
@@ -155,6 +149,7 @@
     },
     data() {
       return {
+        phieuKham: "",
         cmnd: "",
         HoVaTen: "",
         GioiTinh: "",
@@ -167,9 +162,9 @@
         handleBtn: "",
         idBenhNhan: "",
         MaPhieuKham: "",
-        selectedChuyenKhoa:"",
-        selectedPhongKham:"",
-        selectedBan:"",
+        selectedChuyenKhoa: "",
+        selectedPhongKham: "",
+        selectedBan: "",
         chuyenKhoa: "",
         soLuongPhong: [],
         soLuongBan: [],
@@ -189,8 +184,31 @@
       axios.get(process.env.SERVER_URI + `clinic/dsChuyenKhoa`).then(response => {
         this.chuyenKhoa = response.data;
       })
+      axios.get(process.env.SERVER_URI + `clinic/loadAllPhieuKham`).then(response => {
+        this.phieuKham = response.data;
+        //this.label += this.stt;
+      })
     },
     methods: {
+      autocompleteSelected(group) {
+        this.group = group
+        this.MaPhieuKham = this.group.selectedObject.IDPhieuKham;
+        this.checkMaPhieuKham();
+        this.clearSearch();
+      },
+      clearSearch() {
+        this.cmnd = "";
+        this.HoVaTen = "";
+        this.NgaySinh = "";
+        this.GioiTinh = "";
+        this.QueQuan = "";
+        this.NgheNghiep = "";
+        this.DiaChi = "";
+        this.SoDienThoai = "";
+        this.idBenhNhan = "";
+        this.correct = false;
+        this.$mount('#bodyContent');
+      },
       insertNewSubClinical(e) {
         this.soLuongChiDinh.push({
           stt: this.soLuongChiDinh.length + 1
@@ -204,17 +222,17 @@
           response => {
             this.soLuongPhong = response.data;
           })
-       
+
       },
       handleChangeSoPhong() {
-         var temp =this.soLuongPhong.filter(value =>{
+        var temp = this.soLuongPhong.filter(value => {
           return value.phongKham == this.selectedPhongKham;
         });
-        this.soLuongBan= temp[0].thongTin; 
-       
+        this.soLuongBan = temp[0].thongTin;
+
       },
-      handleChangeBan(){},
-      checkMaPhieuKham(e) {
+      handleChangeBan() {},
+      checkMaPhieuKham() {
         axios.get(process.env.SERVER_URI + `clinic/checkPK/` + this.MaPhieuKham).then(response => {
           let res = response.data;
 
@@ -265,6 +283,10 @@
     mounted() {
       this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document
         .getElementById("bodyContent").style.marginLeft = "0";
+      axios.get(process.env.SERVER_URI + `clinic/loadAllPhieuKham`).then(response => {
+        this.phieuKham = response.data;
+        //this.label += this.stt;
+      })
     },
     computed: {
       dynamicComponent: function (parent = this) {
@@ -307,7 +329,7 @@
             axios.get(process.env.SERVER_URI + `clinic/dsCls`).then(response => {
               this.data = response.data;
               //this.label += this.stt;
-            })
+            });
           },
           methods: {
             selectDichVu() {
@@ -333,4 +355,5 @@
       }
     },
   }
+
 </script>

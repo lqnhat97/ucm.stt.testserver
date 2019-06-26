@@ -1,5 +1,9 @@
 var db = require('../Database/db');
 
+exports.loadAllBenhNhan = (idBn) => {
+    return db.executeQuery('select * from BenhNhan');
+}
+
 exports.loadPatientById = (idBn) => {
     return db.executeProcedure('maBn', idBn, 'LayThongTinBenhNhan');
 }

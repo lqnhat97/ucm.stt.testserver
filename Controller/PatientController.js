@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 var db = require('../Repos/PatientRepos');
 
+//Lay all benh nhan
+router.get('/loadAll', (req, res) => {
+    db.loadAllBenhNhan().then(rows => {
+        res.status(200).json(rows.recordset).end();
+    })
+})
+
 //Lay thong tin benh nhan (App)
 router.get('/:id', (req, res) => {
     var id = req.params.id;

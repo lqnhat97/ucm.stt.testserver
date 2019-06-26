@@ -4,16 +4,6 @@
       <div id="cliente" style="background-color: #F8F8F8;position:center">
         <form style=" border-bottom: 2px solid #bbbbbb">
           <div class="row" style="display:flex; align-items: baseline;">
-
-            <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="ngayThang"
-                id="search-name">Ngày</label>
-            </div>
-            <div class="col-sm-3">
-              <date-picker valueType="format" :lang='lang' v-model="datetimepicker1" :shortcuts="false"
-                format="MM/DD/YYYY" @change="handleChangeNgay">
-              </date-picker>
-            </div>
-
             <div class="col-sm-2" style="text-align:right;"> <label class="control-label" for="chuyenkhoa"
                 id="search-name">Chuyên khoa</label>
             </div>
