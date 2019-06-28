@@ -78,9 +78,9 @@
                 <div class="row form-group">
                   <label for="" class="col-sm-3 col-form-label" style="text-align:right">Mã phiếu khám</label>
                   <div class="col-sm-4">
-                    <autocomplete ref="autocomplete" placeholder="CMND" :source="phieuKham" input-class="form-control"
-                      resultsDisplay="IDPhieuKham" resultsValue="IDPhieuKham" @selected="autocompleteSelected"
-                      @clear="clearSearch">
+                    <autocomplete ref="autocomplete" placeholder="Phiếu khám" :source="phieuKham"
+                      input-class="form-control" resultsDisplay="IDPhieuKham" resultsValue="IDPhieuKham"
+                      @selected="autocompleteSelected" @clear="clearSearch">
                     </autocomplete>
                   </div>
                   <label for="" class="col-sm-3 col-form-label" style="text-align:right">Ngày
@@ -99,32 +99,52 @@
                 <hr color="black" />
 
                 <div id="chiDinhCanLamSang">
-                  <component v-for="(option,index) in soLuongChiDinh" :key="option.stt" :is="dynamicComponent"
-                    :index="index" />
+                  <template v-if="this.MaPhieuKham != ''">
+                    <div class="row form-group">
+                      <label for="" class="col-sm-4 col-form-label">Danh sách dịch vụ</label>
+                      <div class="col-sm-8">
+                        <select style="width:100%" class="form-group form-control" v-model="selectedCanLamSang"
+                          @change="handleChangeDsDvCls">
+                          <option selected disabled value="0">Chọn dịch vụ</option>
+                          <option v-for="option in dsDvCls" :value="option.LoaiDichVu" :key="option.LoaiDichVu">
+                            {{option.TenLoaiDichVu}}</option>
+                        </select>
+                        <select multiple size="7" style="width:100%" class="form-group form-control"
+                          v-model="selectedDichVu">
+                          <option selected disabled value="0">Danh sách dịch vụ</option>
+                          <option v-for="option in dichVu" :value="option.IDDichVu" :key="option.IDDichVu">
+                            {{option.TenDichVu}}</option>
+                        </select>
+                        <input type="button" value="Thêm chỉ định" class="btn btn-success" @click="themDichVu">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label for="" class="col-sm-4 col-form-label">Danh sách dịch vụ đã chọn</label>
+                      <div class="col-sm-8">
+                        <select multiple size="7" class="form-group form-control" v-model="dsDvThucHien">
+                          <option v-if="dvThucHien.length === 0" value="" disabled>Chưa chỉ định dịch vụ</option>
+                          <option v-else v-for="(dv, index) in dvThucHien" :key="index" :value="dv.IDDichVu">
+                            {{dv.TenDichVu}}</option>
+                        </select>
+                        <input type="button" id="remove" value="Xóa chỉ định" class="btn btn-danger" @click="xoaDichVu"
+                          style="text-align:left">
+                      </div>
+                    </div>
+                  </template>
+                  <h3 v-else>Chưa có bệnh nhân</h3>
                 </div>
-                <a id="add" class="col-sm-6" @click="insertNewSubClinical">Thêm chỉ định</a>
-
-
-                <br><br><br><br>
                 <hr />
-                <div class="row">
-                  <div class="col-sm-4"></div>
-                  <div class="col-sm-4">
-                    <input class="form-group" id="buttom" type="submit" value="Chỉ định" @click="chiDinhCanLamSang">
-                  </div>
+                <div style="display:flex;justify-content:center">
+                  <input class="form-group" id="buttom" type="submit" value="Chỉ định" @click="chiDinhCanLamSang"
+                    style="width:30%">
                 </div>
               </form>
-
             </div>
           </div>
-
         </div>
       </div>
-
-
       <!-- Modal -->
       <modal :message="this.message" />
-
     </div>
   </div>
 
@@ -164,6 +184,12 @@
         MaPhieuKham: "",
         selectedChuyenKhoa: "",
         selectedPhongKham: "",
+        selectedCanLamSang: "",
+        selectedDichVu: [],
+        dvThucHien: [],
+        dsDvThucHien: [],
+        dsDvCls: "",
+        dichVu: "",
         selectedBan: "",
         chuyenKhoa: "",
         soLuongPhong: [],
@@ -186,15 +212,17 @@
       })
       axios.get(process.env.SERVER_URI + `clinic/loadAllPhieuKham`).then(response => {
         this.phieuKham = response.data;
-        //this.label += this.stt;
       })
+      axios.get(process.env.SERVER_URI + `clinic/dsCls`).then(response => {
+        this.dsDvCls = response.data;
+      });
     },
     methods: {
       autocompleteSelected(group) {
         this.group = group
         this.MaPhieuKham = this.group.selectedObject.IDPhieuKham;
+        console.log(this.MaPhieuKham);
         this.checkMaPhieuKham();
-        this.clearSearch();
       },
       clearSearch() {
         this.cmnd = "";
@@ -206,36 +234,24 @@
         this.DiaChi = "";
         this.SoDienThoai = "";
         this.idBenhNhan = "";
+        this.MaPhieuKham="";
         this.correct = false;
         this.$mount('#bodyContent');
       },
-      insertNewSubClinical(e) {
-        this.soLuongChiDinh.push({
-          stt: this.soLuongChiDinh.length + 1
-        });
-        console.log(this.bodyRequestChiDinh);
+      handleChangeDsDvCls() {
+        if (this.selectedCanLamSang != 0) {
+          axios.get(process.env.SERVER_URI + `clinic/dsClsTheoDv/` + this.selectedCanLamSang).then(
+            response => {
+              if (response != null) {
+                this.dichVu = response.data;
+              }
+            }
+          )
+        }
       },
-
-      handleChangeChuyenKhoa() {
-        this.soLuongPhong = [];
-        axios.get(process.env.SERVER_URI + `clinic/dspkbkTheoChuyenKhoa/` + this.selectedChuyenKhoa).then(
-          response => {
-            this.soLuongPhong = response.data;
-          })
-
-      },
-      handleChangeSoPhong() {
-        var temp = this.soLuongPhong.filter(value => {
-          return value.phongKham == this.selectedPhongKham;
-        });
-        this.soLuongBan = temp[0].thongTin;
-
-      },
-      handleChangeBan() {},
       checkMaPhieuKham() {
         axios.get(process.env.SERVER_URI + `clinic/checkPK/` + this.MaPhieuKham).then(response => {
           let res = response.data;
-
           if (!res.hasOwnProperty("message")) {
             this.correct = true
             this.cmnd = res.CMND_CCCD;
@@ -261,12 +277,34 @@
           this.correct = false;
         })
       },
+      themDichVu() {
+        for (const [index, value] of this.selectedDichVu.entries()) {
+          let tmp = this.dichVu.filter(v => {
+            return v.IDDichVu == value;
+          })[0];
+          let contain = this.dvThucHien.some(value => value.IDDichVu === tmp.IDDichVu);
+          if (!contain)
+            this.dvThucHien.push({
+              IDDichVu: tmp.IDDichVu,
+              TenDichVu: tmp.TenDichVu
+            })
+        }
+      },
+      xoaDichVu() {
+        for (const dv of this.dsDvThucHien) {
+          this.dvThucHien = this.dvThucHien.filter(value => value.IDDichVu != dv)
+        }
+      },
       chiDinhCanLamSang(e) {
         e.preventDefault();
-        this.bodyRequestChiDinh.idPhieuKham = this.MaPhieuKham;
-        axios.post(process.env.SERVER_URI + `clinic/phatSinhCLS`,
-          this.bodyRequestChiDinh
-        ).then(e => {
+        if (this.dvThucHien.length === 0) {
+          this.message ="Vui lòng chỉ định dịch vụ";
+          $('#findCmndModal').modal('show');
+        }
+        axios.post(process.env.SERVER_URI + `clinic/phatSinhCLS`, {
+          idPhieuKham: this.MaPhieuKham,
+          idDichVuCls: this.dvThucHien.map(value => value.IDDichVu),
+        }).then(e => {
           console.log(e);
           if (e.data.hasOwnProperty('CLS') || e.data.hasOwnProperty('XetNghiem')) {
             this.message =
@@ -276,9 +314,11 @@
           } else {
             this.message = 'Phát sinh số lỗi';
           }
+        }).catch(err => {
+          this.message = "Có lỗi xảy ra";
+          $('#findCmndModal').modal('show');
         })
       }
-
     },
     mounted() {
       this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document
@@ -287,72 +327,6 @@
         this.phieuKham = response.data;
         //this.label += this.stt;
       })
-    },
-    computed: {
-      dynamicComponent: function (parent = this) {
-        return {
-          template: ` <div class="row form-group">
-                <label for="" class="col-sm-5 col-form-label" v-text="label"></label>
-                <div class="col-sm-7">
-                  <select style ="width:100%" class="form-group form-control" v-model="selectedCanLamSang"
-                  @change="selectCLS">
-                  <option selected disabled value="0">Chọn dịch vụ</option>
-                  <option v-for="option in data" :value="option.LoaiDichVu" :key="option.LoaiDichVu">{{option.TenLoaiDichVu}}</option>
-                </select>
-
-                <select style ="width:100%" class="form-group form-control" v-model="selectedDichVu"
-                  @change="selectDichVu">
-                  <option selected disabled value="0">Chỉ định cận lâm sàng</option>
-                  <option v-for="option in dichVu" :value="option.IDDichVu" :key="option.IDDichVu">{{option.TenDichVu}}</option>
-                </select>
-                </div>              
-                <a id="add" class="col-sm-3" style="text-align:left" @click="removeNewSubClinical">Xóa chỉ định</a>
-              </div>`,
-          data() {
-            return {
-              selectedCanLamSang: "",
-              selectedDichVu: "",
-              dichVu: "",
-              data: "",
-              stt: this.index + 1,
-              label: "Chỉ định cận lâm sàng "
-            }
-          },
-          props: {
-            index: {
-              type: Number,
-              default: 0
-            }
-          },
-          created() {
-            this.selectedChuyenKhoa = ""
-            axios.get(process.env.SERVER_URI + `clinic/dsCls`).then(response => {
-              this.data = response.data;
-              //this.label += this.stt;
-            });
-          },
-          methods: {
-            selectDichVu() {
-              parent.bodyRequestChiDinh.idDichVuCls.splice(this.stt - 1, 1, this.selectedDichVu);
-            },
-            selectCLS() {
-              if (this.selectedCanLamSang != 0) {
-                axios.get(process.env.SERVER_URI + `clinic/dsClsTheoDv/` + this.selectedCanLamSang).then(
-                  response => {
-                    if (response != null) {
-                      this.dichVu = response.data;
-                    }
-                  }
-                )
-              }
-            },
-            removeNewSubClinical() {
-              parent.soLuongChiDinh.splice(this.index, 1);
-              parent.bodyRequestChiDinh.idDichVuCls.splice(this.index, 1);
-            },
-          }
-        }
-      }
     },
   }
 

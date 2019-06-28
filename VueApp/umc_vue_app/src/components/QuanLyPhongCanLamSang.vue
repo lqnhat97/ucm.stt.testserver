@@ -8,7 +8,7 @@
                 id="search-name">Chuyên khoa</label>
             </div>
             <div class="col-sm-4">
-              <select class="form-control" v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa" 
+              <select class="form-control" v-bind:style="{ margin_top:'10%' }" id="chuyenkhoa"
                 v-model="selectedChuyenKhoa" @change="handleChangeChuyenKhoa">
                 <option :selected="true" disabled>Chọn chuyên khoa</option>
                 <option v-for="option in chuyenKhoa" :value="option.IDChuyenKhoa" :key="option.IDChuyenKhoa">
@@ -44,13 +44,15 @@
                       <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Thời gian bắt đầu</label>
                         <div class="col-sm-10">
-                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" v-model="option.gioBdCa1">
+                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
+                            v-model="option.gioBdCa1">
                         </div>
                       </div>
                       <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Thời gian kết thúc</label>
                         <div class="col-sm-10">
-                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]" v-model="option.gioKtCa1">
+                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"
+                            v-model="option.gioKtCa1">
                         </div>
                       </div>
                     </div>
@@ -63,13 +65,15 @@
                       <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Thời gian bắt đầu</label>
                         <div class="col-sm-10">
-                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-C3]):[0-5][0-9]" v-model="option.gioBdCa2">
+                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-C3]):[0-5][0-9]"
+                            v-model="option.gioBdCa2">
                         </div>
                       </div>
                       <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Thời gian kết thúc</label>
                         <div class="col-sm-10">
-                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-C3]):[0-5][0-9]" v-model="option.gioKtCa2">
+                          <input class="form-control" type="text" pattern="([01]?[0-9]|2[0-C3]):[0-5][0-9]"
+                            v-model="option.gioKtCa2">
                         </div>
                       </div>
                     </div>
@@ -194,7 +198,7 @@
               })
             };
             this.f_dvClsDaLam = new Array(response.data.length);
-            for (const [index,element] of ca1.entries()) {
+            for (const [index, element] of ca1.entries()) {
               element.GioBatDau = new Date(element.GioBatDau);
               ca2[index].GioBatDau = new Date(ca2[index].GioBatDau);
               element.GioKetThuc = new Date(element.GioKetThuc);
@@ -203,7 +207,7 @@
               element.GioKetThuc.setHours(element.GioKetThuc.getHours() - 7);
               ca2[index].GioBatDau.setHours(ca2[index].GioBatDau.getHours() - 7);
               ca2[index].GioKetThuc.setHours(ca2[index].GioKetThuc.getHours() - 7);
-              
+
               console.log(moment(ca2[index].GioBatDau).format('hh:mm'))
 
               this.dichVu.push({
@@ -218,7 +222,7 @@
                 response => {
                   this.f_dvClsDaLam[index] = (response.data);
                   //this.delDuplicateID(this.fetchedDsDichVu, this.f_dvClsDaLam[index]);
-                  this.f_dvClsConLai.push(this.delDuplicateID(this.fetchedDsDichVu, this.f_dvClsDaLam[index]));
+                  this.f_dvClsConLai.push(this.fetchedDsDichVu);
                   this.$mount('#bodyContent');
                 });
             }
@@ -241,40 +245,35 @@
       },
       unSelectCls(index) {
         let data = $("#unSelectCls" + index).val();
-        this.addComplete(data, index, this.f_dvClsConLai, this.f_dvClsDaLam, 2);
+        this.deletedItem(data,index);
         this.$mount('#bodyContent');
       },
-      addedItem(data) {
+      addedItem(data, idx) {
         let res = [];
-        data.forEach((value, index) => {
+        for (const [index, value] of data.entries()) {
           let tmp = this.fetchedDsDichVu.filter(v => {
             return v.IDDichVu == value;
           })[0];
-          res.push({
-            IDDichVu: tmp.IDDichVu,
-            TenDichVu: tmp.TenDichVu
-          })
-        });
-        return res;
-      },
-      deletedItem(data) {
-        let res = [];
-        for (const value of data) {
-          let tmp = this.fetchedDsDichVu.filter(v => {
-            return v.IDDichVu == value;
-          })[0];
-          console.log(tmp);
-          res.push({
-            IDDichVu: tmp.IDDichVu,
-            TenDichVu: tmp.TenDichVu
-          })
+          let contain = this.f_dvClsDaLam[idx].some(value => value.IDDichVu === tmp.IDDichVu);
+          console.log(this.f_dvClsDaLam)
+          if (!contain)
+            res.push({
+              IDDichVu: tmp.IDDichVu,
+              TenDichVu: tmp.TenDichVu
+            })
         }
         return res;
       },
+      deletedItem(data, idx) {
+        let dataDel ={}
+        for (const dv of data) {
+          this.f_dvClsDaLam[idx] = this.f_dvClsDaLam[idx].filter(value => value.IDDichVu != dv)
+        }
+      },
       addComplete(data, index, data1, data2, type) {
-        let res = type == 1 ? this.addedItem(data) : this.deletedItem(data);
-        data1[index] = data1[index].concat(res);
-        data2[index] = this.delDuplicateID(this.fetchedDsDichVu, data1[index]);
+        let res = type == 1 ? this.addedItem(data, index) : this.deletedItem(data, index);
+        if (type == 1)
+          data1[index] = data1[index].concat(res);
       },
       quyDinhCls(e) {
         e.preventDefault;

@@ -469,9 +469,9 @@ router.post('/chiDinhDvClsChoPhong', (req, res) => {
         promise.push(db.themLichCls2(value));
         promise.push(db.xoaDvPhongCls(value.idPhong));
         Promise.all(promise).then(() => {
-            let dv = value.dsDvCls;
+            let dichVu = value.dsDvCls;
             promiseChiDinh = [];
-            for (const dv of dv) {
+            for (const dv of dichVu) {
                 promiseChiDinh.push(db.chiDinhDvClsChoPhong(value.idPhong, dv))
             };
             Promise.all(promiseChiDinh).then(() => {
