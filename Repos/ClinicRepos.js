@@ -38,23 +38,18 @@ exports.taoPhieuKham = (data) => {
 }
 
 exports.phatSinhSttPkTheoBS = (data) => {
+    console.log(data)
     let sql = `exec PhatSinhSTTPhongKham_BacSiCa1 '${data.IDPhieuKham}','${data.IDChuyenKhoa}','${data.IDBacSi}'`
     let sql2 = `exec PhatSinhSTTPhongKham_BacSiCa2 '${data.IDPhieuKham}','${data.IDChuyenKhoa}','${data.IDBacSi}'`
 
     switch (data.CaKham) {
         case '1':
             return db.executeQuery(sql);
+            break;
         case '2':
             console.log('th2');
             return db.executeQuery(sql2);
-        default:
-            console.log('th3');
-            let d = new Date();
-            let n = d.getHours();
-            if (n <= 11) {
-                return db.executeQuery(sql);
-            } else
-                return db.executeQuery(sql2);
+            break;
     }
 
 }
@@ -63,16 +58,14 @@ exports.phatSinhSttPkTheoChuyenKhoa = (data) => {
     console.log(data);
     switch (data.CaKham) {
         case '1':
+        console.log('ca1');
             return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa1');
+            break;
         case '2':
+        console.log('ca2');
+
             return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa2');
-        default:
-            let d = new Date();
-            let n = d.getHours();
-            if (n <= 11) {
-                return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa1');
-            } else
-                return db.executeProcedure2input('IDPhieuKham', 'IDChuyenKhoa', data.IDPhieuKham, data.IDChuyenKhoa, 'PhatSinhSTTPhongKhamCa2');
+            break;
     }
 }
 
@@ -132,9 +125,7 @@ exports.tinhTrangConChoTheoChuyenKhoa = (idChuyenKhoa) => {
 //Qua số lâm sàng
 exports.soKeTiepLS = (data) => {
     console.log(data);
-    let d = new Date();
-    let n = d.getHours();
-    let sql = `exec BamSoHienThiPhongKham '${data.idBanKham}','${data.idPhong}',${n>11?2:1}`
+    let sql = `exec BamSoHienThiPhongKham '${data.idBanKham}','${data.idPhong}',${data.caKham}`
     return db.executeQuery(sql);
 }
 
@@ -285,7 +276,7 @@ exports.dashBoardXn = () => {
 exports.loadThongTinThuKy = (idThuKy) => {
     let d = new Date();
     let n = d.getHours();
-    return db.executeProcedure2input('IDNhanVien', 'CaKham', idThuKy, n > 11 ? 2 : 1, 'DangNhapNhanVien');
+    return db.executeProcedure2input('IDNhanVien', 'CaKham', idThuKy, n > 10 ? 2 : 1, 'DangNhapNhanVien');
 }
 
 //Check bệnh nhân theo phiếu khám
@@ -318,6 +309,62 @@ exports.themLichKhamBacSi = (data)=>{
 //Thêm lịch trực nhân viên
 exports.themLichTrucNhanVien = (data)=>{
     let sql = `exec ThemLichBacSi '${data.BacSi}','${data.Ngay}','${data.Ca}','${data.Ban}','${data.Phong}'`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Yêu cầu khám lại lâm sàng
+exports.ycklLamSang =(data)=>{
+    let sql = `exec YeuCauLamSang '${data.idPhieuKham}','${data.idPhong}','${data.idBan}','${data.stt}','${data.caKham}'`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Yêu cầu khám lại cận lâm sàng
+exports.ycklCanLamSang =(data)=>{
+    let sql = `exec YeuCauCanLamSang '${data.idPhieuKham}','${data.idPhong}','${data.stt}','${data.caKham}'`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Danh sách Yêu cầu khám lại lâm sàng
+exports.dsycklLamSang =(data)=>{
+    let sql = `exec DanhSachYeuCauLamSang '${data.idBan}','${data.idPhong}','${data.caKham}'`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Danh sách Yêu cầu khám lại cận lâm sàng
+exports.dsycklCanLamSang =(data)=>{
+    let sql = `exec DanhSachYeuCauCanLamSang '${data.idPhong}','${data.caKham}'`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Accept yêu cầu khám lại lâm sàng
+exports.acceptYcklLamSang =(data)=>{
+    let sql = `exec CapNhatYeuCauLamSang '${data.idPhieuKham}','${data.idPhong}','${data.idBan}',${data.stt},${data.caKham}`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Accept yêu cầu khám lại cận lâm sàng
+exports.acceptYcklCanLamSang =(data)=>{
+    let sql = `exec CapNhatYeuCauCanLamSang '${data.idPhieuKham}','${data.idPhong}','${data.stt}','${data.caKham}'`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Accept yêu cầu khám lại lâm sàng
+exports.declineYcklLamSang =(data)=>{
+    let sql = `exec XoaYeuCauLamSang '${data.idPhieuKham}','${data.idPhong}','${data.idBan}',${data.stt},${data.caKham}`;
+    console.log(sql);
+    return db.executeQuery(sql);
+}
+
+//Accept yêu cầu khám lại cận lâm sàng
+exports.declineYcklCanLamSang =(data)=>{
+    let sql = `exec XoaYeuCauCanLamSang '${data.idPhieuKham}','${data.idPhong}','${data.stt}','${data.caKham}'`;
     console.log(sql);
     return db.executeQuery(sql);
 }

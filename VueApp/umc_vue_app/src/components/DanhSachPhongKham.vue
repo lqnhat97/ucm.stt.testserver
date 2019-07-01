@@ -167,7 +167,8 @@
             nextNumber(data) {
               axios.post(process.env.SERVER_URI + `clinic/soKeTiepLamSang`, {
                 idBanKham: data.IDBan,
-                idPhong: data.IDPhong
+                idPhong: data.IDPhong,
+                caKham:data.CaKham
               }).then(response => {
                 if (response.status == 200) {
                   this.message = 'Đã qua số cho bàn <strong><span style="color: #41B883;">' + response.data
