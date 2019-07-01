@@ -15,7 +15,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
             if (rows.recordsets.length == 0) {
                 res.status(404).end();
             } else {
-                var maPhong, maPhieuKham, tenKhu, tenLau, tenPhong, ban, tenChuyenKhoa, maPhongCls, stt, sttHienTai, sttXetNghiem, thoiGianDuKien, tinhTrang;
+                var maPhong, maPhieuKham, tenKhu, tenLau, tenPhong, ban, tenChuyenKhoa, maPhongCls, stt, sttHienTai, sttXetNghiem, thoiGianDuKien, tinhTrang, caKham;
                 if (Object.keys(rows.recordsets).length > 0) {
                     for (let i = 0; i < Object.keys(rows.recordsets[0]).length; i++) {
                         maPhieuKham = rows.recordsets[0][i].IDPhieuKham;
@@ -26,6 +26,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         ban = rows.recordsets[0][i].SoBan.toString();
                         stt = rows.recordsets[0][i].STTPhongKham;
                         timeTemp = new Date(rows.recordsets[0][i].ThoiGianDuKien);
+                        caKham = rows.recordsets[0][i].CaKham;
                         if ((timeTemp.getHours() < 7)) {
                             thoiGianDuKien = (17 + timeTemp.getHours()) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
                         } else
@@ -60,7 +61,10 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                             stt,
                             sttHienTai,
                             thoiGianDuKien,
-                            tinhTrang
+                            tinhTrang,
+                            idPhong:rows.recordsets[0][i].IDPhong,
+                            idBan:rows.recordsets[0][i].IDBan,
+                            caKham,
                         });
                     }
 
@@ -72,6 +76,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tenPhong = rows.recordsets[1][k].TenCanLamSang;
                         stt = rows.recordsets[1][k].STTPhongCLS;
                         timeTemp = new Date(rows.recordsets[1][k].ThoiGianDuKien);
+                        caKham = rows.recordsets[1][k].CaKham;
                         if ((timeTemp.getHours() < 7)) {
                             thoiGianDuKien = (17 + timeTemp.getHours()) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
                         } else
@@ -97,6 +102,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         };
                         sttHienTai = rows.recordsets[1][k].SoHienTaiCuaPhong + '';
                         canLamSang.push({
+                            maPhieuKham : rows.recordsets[1][k].IDPhieuKham,
                             maPhongCls,
                             tenKhu,
                             tenLau,
@@ -105,7 +111,10 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                             stt,
                             sttHienTai,
                             thoiGianDuKien,
-                            tinhTrang
+                            tinhTrang,
+                            idPhong:rows.recordsets[1][k].IDPhong,
+                            idBan:"null",
+                            caKham,
                         });
                     }
 
@@ -125,6 +134,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tinhTrang = rows.recordsets[2][0].TinhTrang;
                         sttXetNghiem = (xnRange - xnRange % soNhay + 1) + " -> " + (xnRange - xnRange % soNhay + soNhay);
                         canLamSang.push({
+                            maPhieuKham : "null",
                             maPhongCls: "Xét nghiệm",
                             tenPhong,
                             tenKhu,
@@ -133,7 +143,10 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                             sttHienTai: "0",
                             sttXetNghiem,
                             thoiGianDuKien,
-                            tinhTrang
+                            tinhTrang,
+                            idPhong:"null",
+                            idBan:"null",
+                            caKham:"null",
                         });
                     }
                 }
@@ -601,7 +614,8 @@ router.get('/thuKi/:idThuKy', (req, res) => {
                         bacSi: value.BacSi,
                         BenhNhan: value.BenhNhan,
                         STTHienTai: value.hasOwnProperty('STTHientai') ? ((value.STTHientai - value.STTHientai % value.SoNhay + 1) + " -> " + (value.STTHientai - value.STTHientai % value.SoNhay + value.SoNhay)) : value.STTHienTai.toString(),
-                        STTCuoi: value.STTCuoi.toString()
+                        STTCuoi: value.STTCuoi.toString(),
+                        SoLuongRequest:value.SoLuongRequest == null ? "0":value.SoLuongRequest.toString()
                     })
                 }
             } else {
@@ -613,7 +627,8 @@ router.get('/thuKi/:idThuKy', (req, res) => {
                     bacSi: "null",
                     BenhNhan: data[0][0].hasOwnProperty('STTHientai') ? ("Bệnh nhân có STT " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + 1) + " -> " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + data[0][0].SoNhay)) : data[0][0].BenhNhan,
                     STTHienTai: data[0][0].hasOwnProperty('STTHientai') ? ((data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + 1) + " -> " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + data[0][0].SoNhay)) : data[0][0].STTHienTai.toString(),
-                    STTCuoi: data[0][0].STTCuoi.toString()
+                    STTCuoi: data[0][0].STTCuoi.toString(),
+                    SoLuongRequest:data[0][0].SoLuongRequest == null ? "0":data[0][0].SoLuongRequest.toString()
                 })
             }
             res.status(200).json(dataRes).end();
@@ -697,3 +712,89 @@ router.post('/themLichBacSi',(req,res)=>{
 //         res.json(err).end();
 //     })
 // })
+
+//-------Yêu cầu khám lại
+router.post('/yeuCauKhamLaiLamSang',(req,res)=>{
+    let data = req.body
+    db.ycklLamSang(data).then(rows=>{
+        res.status(200).json(rows.recordset);
+    }).catch(err=>{
+        throw err
+    })
+})
+
+router.post('/yeuCauKhamLaiCanLamSang',(req,res)=>{
+    let data = req.body
+    db.ycklCanLamSang(data).then(rows=>{
+        res.status(200).json(rows.recordset);
+    }).catch(err=>{
+        throw err
+    })
+})
+
+//-------Danh sách yêu cầu lâm sàng
+router.get('/danhSachYeuCauLamSang',(req,res)=>{
+    let data = req.query;
+    console.log(data)
+    db.dsycklLamSang(data).then(rows=>{
+        res.status(200).json({danhSachYeuCau:rows.recordset});
+    }).catch(err=>{
+        throw err
+    })
+})
+
+
+//-------Danh sách yêu cầu lâm sàng
+router.get('/danhSachYeuCauCanLamSang',(req,res)=>{
+    let data = req.query;
+    console.log(data)
+    db.dsycklCanLamSang(data).then(rows=>{
+        res.status(200).json({danhSachYeuCau:rows.recordset});
+    }).catch(err=>{
+        throw err
+    })
+})
+
+//-------Accept yêu cầu lâm sàng
+router.post('/acceptYeuCauLamSang',(req,res)=>{
+    let data = req.body;
+    console.log(data)
+    db.acceptYcklLamSang(data).then(rows=>{
+        res.status(200).end();
+    }).catch(err=>{
+        throw err
+    })
+})
+
+//-------Xóa danh sách yêu cầu lâm sàng
+router.post('/declineYeuCauLamSang',(req,res)=>{
+    let data = req.body;
+    console.log(data)
+    db.declineYcklLamSang(data).then(rows=>{
+        res.status(200).end();
+    }).catch(err=>{
+        throw err
+    })
+})
+
+//-------Xóa danh sách yêu cầu cận lâm sàng
+router.post('/declineYeuCauCanLamSang',(req,res)=>{
+    let data = req.body;
+    console.log(data)
+    db.declineYcklCanLamSang(data).then(rows=>{
+        res.status(200).end();
+    }).catch(err=>{
+        throw err
+    })
+})
+
+//-------Accept yêu cầu lâm sàng
+router.post('/acceptYeuCauCanLamSang',(req,res)=>{
+    let data = req.body;
+    console.log(data)
+    db.acceptYcklCanLamSang(data).then(rows=>{
+        res.status(200).end();
+    }).catch(err=>{
+        throw err
+    })
+})
