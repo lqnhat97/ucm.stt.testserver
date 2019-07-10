@@ -139,7 +139,8 @@
       nextNumber() {
         axios.post(process.env.SERVER_URI + `clinic/soKeTiepCanLamSang`, {
           idPhong: this.cls.IDPhong,
-          isXetNghiem: this.isXetNghiem
+          isXetNghiem: this.isXetNghiem,
+          caKham:this.cls.CaKham
         }).then(response => {
           if (response.status == 200) {
             console.log(response.data);

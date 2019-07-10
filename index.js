@@ -19,6 +19,9 @@ app.set("view engine", "ejs");
 app.set('views','./BarcodeService');
 app.use('/home',(req,res)=>{
     res.render('./barcodeExample');
+});
+app.use('/expert',(req,res)=>{
+    res.render('./barcode');
 })
 app.use(express.static('Public'));
 app.use(morgan('dev'));
@@ -40,7 +43,9 @@ http.listen(port, () => {
 global.io = require('socket.io')(http);
 io.on("connection", (socket) => {
     console.log(socket.id);
-    socket.on("disconnect",()=>{
-        console.log("socket id:"+socket.id+" disconnect");
+    socket.on("genarateBarcode",(msg)=>{
+        console.log(`msg: ${msg}`);
+        socket.broadcast.emit("execBarcode",msg)
     })
+    
 })

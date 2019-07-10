@@ -33,7 +33,7 @@
                       <td>
                         <select size="2" class="form-control" v-model="optionChuyenKhoa.caKham"
                           @change="handleChangeCaKham(index)">
-                          <option value="1" :disabled="new Date().getHours()>12?true:false">Ca 1</option>
+                          <option value="1" :disabled="new Date().getHours()>11?true:false">Ca 1</option>
                           <option value="2"> Ca 2 </option>
                         </select>
                       </td>
@@ -145,7 +145,7 @@
           selected: "",
           loadedDoctor: "",
           idBacSi: "",
-          caKham: new Date().getHours() > 12 ? "2" : "1"
+          caKham: new Date().getHours() > 11 ? "2" : "1"
         })
 
       },

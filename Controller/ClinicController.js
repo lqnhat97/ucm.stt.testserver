@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../Repos/ClinicRepos');
 
-router.get('/thongtinkhambenh/:id', async (req, res) => {
+router.get('/accc/:id', async (req, res) => {
     // db.layPhongKhamHienTai(req.params.id).then(rows=>{
     //     res.json(rows)
     // });
@@ -62,8 +62,8 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                             sttHienTai,
                             thoiGianDuKien,
                             tinhTrang,
-                            idPhong:rows.recordsets[0][i].IDPhong,
-                            idBan:rows.recordsets[0][i].IDBan,
+                            idPhong: rows.recordsets[0][i].IDPhong,
+                            idBan: rows.recordsets[0][i].IDBan,
                             caKham,
                         });
                     }
@@ -102,7 +102,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         };
                         sttHienTai = rows.recordsets[1][k].SoHienTaiCuaPhong + '';
                         canLamSang.push({
-                            maPhieuKham : rows.recordsets[1][k].IDPhieuKham,
+                            maPhieuKham: rows.recordsets[1][k].IDPhieuKham,
                             maPhongCls,
                             tenKhu,
                             tenLau,
@@ -112,8 +112,8 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                             sttHienTai,
                             thoiGianDuKien,
                             tinhTrang,
-                            idPhong:rows.recordsets[1][k].IDPhong,
-                            idBan:"null",
+                            idPhong: rows.recordsets[1][k].IDPhong,
+                            idBan: "null",
                             caKham,
                         });
                     }
@@ -134,7 +134,7 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                         tinhTrang = rows.recordsets[2][0].TinhTrang;
                         sttXetNghiem = (xnRange - xnRange % soNhay + 1) + " -> " + (xnRange - xnRange % soNhay + soNhay);
                         canLamSang.push({
-                            maPhieuKham : "null",
+                            maPhieuKham: "null",
                             maPhongCls: "Xét nghiệm",
                             tenPhong,
                             tenKhu,
@@ -144,9 +144,9 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
                             sttXetNghiem,
                             thoiGianDuKien,
                             tinhTrang,
-                            idPhong:"null",
-                            idBan:"null",
-                            caKham:"null",
+                            idPhong: "null",
+                            idBan: "null",
+                            caKham: "null",
                         });
                     }
                 }
@@ -175,8 +175,119 @@ router.get('/thongtinkhambenh/:id', async (req, res) => {
     }
 })
 
+function separateDataSTT(data) {
+    let sepData = [];
+    for (const roomType of data) {
+        for (const data of roomType) {
+            sepData.push(data);
+        }
+    }
+    // data.forEach(roomType => {
+    //     roomType.forEach(banKham => {
+    //         sepData.push(banKham);
+    //     });
+    // });
+    return sepData;
+}
+
+function handlingDsSTT(data) {
+    let ketQua = [];
+    let dataRes = separateDataSTT(data);
+    let arrPhieuKham = dataRes.map((data) => {
+        return data.IDPhieuKham;
+    });
+
+    let rightArraySoPhong = arrPhieuKham.filter((v, i) => arrPhieuKham.indexOf(v) === i);
+    for (const idPhieuKham of rightArraySoPhong) {
+        let data = dataRes.filter((dataInside) => {
+            return dataInside.IDPhieuKham === idPhieuKham;
+        });
+        let lamSang;
+        let canLamSang = [];
+        for (const value of data) {
+            timeTemp = value.hasOwnProperty("STTXetNghiem") ? new Date(value.Gio) : new Date(value.ThoiGianDuKien);
+            let thoiGianDuKien;
+            let tmp;
+            let tinhTrang;
+            if ((timeTemp.getHours() < 7)) {
+                thoiGianDuKien = (17 + timeTemp.getHours()) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+            } else
+                thoiGianDuKien = ((timeTemp.getHours() - 7) >= 10 ? (timeTemp.getHours() - 7).toString() : ("0" + (timeTemp.getHours() - 7))) + ":" + (timeTemp.getMinutes() >= 10 ? timeTemp.getMinutes() : ("0" + timeTemp.getMinutes()));
+            switch (value.TinhTrang) {
+                case "Đang khám":
+                    if (value.TinhTrangBenhNhan == "Chưa có") {
+                        tinhTrang = "Đã tới lượt khám";
+                    } else {
+                        tinhTrang = "Đang khám";
+                    }
+                    break;
+                case "Đã qua":
+                    if (value.TinhTrangBenhNhan == "Chưa có") {
+                        tinhTrang = "Qua số nhưng chưa khám";
+                    } else {
+                        tinhTrang = "Đã khám";
+                    }
+                    break;
+                default:
+                    tinhTrang = "Chưa khám";
+                    break;
+            }
+            if (value.hasOwnProperty('STTPhongKham')) {
+                lamSang = value;
+                lamSang.TinhTrang = tinhTrang;
+                lamSang.ThoiGianDuKien = thoiGianDuKien
+            } else {
+                tmp = value;
+                tmp.ThoiGianDuKien = thoiGianDuKien;
+                tmp.TinhTrang = tinhTrang;
+                tmp.isXetNghiem = false;
+                if (value.hasOwnProperty("STTXetNghiem")) {
+                    tmp.isXetNghiem = true;
+                    let xnRange = value.STTCheckedCuoi;
+                    let soNhay = value.SoNhay;
+                    let sttXetNghiem = (xnRange - xnRange % soNhay + 1) + " -> " + (xnRange - xnRange % soNhay + soNhay);
+                    tmp.TenCanLamSang ="Xét nghiệm";
+                    tmp.IDPhong = "null";
+                    tmp.SoHienTaiCuaPhong = sttXetNghiem;
+                    tmp.STTPhongCLS = tmp.STTXetNghiem;
+                }
+                tmp.STTPhongCLS=tmp.STTPhongCLS.toString();
+                tmp.SoHienTaiCuaPhong = tmp.SoHienTaiCuaPhong.toString()
+                canLamSang.push(tmp);
+            }
+
+        }
+        ketQua.push({
+            lamSang: lamSang,
+            canLamSang: canLamSang
+        });
+    }
+    // rightArraySoPhong.forEach((soPhong, index) => {
+    //     let data = dataRes.filter((dataInside) => {
+    //         return dataInside.SoPhong === soPhong;
+    //     });
+    //     ketQua.push({
+    //         phongKham: soPhong,
+    //         thongTin: data
+    //     });
+    // });
+    return {
+        thongTin: ketQua
+    };
+}
+
+router.get('/thongtinkhambenh/:id', (req, res) => {
+    var id = req.params.id;
+    var thongTinKhamBenh = [];
+    var lamSang = [];
+    var canLamSang = [];
+    db.layPhongKhamHienTai(id).then(rows => {
+        res.json(handlingDsSTT(rows.recordsets));
+    })
+})
+
 //lấy toàn bộ phiếu khám
-router.get('/loadAllPhieuKham',(req,res)=>{
+router.get('/loadAllPhieuKham', (req, res) => {
     db.loadAllPhieuKham().then(rows => {
         res.status(200).json(rows.recordset);
     })
@@ -615,7 +726,7 @@ router.get('/thuKi/:idThuKy', (req, res) => {
                         BenhNhan: value.BenhNhan,
                         STTHienTai: value.hasOwnProperty('STTHientai') ? ((value.STTHientai - value.STTHientai % value.SoNhay + 1) + " -> " + (value.STTHientai - value.STTHientai % value.SoNhay + value.SoNhay)) : value.STTHienTai.toString(),
                         STTCuoi: value.STTCuoi.toString(),
-                        SoLuongRequest:value.SoLuongRequest == null ? "0":value.SoLuongRequest.toString()
+                        SoLuongRequest: value.SoLuongRequest == null ? "0" : value.SoLuongRequest.toString()
                     })
                 }
             } else {
@@ -628,7 +739,7 @@ router.get('/thuKi/:idThuKy', (req, res) => {
                     BenhNhan: data[0][0].hasOwnProperty('STTHientai') ? ("Bệnh nhân có STT " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + 1) + " -> " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + data[0][0].SoNhay)) : data[0][0].BenhNhan,
                     STTHienTai: data[0][0].hasOwnProperty('STTHientai') ? ((data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + 1) + " -> " + (data[0][0].STTHientai - data[0][0].STTHientai % data[0][0].SoNhay + data[0][0].SoNhay)) : data[0][0].STTHienTai.toString(),
                     STTCuoi: data[0][0].STTCuoi.toString(),
-                    SoLuongRequest:data[0][0].SoLuongRequest == null ? "0":data[0][0].SoLuongRequest.toString()
+                    SoLuongRequest: data[0][0].SoLuongRequest == null ? "0" : data[0][0].SoLuongRequest.toString()
                 })
             }
             res.status(200).json(dataRes).end();
@@ -686,13 +797,13 @@ router.post('/themNhanVien', (req, res) => {
 });
 
 //Thêm lịch bác sĩ
-router.post('/themLichBacSi',(req,res)=>{
+router.post('/themLichBacSi', (req, res) => {
     let promise = [];
     console.log(req.body);
     for (const data of req.body) {
         promise.push(db.themLichKhamBacSi(data))
     }
-    Promise.all(promise).then(rows=>{
+    Promise.all(promise).then(rows => {
         res.status(200).end();
     }).catch(err => {
         res.json(err).end();
@@ -714,87 +825,91 @@ router.post('/themLichBacSi',(req,res)=>{
 // })
 
 //-------Yêu cầu khám lại
-router.post('/yeuCauKhamLaiLamSang',(req,res)=>{
+router.post('/yeuCauKhamLaiLamSang', (req, res) => {
     let data = req.body
-    db.ycklLamSang(data).then(rows=>{
+    db.ycklLamSang(data).then(rows => {
         res.status(200).json(rows.recordset);
-    }).catch(err=>{
+    }).catch(err => {
         throw err
     })
 })
 
-router.post('/yeuCauKhamLaiCanLamSang',(req,res)=>{
+router.post('/yeuCauKhamLaiCanLamSang', (req, res) => {
     let data = req.body
-    db.ycklCanLamSang(data).then(rows=>{
+    db.ycklCanLamSang(data).then(rows => {
         res.status(200).json(rows.recordset);
-    }).catch(err=>{
+    }).catch(err => {
         throw err
     })
 })
 
 //-------Danh sách yêu cầu lâm sàng
-router.get('/danhSachYeuCauLamSang',(req,res)=>{
+router.get('/danhSachYeuCauLamSang', (req, res) => {
     let data = req.query;
     console.log(data)
-    db.dsycklLamSang(data).then(rows=>{
-        res.status(200).json({danhSachYeuCau:rows.recordset});
-    }).catch(err=>{
+    db.dsycklLamSang(data).then(rows => {
+        res.status(200).json({
+            danhSachYeuCau: rows.recordset
+        });
+    }).catch(err => {
         throw err
     })
 })
 
 
 //-------Danh sách yêu cầu lâm sàng
-router.get('/danhSachYeuCauCanLamSang',(req,res)=>{
+router.get('/danhSachYeuCauCanLamSang', (req, res) => {
     let data = req.query;
     console.log(data)
-    db.dsycklCanLamSang(data).then(rows=>{
-        res.status(200).json({danhSachYeuCau:rows.recordset});
-    }).catch(err=>{
+    db.dsycklCanLamSang(data).then(rows => {
+        res.status(200).json({
+            danhSachYeuCau: rows.recordset
+        });
+    }).catch(err => {
         throw err
     })
 })
 
 //-------Accept yêu cầu lâm sàng
-router.post('/acceptYeuCauLamSang',(req,res)=>{
+router.post('/acceptYeuCauLamSang', (req, res) => {
     let data = req.body;
     console.log(data)
-    db.acceptYcklLamSang(data).then(rows=>{
+    db.acceptYcklLamSang(data).then(rows => {
         res.status(200).end();
-    }).catch(err=>{
+    }).catch(err => {
         throw err
     })
 })
 
 //-------Xóa danh sách yêu cầu lâm sàng
-router.post('/declineYeuCauLamSang',(req,res)=>{
+router.post('/declineYeuCauLamSang', (req, res) => {
     let data = req.body;
     console.log(data)
-    db.declineYcklLamSang(data).then(rows=>{
+    db.declineYcklLamSang(data).then(rows => {
         res.status(200).end();
-    }).catch(err=>{
+    }).catch(err => {
         throw err
     })
 })
 
 //-------Xóa danh sách yêu cầu cận lâm sàng
-router.post('/declineYeuCauCanLamSang',(req,res)=>{
+router.post('/declineYeuCauCanLamSang', (req, res) => {
     let data = req.body;
     console.log(data)
-    db.declineYcklCanLamSang(data).then(rows=>{
+    db.declineYcklCanLamSang(data).then(rows => {
         res.status(200).end();
-    }).catch(err=>{
+    }).catch(err => {
         throw err
     })
 })
 
 //-------Accept yêu cầu lâm sàng
-router.post('/acceptYeuCauCanLamSang',(req,res)=>{
+router.post('/acceptYeuCauCanLamSang', (req, res) => {
     let data = req.body;
     console.log(data)
-    db.acceptYcklCanLamSang(data).then(rows=>{
+    db.acceptYcklCanLamSang(data).then(rows => {
         res.status(200).end();
-    }).catch(err=>{
+    }).catch(err => {
         throw err
     })
 })

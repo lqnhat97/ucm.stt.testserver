@@ -5,20 +5,20 @@
         <div id="cliente">
           <div style=" border-bottom: 2px solid #bbbbbb">
             <div class="row form-group" style="padding:5pt">
-              <div class="col-sm-2"> <label class="control-label"
-                  style="color:#969696;padding:5pt;text-align:right">Số CMND/CCCD</label>
+              <div class="col-sm-2"> <label class="control-label" style="color:#969696;padding:5pt;text-align:right">Số
+                  CMND/CCCD</label>
               </div>
               <div class="col-sm-5">
-                <autocomplete ref="autocomplete" placeholder="CMND"
-                  :source="allBenhNhan" input-class="form-control" v-model="cmnd" resultsDisplay="CMND_CCCD" resultsValue="CMND_CCCD" @selected="autocompleteSelected" @clear="clearSearch">
+                <autocomplete ref="autocomplete" placeholder="CMND" :source="allBenhNhan" input-class="form-control"
+                  v-model="cmnd" resultsDisplay="CMND_CCCD" resultsValue="CMND_CCCD" @selected="autocompleteSelected"
+                  @clear="clearSearch">
                 </autocomplete>
               </div>
-              <div class="col-sm-2"> <label class="control-label"
-                  style="color:#969696;padding:5pt;text-align:right">Mã bệnh nhân</label>
+              <div class="col-sm-2"> <label class="control-label" style="color:#969696;padding:5pt;text-align:right">Mã
+                  bệnh nhân</label>
               </div>
               <div>
-                <input type="text" value="" class="form-control" disabled v-model="maBn"
-                  v-text="HoVaTen">
+                <input type="text" value="" class="form-control" disabled v-model="maBn" v-text="HoVaTen">
               </div>
             </div>
           </div>
@@ -117,7 +117,7 @@
     },
     data() {
       return {
-        allBenhNhan:"",
+        allBenhNhan: "",
         cmnd: "",
         HoVaTen: "",
         GioiTinh: "",
@@ -132,7 +132,7 @@
         handleBtn: "",
         idBenhNhan: "",
         isFound: false,
-        maBn:"",
+        maBn: "",
         lang: {
           days: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
           months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9',
@@ -149,21 +149,22 @@
     mounted() {
       this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
         "bodyContent").style.marginLeft = "0";
+
     },
-    created(){
-      axios.get(process.env.SERVER_URI +`patient/loadAll`).then((res)=>{
+    created() {
+      axios.get(process.env.SERVER_URI + `patient/loadAll`).then((res) => {
         this.allBenhNhan = res.data;
       })
     },
     methods: {
-      autocompleteSelected(group){
+      autocompleteSelected(group) {
         this.group = group;
         this.cmnd = group.selectedObject.CMND_CCCD;
         this.checkCMND();
       },
-      clearSearch(){
+      clearSearch() {
         this.clearTex();
-        this.isFound=false;
+        this.isFound = false;
       },
       clearTex() {
         this.cmnd = "";
@@ -196,6 +197,7 @@
               this.maBn = res.ID;
               this.message = "Có kết qủa tìm kiếm"
               this.isFound = true;
+              this.socket.emit('genarateBarcode', `${process.env.SERVER_URI}home?idBenhNhan=${res.ID}&cmnd=${this.cmnd}`);
             } else {
               this.message = res.message;
               this.isFound = false;
@@ -205,6 +207,9 @@
           .catch(e => {
             console.log(e);
           })
+      },
+      isEmpty(obj) {
+        return Object.values(obj).some(element => element === "");
       },
       taoHoSo(e) {
         e.preventDefault();
@@ -228,24 +233,31 @@
           "phone": this.SoDienThoai,
           "address": this.DiaChi,
         };
-        axios.post(process.env.SERVER_URI + `patient/taoThongTin`, {
-            body: posbody
-          }).then(async response => {
-            console.log(response);
-            this.message = 'Tạo thông tin thành công, mã bệnh nhân: <strong>' + response.data.ID +
-              '</strong>. Xem barcode <a  href="localhost:8088/home?idBenhNhan=' + this.idBenhNhan +
-              '">Tại đây</a>';
-            this.handleBtn = "Tạo phiếu khám";
-            localStorage.idBenhNhan = response.data.ID;
-            this.idBenhNhan = response.data.ID;
-            this.maBn = response.data.ID
-            this.isFound = true;
-            $('#findCmndModal').modal('show');
-          })
-          .catch(e => {
-            this.message = e;
-            $('#findCmndModal').modal('show');
-          })
+        console.log(posbody);
+        if (!this.isEmpty(posbody)) {
+          axios.post(process.env.SERVER_URI + `patient/taoThongTin`, {
+              body: posbody
+            }).then(async response => {
+
+              console.log(response);
+              this.message =
+                `Tạo thông tin thành công, mã bệnh nhân: <strong>${response.data.ID}</strong>. Xem barcode <a href="localhost:8088/home?idBenhNhan=${response.data.ID}&hoten=${this.HoVaTen}&cmnd=${this.cmnd}">Tại đây</a>`;
+              this.handleBtn = "Tạo phiếu khám";
+              this.socket.emit('genarateBarcode', `${process.env.SERVER_URI}home?idBenhNhan=${response.data.ID}&cmnd=${this.cmnd}`);
+              localStorage.idBenhNhan = response.data.ID;
+              this.idBenhNhan = response.data.ID;
+              this.maBn = response.data.ID
+              this.isFound = true;
+              $('#findCmndModal').modal('show');
+            })
+            .catch(e => {
+              this.message = e;
+              $('#findCmndModal').modal('show');
+            })
+        } else {
+          this.message = "Vui lòng nhập đủ thông tin";
+          $('#findCmndModal').modal('show');
+        }
       }
     }
   }
