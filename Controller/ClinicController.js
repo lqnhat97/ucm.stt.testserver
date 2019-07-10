@@ -277,12 +277,13 @@ function handlingDsSTT(data) {
 }
 
 router.get('/thongtinkhambenh/:id', (req, res) => {
-    var id = req.params.id;
-    var thongTinKhamBenh = [];
-    var lamSang = [];
-    var canLamSang = [];
+    let id = req.params.id;
     db.layPhongKhamHienTai(id).then(rows => {
-        res.json(handlingDsSTT(rows.recordsets));
+        if(rows.recordsets.length == 0) {
+            res.status(404).end();
+        }else{
+            res.json(handlingDsSTT(rows.recordsets));
+        }
     })
 })
 

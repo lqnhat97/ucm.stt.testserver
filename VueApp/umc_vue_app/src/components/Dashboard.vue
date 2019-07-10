@@ -150,7 +150,7 @@
                     </div>
                     <div style="display:flex;justify-content:space-between">
                       <table class="table table-bordered">
-                        <thead>                        
+                        <thead>
                           <tr>
                             <th>Số hiện tại </th>
                             <th>Số mới nhất</th>
@@ -188,6 +188,7 @@
         dsLs: "",
         dsCls: "",
         dsXetNghiem: "",
+        interval: ""
       }
     },
     props: {
@@ -196,11 +197,11 @@
         default: false
       }
     },
-    
+
     methods: {
       handleChangeDashboard() {
-        setInterval(() => {
-          let i =0;
+        this.interval = setInterval(() => {
+          let i = 0;
           switch (this.selectedDashboard) {
             case "lamSang":
               axios.get(process.env.SERVER_URI + `clinic/dashBoardLs`).then(response => {
@@ -223,16 +224,17 @@
               break;
           }
           console.log(i++);
-        }, 1000);
-        this.$mount('#roomType');
+        }, 5000);
       }
     },
-    beforeMount(){
-       this.$destroy('#roomType');
+    beforeDestroy(){
+        clearInterval(this.interval);
     },
+    
     mounted() {
       this.isOpen == true ? document.getElementById("bodyContent").style.marginLeft = "300px" : document.getElementById(
         "bodyContent").style.marginLeft = "0";
+
     },
   }
 

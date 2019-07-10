@@ -121,7 +121,7 @@
               response => {
                 this.soPhong = response.data;
               })
-          }, 1000);
+          }, 5000);
         }else{
           clearInterval(this.interval);
         }

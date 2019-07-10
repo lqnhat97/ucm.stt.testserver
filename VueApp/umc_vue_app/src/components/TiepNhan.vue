@@ -18,7 +18,11 @@
                   bệnh nhân</label>
               </div>
               <div>
-                <input type="text" value="" class="form-control" disabled v-model="maBn" v-text="HoVaTen">
+                <autocomplete ref="autocomplete1" placeholder="Mã bệnh nhân" :source="allBenhNhan" input-class="form-control"
+                  v-model="idBenhNhan" resultsDisplay="ID" resultsValue="ID" @selected="autocompleteSelected"
+                  @clear="clearSearch">
+                </autocomplete>
+                <!-- <input type="text" value="" class="form-control" v-model="idBenhNhan"> -->
               </div>
             </div>
           </div>
@@ -50,7 +54,7 @@
               </div>
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
               <div class="col-sm-4">
-                <input type="text" value="" :disabled="isFound?true:false" class="form-control" v-model="cmnd"
+                <input type="number" value="" :disabled="isFound?true:false" class="form-control" v-model="cmnd"
                   v-text="cmnd">
               </div>
             </div>
@@ -130,9 +134,8 @@
         SoDienThoai: "",
         message: "",
         handleBtn: "",
-        idBenhNhan: "",
         isFound: false,
-        maBn: "",
+        idBenhNhan: "",
         lang: {
           days: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
           months: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9',
@@ -159,6 +162,15 @@
     methods: {
       autocompleteSelected(group) {
         this.group = group;
+        console.log(group);
+
+        if(isNaN(group.display)){
+          this.$refs.autocomplete.clear();
+          this.cmnd="";
+        }else{
+          this.$refs.autocomplete1.clear();
+          this.idBenhNhan="";
+        };
         this.cmnd = group.selectedObject.CMND_CCCD;
         this.checkCMND();
       },
@@ -175,7 +187,7 @@
         this.NgheNghiep = "";
         this.DiaChi = "";
         this.SoDienThoai = "";
-        this.maBn = "";
+        this.idBenhNhan = "";
       },
       checkCMND() {
         axios.get(process.env.SERVER_URI + `patient/checkBenhNhan/` + this.cmnd)
@@ -194,7 +206,7 @@
               console.log(localStorage.idBenhNhan);
 
               this.idBenhNhan = res.Id;
-              this.maBn = res.ID;
+              this.idBenhNhan = res.ID;
               this.message = "Có kết qủa tìm kiếm"
               this.isFound = true;
               this.socket.emit('genarateBarcode', `${process.env.SERVER_URI}home?idBenhNhan=${res.ID}&cmnd=${this.cmnd}`);
@@ -223,7 +235,6 @@
 
         let posbody = {
           "firstName": splitedHoVaTen[0],
-          "middleName": splitedHoVaTen.length > 2 ? middleName : "",
           "lastName": splitedHoVaTen[splitedHoVaTen.length - 1],
           "cmnd_cccd": this.cmnd,
           "sex": this.GioiTinh,
@@ -235,6 +246,7 @@
         };
         console.log(posbody);
         if (!this.isEmpty(posbody)) {
+          posbody.middleName = splitedHoVaTen.length > 2 ? middleName : "";
           axios.post(process.env.SERVER_URI + `patient/taoThongTin`, {
               body: posbody
             }).then(async response => {
@@ -246,7 +258,7 @@
               this.socket.emit('genarateBarcode', `${process.env.SERVER_URI}home?idBenhNhan=${response.data.ID}&cmnd=${this.cmnd}`);
               localStorage.idBenhNhan = response.data.ID;
               this.idBenhNhan = response.data.ID;
-              this.maBn = response.data.ID
+              this.idBenhNhan = response.data.ID
               this.isFound = true;
               $('#findCmndModal').modal('show');
             })
