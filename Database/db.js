@@ -1,10 +1,10 @@
 var mssql = require('mssql');
 
 var config = {
-    user: 'lqnhat97_SQLLogin_1',
-    password: 'r6nzu4oqoe',
-    server: 'umc-stt.mssql.somee.com',
-    database: 'umc-stt',
+    user: 'test',
+    password: '123456',
+    server: 'DESKTOP-RF5QQMJ',
+    database: 'TEST',
     options: {
         trustedConnection: true
     }

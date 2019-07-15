@@ -234,7 +234,7 @@
         this.DiaChi = "";
         this.SoDienThoai = "";
         this.idBenhNhan = "";
-        this.MaPhieuKham="";
+        this.MaPhieuKham = "";
         this.correct = false;
         this.$mount('#bodyContent');
       },
@@ -298,26 +298,27 @@
       chiDinhCanLamSang(e) {
         e.preventDefault();
         if (this.dvThucHien.length === 0) {
-          this.message ="Vui lòng chỉ định dịch vụ";
+          this.message = "Vui lòng chọn và chỉ định dịch vụ";
           $('#findCmndModal').modal('show');
-        }
-        axios.post(process.env.SERVER_URI + `clinic/phatSinhCLS`, {
-          idPhieuKham: this.MaPhieuKham,
-          idDichVuCls: this.dvThucHien.map(value => value.IDDichVu),
-        }).then(e => {
-          console.log(e);
-          if (e.data.hasOwnProperty('CLS') || e.data.hasOwnProperty('XetNghiem')) {
-            this.message =
-              'Phát sinh số cận lâm sàng thành công cho phiếu khám <strong><span style="color: #41B883;">' + this
-              .MaPhieuKham + '</span></strong>';
+        } else {
+          axios.post(process.env.SERVER_URI + `clinic/phatSinhCLS`, {
+            idPhieuKham: this.MaPhieuKham,
+            idDichVuCls: this.dvThucHien.map(value => value.IDDichVu),
+          }).then(e => {
+            console.log(e);
+            if (e.data.hasOwnProperty('CLS') || e.data.hasOwnProperty('XetNghiem')) {
+              this.message =
+                'Phát sinh số cận lâm sàng thành công cho phiếu khám <strong><span style="color: #41B883;">' + this
+                .MaPhieuKham + '</span></strong>';
+              $('#findCmndModal').modal('show');
+            } else {
+              this.message = 'Phát sinh số lỗi';
+            }
+          }).catch(err => {
+            this.message = "Có lỗi xảy ra";
             $('#findCmndModal').modal('show');
-          } else {
-            this.message = 'Phát sinh số lỗi';
-          }
-        }).catch(err => {
-          this.message = "Có lỗi xảy ra";
-          $('#findCmndModal').modal('show');
-        })
+          })
+        }
       }
     },
     mounted() {

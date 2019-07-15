@@ -224,7 +224,7 @@
               break;
           }
           console.log(i++);
-        }, 5000);
+        }, 2000);
       }
     },
     beforeDestroy(){

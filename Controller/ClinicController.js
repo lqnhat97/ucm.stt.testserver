@@ -224,7 +224,7 @@ function handlingDsSTT(data) {
                 case "Đã qua":
                     if (value.TinhTrangBenhNhan == "Chưa có") {
                         tinhTrang = "Qua số nhưng chưa khám";
-                    } else {
+                    }else {
                         tinhTrang = "Đã khám";
                     }
                     break;
@@ -234,12 +234,18 @@ function handlingDsSTT(data) {
             }
             if (value.hasOwnProperty('STTPhongKham')) {
                 lamSang = value;
+                lamSang.ThoiGianDuKien = thoiGianDuKien;
                 lamSang.TinhTrang = tinhTrang;
-                lamSang.ThoiGianDuKien = thoiGianDuKien
+                if( timeTemp.getHours()>11 && value.CaKham==1 && (tinhTrang=="Qua số nhưng chưa khám"||tinhTrang=="Chưa khám")){
+                    lamSang.TinhTrang = "Quá ca";
+                }
             } else {
                 tmp = value;
                 tmp.ThoiGianDuKien = thoiGianDuKien;
                 tmp.TinhTrang = tinhTrang;
+                if( timeTemp.getHours()>11 && value.CaKham==1 && (tinhTrang=="Qua số nhưng chưa khám"||tinhTrang=="Chưa khám")){
+                    tmp.TinhTrang = "Quá ca";
+                }
                 tmp.isXetNghiem = false;
                 if (value.hasOwnProperty("STTXetNghiem")) {
                     tmp.isXetNghiem = true;

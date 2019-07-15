@@ -5,24 +5,25 @@
         <div id="cliente">
           <div style=" border-bottom: 2px solid #bbbbbb">
             <div class="row form-group" style="padding:5pt">
-              <div class="col-sm-2"> <label class="control-label" style="color:#969696;padding:5pt;text-align:right">Số
-                  CMND/CCCD</label>
-              </div>
-              <div class="col-sm-5">
+              <label class="control-label col-sm-2" style="color:#969696;padding:5pt;text-align:right">Tìm kiếm theo CMND/CCCD</label>
+              <div class="col-sm-2">
                 <autocomplete ref="autocomplete" placeholder="CMND" :source="allBenhNhan" input-class="form-control"
                   v-model="cmnd" resultsDisplay="CMND_CCCD" resultsValue="CMND_CCCD" @selected="autocompleteSelected"
                   @clear="clearSearch">
                 </autocomplete>
               </div>
-              <div class="col-sm-2"> <label class="control-label" style="color:#969696;padding:5pt;text-align:right">Mã
+              <label class="control-label col-sm-2" style="color:#969696;padding:5pt;text-align:right">Tìm kiếm theo mã
                   bệnh nhân</label>
-              </div>
-              <div>
+              <div class="col-sm-2">
                 <autocomplete ref="autocomplete1" placeholder="Mã bệnh nhân" :source="allBenhNhan" input-class="form-control"
                   v-model="idBenhNhan" resultsDisplay="ID" resultsValue="ID" @selected="autocompleteSelected"
                   @clear="clearSearch">
                 </autocomplete>
                 <!-- <input type="text" value="" class="form-control" v-model="idBenhNhan"> -->
+              </div>
+              <label class="control-label col-sm-2" style="color:#969696;padding:5pt;text-align:right">Mã bệnh nhân</label>
+              <div class="col-sm-2">
+                <input type="text" value="" class="form-control" v-model="idBenhNhan" disabled>
               </div>
             </div>
           </div>
@@ -49,7 +50,7 @@
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">Ngày sinh</label>
               <div class="col-sm-4">
                 <date-picker style="width:100%" valueType="format" :lang='lang' :placeholder="NgaySinh"
-                  v-model="NgaySinh" :shortcuts="false" :disabled="isFound?true:false" format="MM/DD/YYYY">
+                  v-model="NgaySinh" :shortcuts="false" :disabled="isFound?true:false" format="MM/DD/YYYY" @change="checkBirthDay">
                 </date-picker>
               </div>
               <label for="" class="col-sm-2 col-form-label" style="text-align:right">CMND/CCCD</label>
@@ -106,6 +107,7 @@
   import Modal from './modal.vue'
   import DatePicker from 'vue2-datepicker'
   import Autocomplete from 'vuejs-auto-complete'
+  import moment from 'moment'
   export default {
     name: 'TiepNhan',
     props: {
@@ -188,6 +190,15 @@
         this.DiaChi = "";
         this.SoDienThoai = "";
         this.idBenhNhan = "";
+      },
+      checkBirthDay(){
+        let dateTmp=new Date();
+        let date = new Date(this.NgaySinh);
+        if(date>dateTmp){
+          this.message="Vui lòng chọn đúng ngày sinh";
+          $('#findCmndModal').modal('show');
+          this.NgaySinh="";
+        };
       },
       checkCMND() {
         axios.get(process.env.SERVER_URI + `patient/checkBenhNhan/` + this.cmnd)
