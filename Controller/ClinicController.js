@@ -236,14 +236,14 @@ function handlingDsSTT(data) {
                 lamSang = value;
                 lamSang.ThoiGianDuKien = thoiGianDuKien;
                 lamSang.TinhTrang = tinhTrang;
-                if( timeTemp.getHours()>11 && value.CaKham==1 && (tinhTrang=="Qua số nhưng chưa khám"||tinhTrang=="Chưa khám")){
+                if( timeTemp.getHours()-7>11 && value.CaKham==1 && (tinhTrang=="Qua số nhưng chưa khám"||tinhTrang=="Chưa khám")){
                     lamSang.TinhTrang = "Quá ca";
                 }
             } else {
                 tmp = value;
                 tmp.ThoiGianDuKien = thoiGianDuKien;
                 tmp.TinhTrang = tinhTrang;
-                if( timeTemp.getHours()>11 && value.CaKham==1 && (tinhTrang=="Qua số nhưng chưa khám"||tinhTrang=="Chưa khám")){
+                if( timeTemp.getHours()-7>11 && value.CaKham==1 && (tinhTrang=="Qua số nhưng chưa khám"||tinhTrang=="Chưa khám")){
                     tmp.TinhTrang = "Quá ca";
                 }
                 tmp.isXetNghiem = false;

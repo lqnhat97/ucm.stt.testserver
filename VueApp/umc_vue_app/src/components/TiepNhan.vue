@@ -195,7 +195,7 @@
         let dateTmp=new Date();
         let date = new Date(this.NgaySinh);
         if(date>dateTmp){
-          this.message="Vui lòng chọn đúng ngày sinh";
+          this.message="Vui lòng chọn ngày sinh hợp lệ";
           $('#findCmndModal').modal('show');
           this.NgaySinh="";
         };
